@@ -6,22 +6,22 @@ const url = [url1,url2,url3]
 
 
 let str = []
+let count = 0
 
 url.forEach((url,index)=>{
 
     
     http.get(url,function(res){
-    
-        res.on('data', function(data){
-            
-            str[index] += data.toString()
-            
-        })
+       
         res.pipe(bl(function(err,data){
             if(err) throw err
-            
-            console.log(str[index])
+            str[index] = data.toString()
+
+            count ++
+            if (count===3) str.forEach(str => console.log(str))
+
         }))
+
     })
     
 })
