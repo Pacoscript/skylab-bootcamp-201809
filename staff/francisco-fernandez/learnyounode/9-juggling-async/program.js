@@ -14,10 +14,12 @@ url.forEach((url,index)=>{
     http.get(url,function(res){
        
         res.pipe(bl(function(err,data){
-            if(err) throw err
-            str[index] = data.toString()
 
+            if(err) throw err
+
+            str[index] = data.toString()
             count ++
+
             if (count===3) str.forEach(str => console.log(str))
 
         }))
