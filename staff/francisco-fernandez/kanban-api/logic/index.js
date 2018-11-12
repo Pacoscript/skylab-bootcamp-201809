@@ -43,18 +43,26 @@ const logic = {
 
         if (!id.trim().length) throw new ValueError('id is empty or blank')
 
-        return User.findById(id)
-            .then(user => {
+        return User.findById(id, { '_id': 0, password: 0, postits: 0, __v: 0 })
+            // .then(user => {
+            //     if (!user) throw new NotFoundError(`user with id ${id} not found`)
+
+            //     const _user = user.toObject()
+
+            //     _user.id = id
+
+            //     delete _user.password
+            //     delete _user.postits
+
+            //     return _user
+            // })
+            .lean()
+            .then(user => { // ALT
                 if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-                const _user = user.toObject()
+                user.id = id
 
-                _user.id = id
-
-                delete _user.password
-                delete _user.postits
-
-                return _user
+                return user
             })
     },
 
@@ -125,7 +133,7 @@ const logic = {
             .then(user => {
                 if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-                const postit = new Postit({ text })
+                const postit = new Postit({ text, status: 'TODO' })
 
                 user.postits.push(postit)
 
@@ -139,10 +147,18 @@ const logic = {
         if (!id.trim().length) throw new ValueError('id is empty or blank')
 
         return User.findById(id)
+            .lean()
             .then(user => {
                 if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-                return user.postits
+                // return user.postits.map(({ _id, text }) => { id: _id.toString(), text })
+                return user.postits.map(postit => {
+                    postit.id = postit._id.toString()
+
+                    delete postit._id
+
+                    return postit
+                })
             })
     },
 
@@ -171,16 +187,6 @@ const logic = {
                 if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
                 const { postits } = user
-
-                // by filtering
-
-                // const _postits = postits.filter(postit => postit.id !== postitId)
-
-                // if (_postits.length !== postits.length - 1) throw Error(`postit with id ${postitId} not found in user with id ${id}`)
-
-                // user.postits = _postits
-
-                // by finding index
 
                 const index = postits.findIndex(postit => postit.id === postitId)
 

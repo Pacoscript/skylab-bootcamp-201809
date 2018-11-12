@@ -7,7 +7,7 @@ const { AlreadyExistsError } = require('../errors')
 
 const { expect } = require('chai')
 
-const { env: { MONGO_URL } } = process
+const MONGO_URL = 'mongodb://localhost:27017/postit-test'
 
 // running test from CLI
 // normal -> $ mocha src/logic.spec.js --timeout 10000
@@ -90,9 +90,9 @@ describe('logic', () => {
 
             beforeEach(() => {
                 postit = new Postit({ text: 'Hello text', status: 'TODO' })
-                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123', postit })
+                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123', postits: [postit] })
 
-                return User.create(user)
+                return user.save()
 
             })
 
@@ -104,6 +104,7 @@ describe('logic', () => {
                         const { id, name, surname, username, password, postits } = _user
 
                         expect(id).to.exist
+                        expect(id).to.be.a('string')
                         expect(id).to.equal(user.id)
                         expect(name).to.equal(user.name)
                         expect(surname).to.equal(user.surname)
