@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const { MongoClient } = require('mongodb')
+const mongoose = require('mongoose')
 const express = require('express')
 const package = require('./package.json')
 const router = require('./routes')
@@ -9,17 +9,11 @@ const { User } = require('./data')
 
 const { env: { PORT, MONGO_URL } } = process
 
-const client = new MongoClient(MONGO_URL, { useNewUrlParser: true })
+// const client = new MongoClient(MONGO_URL, { useNewUrlParser: true })
 
-client.connect()
+// client.connect()
     .then(() => {
         console.log(`db server running at ${MONGO_URL}`)
-
-        const db = client.db('kanban')
-
-        users = db.collection('users')
-
-        User._collection = users
 
         const { argv: [, , port = PORT || 8080] } = process
 
