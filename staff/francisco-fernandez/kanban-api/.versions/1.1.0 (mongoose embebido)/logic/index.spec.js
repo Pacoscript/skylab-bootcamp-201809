@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const mongoose = require('mongoose')
 const { User, Postit } = require('../data')
 const logic = require('.')
@@ -14,7 +16,7 @@ const MONGO_URL = 'mongodb://localhost:27017/postit-test'
 describe('logic', () => {
     before(() => mongoose.connect(MONGO_URL, { useNewUrlParser: true }))
 
-    beforeEach(() => Promise.all([User.deleteMany(), Postit.deleteMany()]))
+    beforeEach(() => User.deleteMany())
 
     describe('user', () => {
         describe('register', () => {
@@ -52,14 +54,12 @@ describe('logic', () => {
 
         describe('authenticate', () => {
             let user
-            // beforeEach(() => {
-            //     user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })
 
-            //     return user.save()
-            // })
+            beforeEach(() => {
+                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })
 
-            // ALT
-            beforeEach(() => (user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })).save())
+                return User.create(user)
+            })
 
             it('should authenticate on correct credentials', () => {
                 const { username, password } = user
@@ -200,10 +200,10 @@ describe('logic', () => {
                 let user2
 
                 beforeEach(() => {
-                    // user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })
+                    user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })
                     user2 = new User({ name: 'John', surname: 'Doe', username: 'jd2', password: '123' })
 
-                    return User.create([user2])
+                    return User.create([user, user2])
                 })
 
                 it('should update on correct data and password', () => {
@@ -216,10 +216,11 @@ describe('logic', () => {
                         .catch(err => {
                             expect(err).to.be.instanceof(AlreadyExistsError)
 
-                            return User.findById(id)
+                            return User.findById( id )
                         })
                         .then(_user => {
                             expect(_user.id).to.equal(id)
+
                             expect(_user.name).to.equal(name)
                             expect(_user.surname).to.equal(surname)
                             expect(_user.username).to.equal(username)
@@ -245,16 +246,20 @@ describe('logic', () => {
             })
 
             it('should succeed on correct data', () =>
-                logic.addPostit(text, user.id, status)
-                    .then(() => Postit.find())
-                    .then(_postits => {
-                        const [_postit] = _postits
+                logic.addPostit(user.id, text, status)
+                    .then(() => User.find())
+                    .then(_users => {
+                        const [_user] = _users
 
-                        expect(_postit.user.toString()).to.equal(user.id)
+                        expect(_user.id).to.equal(user.id)
 
-                        expect(_postits.length).to.equal(1)
+                        const { postits } = _user
 
-                        expect(_postit.text).to.equal(text)
+                        expect(postits.length).to.equal(1)
+
+                        const [postit] = postits
+
+                        expect(postit.text).to.equal(text)
 
                     })
             )
@@ -266,16 +271,12 @@ describe('logic', () => {
             let user, postit, postit2
 
             beforeEach(() => {
+                postit = new Postit({ text: 'hello text' })
+                postit2 = new Postit({ text: 'hello text 2' })
 
-                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123'})
-                
-                postit = new Postit({ text: 'hello text', user: user.id, status: 'TODO' })
-                postit2 = new Postit({ text: 'hello text 2', user: user.id, status: 'TODO' })
+                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123', postits: [postit, postit2] })
 
-                Promise.all([User.create(user), Postit.create(postit), Postit.create(postit2)])
-
-                
-                
+                return User.create(user)
             })
 
             it('should succeed on correct data', () =>
@@ -372,7 +373,7 @@ describe('logic', () => {
 
                         expect(postit.text).to.equal(newText)
 
-
+                        
                     })
             )
         })
@@ -407,7 +408,7 @@ describe('logic', () => {
 
                         expect(postit.status).to.equal('DOING')
 
-
+                        
                     })
             )
         })

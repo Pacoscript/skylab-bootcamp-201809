@@ -120,23 +120,24 @@ const logic = {
      * 
      * @returns {Promise} Resolves on correct data, rejects on wrong user id
      */
-    addPostit(text, user, status) {
-        if (typeof user !== 'string') throw TypeError(`${id} is not a string`)
+    addPostit(id, text) {
+        if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
 
-        if (!user.trim().length) throw new ValueError('id is empty or blank')
+        if (!id.trim().length) throw new ValueError('id is empty or blank')
 
         if (typeof text !== 'string') throw TypeError(`${text} is not a string`)
 
         if (!text.trim().length) throw new ValueError('text is empty or blank')
 
-        return User.findById(user)
+        return User.findById(id)
             .then(user => {
                 if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-                const postit = new Postit({ text, user, status })
+                const postit = new Postit({ text, status: 'TODO' })
 
-                return postit.save()
+                user.postits.push(postit)
 
+                return user.save()
             })
     },
 
@@ -144,8 +145,9 @@ const logic = {
         if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
 
         if (!id.trim().length) throw new ValueError('id is empty or blank')
-        debugger
+
         return User.findById(id)
+            .lean()
             .then(user => {
                 if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
