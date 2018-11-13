@@ -80,7 +80,7 @@ const logic = {
                 'Content-Type': 'application/json; charset=utf-8',
                 'Authorization': `Bearer ${this._token}`
             },
-            body: JSON.stringify({ text })
+            body: JSON.stringify({ text, status:'TODO' })
         })
             .then(res => res.json())
             .then(res => {
