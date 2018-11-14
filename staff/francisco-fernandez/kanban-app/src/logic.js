@@ -73,7 +73,7 @@ const logic = {
         if (typeof text !== 'string') throw TypeError(`${text} is not a string`)
 
         if (!text.trim()) throw Error('text is empty or blank')
-
+        
         return fetch(`${this.url}/users/${this._userId}/postits`, {
             method: 'POST',
             headers: {
@@ -165,6 +165,92 @@ const logic = {
             .then(res => {
                 if (res.error) throw Error(res.error)
             })
+
+    },
+
+    addBuddy(username) {
+
+        if (typeof username !== 'string') throw TypeError(`${username} is not a string`)
+
+        if (!username.trim()) throw Error('username is empty or blank')
+
+        return fetch(`${this.url}/users/${this._userId}/buddy`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': `Bearer ${this._token}`
+            },
+            body: JSON.stringify({ username })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+            })
+
+    },
+
+    listBuddies(){
+        return fetch(`${this.url}/users/${this._userId}/buddies`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this._token}`
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+
+                return res.data
+            })
+
+    },
+
+    assignTo(id, username){
+        
+        if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
+
+        if (!id.trim()) throw Error('id is empty or blank')
+
+        if (typeof username !== 'string') throw TypeError(`${username} is not a string`)
+
+        if (!username.trim()) throw Error('username is empty or blank')
+
+        return fetch(`${this.url}/users/${this._userId}/postits/${id}/buddies`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': `Bearer ${this._token}`
+            },
+            body: JSON.stringify({ username })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+            })
+
+
+    },
+
+    retrieveUser(id){
+        if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
+
+        if (!id.trim()) throw Error('id is empty or blank')
+        
+        return fetch(`${this.url}/users/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': `Bearer ${this._token}`
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+
+                return res.data
+            })
+
+
 
     }
 

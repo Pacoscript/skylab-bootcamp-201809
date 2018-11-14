@@ -386,7 +386,84 @@ describe('logic', () => {
             )
         })
 
+        describe('assign to', ()=>{
+            let user, postit
 
+            beforeEach(() => {
+
+                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })
+                user2 = new User({ name: 'John2', surname: 'Doe2', username: 'jd2', password: '123' })
+                postit = new Postit({ text: 'hello text', user: user.id, status: 'TODO' })
+
+                return Promise.all([user.save(), user2.save(), postit.save()])
+            })
+
+            it('should succeed on correct data', async () => {
+
+                const res = await logic.assignTo(postit.id, user2.username)
+
+                expect(res).to.be.undefined
+
+                const postits = await Postit.find()
+
+                expect(postits.length).to.equal(1)
+
+                const [_postit] = postits
+
+                expect(_postit.assignedTo.toString()).to.equal(user2.id)
+            })
+
+        })
+
+
+    })
+
+    describe('buddies', () => {
+        describe('add', () => {
+            beforeEach(async () => {
+                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })
+                user2 = new User({ name: 'John2', surname: 'Doe2', username: 'jd2', password: '123' })
+
+                await user.save()
+                await user2.save()
+            })
+
+            it('should succeed on correct data', async () => {
+                await logic.addBuddy(user.id, user2.username)
+
+                const _user = await User.findById(user.id)
+
+                expect(_user.buddies.length).to.equal(1)
+
+                expect(_user.buddies[0].toString()).to.equal(user2.id)
+
+            })
+        })
+
+        describe('list', () => {
+            beforeEach(async () => {
+                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })
+                user2 = new User({ name: 'John2', surname: 'Doe2', username: 'jd2', password: '123' })
+                user3 = new User({ name: 'John3', surname: 'Doe3', username: 'jd3', password: '123' })
+
+                user.buddies.push(user2.id)
+                user.buddies.push(user3.id)
+
+                await user.save()
+                await user2.save()
+                await user3.save()
+            })
+
+            it('should succeed on correct data', async () => {
+                const _buddies = await logic.listBuddies(user.id)
+
+                expect(_buddies.length).to.equal(2)
+                
+                expect(_buddies[0]).to.equal(user2.username)
+                expect(_buddies[1]).to.equal(user3.username)
+
+            })
+        })
     })
 
     after(() => mongoose.disconnect())

@@ -144,8 +144,9 @@ const logic = {
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-
+            
             let postits = await Postit.find({ user: user._id }).lean()
+            let postitsAssigned = await Postit.find({ assignedTo: id }).lean()
 
             postits.forEach(postit => {
                 postit.id = postit._id.toString()
@@ -155,7 +156,18 @@ const logic = {
                 postit.user = postit.user.toString()
 
             })
-            return postits
+
+            postitsAssigned.forEach(postit => {
+                postit.id = postit._id.toString()
+
+                delete postit._id
+
+                postit.user = postit.user.toString()
+
+            })
+
+
+            return postits.concat(postitsAssigned)
 
         })()
 
@@ -187,7 +199,12 @@ const logic = {
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-            const postit = await Postit.findOne({ user: user._id, _id: postitId })
+            let postit = await Postit.findOne({ user: user._id, _id: postitId })
+
+            if (!postit){
+                
+                postit = await Postit.findOne({ assignedTo: user._id, _id: postitId })
+            }
 
             if (!postit) throw new NotFoundError(`postit with id ${postitId} not found`)
 
@@ -215,7 +232,11 @@ const logic = {
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
             postit = await Postit.findOne({ user: user._id, _id: postitId })
-
+       
+            if (!postit){
+                
+                postit = await Postit.findOne({ assignedTo: user._id, _id: postitId })
+            }
 
             if (!postit) throw new NotFoundError(`postit with id ${postitId} not found`)
 
@@ -244,18 +265,103 @@ const logic = {
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-            const postit = await Postit.findOne({ user: user._id, _id: postitId })
+            let postit = await Postit.findOne({ user: user._id, _id: postitId })
+
+            if (!postit){
+                
+                postit = await Postit.findOne({ assignedTo: user._id, _id: postitId })
+            }
 
 
             if (!postit) throw new NotFoundError(`postit with id ${postitId} not found`)
-
+            
             postit.status = status
 
             await postit.save()
 
             await (() => undefined)
         })()
+    },
 
+    /**
+     * 
+     * @param {String} id id of my user
+     * @param {String} username username of the user to add to buddies
+     */
+    addBuddy(id, username) {
+        if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
+
+        if (!id.trim().length) throw new ValueError('id is empty or blank')
+
+        if (typeof username !== 'string') throw TypeError(`${id} is not a string`)
+
+        if (!id.trim().length) throw new ValueError('id is empty or blank')
+
+        return (async () => {
+            const user = await User.findById(id)
+
+            const user2 = await User.findOne({ username })
+
+            user.buddies.push(user2.id)
+
+            await user.save()
+
+        })()
+    },
+
+    /**
+     * 
+     * @param {String} id The id of the user
+     */
+    listBuddies(id) {
+        if (typeof id !== 'string') throw TypeError(`${id} is not a string`)
+
+        if (!id.trim().length) throw new ValueError('id is empty or blank')
+
+        return (async () => {
+            const user = await User.findById(id)
+
+            if (!user) throw new NotFoundError(`user with id ${id} not found`)
+
+            // let buddies = user.buddies
+
+            let promises = []
+
+            for (var i = 0; i < user.buddies.length; i++) {
+                promises.push(User.findById(user.buddies[i]))
+            }
+
+            return Promise.all(promises)
+                .then(res => {
+                    return res.map(item => item.username)
+                })
+        })()
+
+    },
+
+    assignTo(postitId, username) {
+
+        if (typeof postitId !== 'string') throw TypeError(`${postitId} is not a string`)
+
+        if (!postitId.trim().length) throw new ValueError('postitId is empty or blank')
+
+        if (typeof username !== 'string') throw TypeError(`${username} is not a string`)
+
+        if (!username.trim().length) throw new ValueError('username is empty or blank')
+        
+        return (async () => {
+
+            let user = await User.findOne({ username: username })
+
+            const postit = await Postit.findOne({ _id: postitId })
+
+            if (!postit) throw new NotFoundError(`postit with id ${postitId} not found`)
+
+            postit.assignedTo = user.id
+
+            await postit.save()
+
+        })()
 
     }
 }
