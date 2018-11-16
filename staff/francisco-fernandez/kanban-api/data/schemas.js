@@ -12,6 +12,8 @@ const Postit = new Schema({
     },
     status: {
         type: String,
+        default: 'TODO',
+        enum: ['TODO', 'DOING', 'REVIEW', 'DONE'],
         required: true
     },
     assignedTo: {

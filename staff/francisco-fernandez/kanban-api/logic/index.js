@@ -302,6 +302,8 @@ const logic = {
 
             const user2 = await User.findOne({ username })
 
+            //todo comprobation user collaborator doesnt exist
+
             user.buddies.push(user2.id)
 
             await user.save()
