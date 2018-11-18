@@ -45,41 +45,41 @@ const User = new Schema({
         type: String,
         required: true
     },
-    sex: [{
+    created: {
+        type: Number,
+    },
+    sex: {
         type: String,
         default: 'MALE',
         enum: ['MALE', 'FEMALE']
-    }],
-    age: [{
+    },
+    age: {
         type: Number
-    }],
-    City: [{
+    },
+    city: {
         type: String  
-    }],
-    Photos: [{
-        type: Array  
-    }],
-    minAge: [{
+    },
+    presentation: {
+        type: String 
+    },
+    minAge: {
         type: Number  
-    }],
-    maxAge: [{
+    },
+    maxAge: {
         type: Number  
-    }],
-    contacts: [{
+    },
+    contacts: {
         type: Array  
-    }],
-    create: [{
-        type: Date  
-    }],
-    lastView: [{
+    },
+    lastView: {
         type: Number,  
         type: ObjectId,
         ref: 'User'
-    }],
-    autorized: [{
+    },
+    autorized: {
         type: Boolean,
         default: false
-    }]
+    }
     
 })
 

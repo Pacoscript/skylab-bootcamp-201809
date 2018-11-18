@@ -48,6 +48,7 @@ describe('logic', () => {
                 expect(user.surname).to.equal(surname)
                 expect(user.username).to.equal(username)
                 expect(user.password).to.equal(password)
+                expect(user.created).not.equal(undefined)
             })
 
             it('should fail on undefined name', () => {
@@ -103,7 +104,7 @@ describe('logic', () => {
             let user
 
             beforeEach(async () => {
-                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })
+                user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123', created: Date.now() })
 
                 await user.save()
             })
@@ -113,8 +114,8 @@ describe('logic', () => {
 
                 expect(_user).not.to.be.instanceof(User)
 
-                const { id, name, surname, username, password, postits } = _user
-
+                const { id, name, surname, username, password, created } = _user
+                debugger
                 expect(id).to.exist
                 expect(id).to.be.a('string')
                 expect(id).to.equal(user.id)
@@ -122,24 +123,34 @@ describe('logic', () => {
                 expect(surname).to.equal(user.surname)
                 expect(username).to.equal(user.username)
                 expect(password).to.be.undefined
-                expect(postits).not.to.exist
+                expect(created).to.exist
             })
         })
 
         describe('update', () => {
             let user
 
-            beforeEach(() => (user = new User({ name: 'John', surname: 'Doe', username: 'jd', password: '123' })).save())
+            beforeEach(() => (user = new User({
+                name: 'John', surname: 'Doe', username: 'jd', password: '123',
+                sex: 'MALE', age: 30, city: ' Barcelona', presentation: 'Im guay', minAge: 30, maxAge: 35,
+            })).save())
 
             it('should update on correct data and password', async () => {
-                const { id, name, surname, username, password } = user
+                const { id, name, surname, username, password, sex, age, city, presentation, minAge, maxAge } = user
 
                 const newName = `${name}-${Math.random()}`
                 const newSurname = `${surname}-${Math.random()}`
                 const newUsername = `${username}-${Math.random()}`
                 const newPassword = `${password}-${Math.random()}`
+                const newSex = 'FEMALE'
+                const newAge = 35
+                const newCity = 'Madrid'
+                const newPresentation= 'not guay'
+                const newMinAge = 25
+                const newMaxAge = 30
 
-                const res = await logic.updateUser(id, newName, newSurname, newUsername, newPassword, password)
+                const res = await logic.updateUser(id, newName, newSurname, newUsername, newPassword, password,
+                    newSex, newAge, newCity, newPresentation, newMinAge, newMaxAge)
 
                 expect(res).to.be.undefined
 
@@ -148,11 +159,17 @@ describe('logic', () => {
                 const [_user] = _users
 
                 expect(_user.id).to.equal(id)
-
+                debugger
                 expect(_user.name).to.equal(newName)
                 expect(_user.surname).to.equal(newSurname)
                 expect(_user.username).to.equal(newUsername)
                 expect(_user.password).to.equal(newPassword)
+                expect(_user.sex).to.equal(newSex)
+                expect(_user.age).to.equal(newAge)
+                expect(_user.city).to.equal(newCity)
+                expect(_user.presentation).to.equal(newPresentation)
+                expect(_user.minAge).to.equal(newMinAge)
+                expect(_user.maxAge).to.equal(newMaxAge)
             })
 
             it('should update on correct id, name and password (other fields null)', async () => {
@@ -160,7 +177,7 @@ describe('logic', () => {
 
                 const newName = `${name}-${Math.random()}`
 
-                const res = await logic.updateUser(id, newName, null, null, null, password)
+                const res = await logic.updateUser(id, newName, null, null, null, password, null, null, null, null, null, null)
 
                 expect(res).to.be.undefined
 
@@ -181,7 +198,7 @@ describe('logic', () => {
 
                 const newSurname = `${surname}-${Math.random()}`
 
-                const res = await logic.updateUser(id, null, newSurname, null, null, password)
+                const res = await logic.updateUser(id, null, newSurname, null, null, password, null, null, null, null, null, null)
 
                 expect(res).to.be.undefined
 
@@ -205,40 +222,40 @@ describe('logic', () => {
                 expect(() => logic.updateUser(undefined, name, surname, username, password, password)).to.throw(TypeError, 'undefined is not a string')
             })
 
-            // TODO other test cases
+            // // TODO other test cases
 
-            describe('with existing user', () => {
-                let user2
+            // describe('with existing user', () => {
+            //     let user2
 
-                beforeEach(async () => {
-                    user2 = new User({ name: 'John', surname: 'Doe', username: 'jd2', password: '123' })
+            //     beforeEach(async () => {
+            //         user2 = new User({ name: 'John', surname: 'Doe', username: 'jd2', password: '123' })
 
-                    await user2.save()
-                })
+            //         await user2.save()
+            //     })
 
-                it('should update on correct data and password', async () => {
-                    const { id, name, surname, username, password } = user2
+            //     it('should update on correct data and password', async () => {
+            //         const { id, name, surname, username, password } = user2
 
-                    const newUsername = 'jd'
+            //         const newUsername = 'jd'
 
-                    try {
-                        const res = await logic.updateUser(id, null, null, newUsername, null, password)
+            //         try {
+            //             const res = await logic.updateUser(id, null, null, newUsername, null, password)
 
-                        expect(true).to.be.false
-                    } catch (err) {
-                        expect(err).to.be.instanceof(AlreadyExistsError)
-                    } finally {
-                        const _user = await User.findById(id)
+            //             expect(true).to.be.false
+            //         } catch (err) {
+            //             expect(err).to.be.instanceof(AlreadyExistsError)
+            //         } finally {
+            //             const _user = await User.findById(id)
 
-                        expect(_user.id).to.equal(id)
+            //             expect(_user.id).to.equal(id)
 
-                        expect(_user.name).to.equal(name)
-                        expect(_user.surname).to.equal(surname)
-                        expect(_user.username).to.equal(username)
-                        expect(_user.password).to.equal(password)
-                    }
-                })
-            })
+            //             expect(_user.name).to.equal(name)
+            //             expect(_user.surname).to.equal(surname)
+            //             expect(_user.username).to.equal(username)
+            //             expect(_user.password).to.equal(password)
+            //         }
+            //     })
+            // })
         })
 
     })

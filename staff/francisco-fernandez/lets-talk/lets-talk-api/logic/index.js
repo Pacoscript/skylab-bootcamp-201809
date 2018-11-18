@@ -13,7 +13,9 @@ const logic = {
 
             if (user) throw new AlreadyExistsError(`username ${username} already registered`)
 
-            user = new User({ name, surname, username, password })
+            let created = Date.now()
+            
+            user = new User({ name, surname, username, password, created })
 
             await user.save()
         })()
@@ -35,7 +37,7 @@ const logic = {
         validate([{ key: 'id', value: id, type: String }])
 
         return (async () => {
-            const user = await User.findById(id, { '_id': 0, password: 0, postits: 0, __v: 0 }).lean()
+            const user = await User.findById(id, { '_id': 0, password: 0, __v: 0 }).lean()
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
@@ -45,13 +47,19 @@ const logic = {
         })()
     },
 
-    updateUser(id, name, surname, username, newPassword, password) {
+    updateUser(id, name, surname, username, newPassword, password, sex, age, city, presentation, minAge, maxAge) {
         validate([
             { key: 'id', value: id, type: String },
             { key: 'name', value: name, type: String, optional: true },
             { key: 'surname', value: surname, type: String, optional: true },
             { key: 'username', value: username, type: String, optional: true },
-            { key: 'password', value: password, type: String }
+            { key: 'password', value: password, type: String },
+            { key: 'sex', value: sex, type: String, optional: true },
+            { key: 'age', value: age, type: Number, optional: true },
+            { key: 'city', value: city, type: String, optional: true },
+            { key: 'presentation', value: presentation, type: String, optional: true },
+            { key: 'minAge', value: minAge, type: Number, optional: true },
+            { key: 'maxAge', value: maxAge, type: Number, optional: true },
         ])
 
         return (async () => {
@@ -70,12 +78,24 @@ const logic = {
                 surname != null && (user.surname = surname)
                 user.username = username
                 newPassword != null && (user.password = newPassword)
+                sex != null && (user.sex = sex)
+                age != null && (user.age = age)
+                city != null && (user.city = city)
+                presentation != null && (user.presentation = presentation)
+                minAge != null && (user.minAge = minAge)
+                maxAge != null && (user.maxAge = maxAge)
 
                 await user.save()
             } else {
                 name != null && (user.name = name)
                 surname != null && (user.surname = surname)
                 newPassword != null && (user.password = newPassword)
+                sex != null && (user.sex = sex)
+                age != null && (user.age = age)
+                city != null && (user.city = city)
+                presentation != null && (user.presentation = presentation)
+                minAge != null && (user.minAge = minAge)
+                maxAge != null && (user.maxAge = maxAge)
 
                 await user.save()
             }
