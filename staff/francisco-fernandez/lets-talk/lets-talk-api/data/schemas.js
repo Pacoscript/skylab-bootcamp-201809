@@ -14,7 +14,6 @@ const Message = new Schema({
         type: String,
         default: 'PENDING',
         enum: ['PENDING', 'READED', 'RESPONDED'],
-        required: true
     },
     sentTo: {
         type: ObjectId,
@@ -23,7 +22,6 @@ const Message = new Schema({
     }
     ,sentDate:{
         type: Date,
-        required: true 
     }
 })
 
@@ -46,39 +44,45 @@ const User = new Schema({
         required: true
     },
     created: {
-        type: Number,
+        type: Date
     },
     sex: {
         type: String,
         default: 'MALE',
-        enum: ['MALE', 'FEMALE']
+        enum: ['MALE', 'FEMALE'],
+        required: true
     },
     age: {
-        type: Number
+        type: Number,
+        required: true
     },
     city: {
-        type: String  
+        type: String,
+        required: true  
     },
     presentation: {
-        type: String 
-    },
-    minAge: {
-        type: Number  
-    },
-    maxAge: {
-        type: Number  
+        type: String,
+        required: true 
     },
     contacts: {
-        type: Array  
+        type: Array,
+        required: true  
     },
     lastView: {
         type: Number,  
         type: ObjectId,
         ref: 'User'
     },
-    autorized: {
-        type: Boolean,
-        default: false
+    minAgePref: {
+        type: Number,
+        required: true  
+    },
+    maxAgePref: {
+        type: Number,
+        required: true  
+    },
+    photos: {
+        type: Array
     }
     
 })
