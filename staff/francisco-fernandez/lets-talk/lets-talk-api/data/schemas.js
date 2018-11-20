@@ -81,8 +81,17 @@ const User = new Schema({
         type: Number,
         required: true  
     },
-    photos: {
-        type: Array
+    photo1: {
+        type: String,
+        default: '#'
+    },
+    photo2: {
+        type: String,
+        default: '#'
+    },
+    photo3: {
+        type: String,
+        default: '#'
     }
     
 })

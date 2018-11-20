@@ -143,6 +143,9 @@ const logic = {
         ])
 
         return (async () => {
+            
+            if (id === idContact) throw new NotAllowedError('user cannot add himself as a contact')
+
             const user = await User.findById(id)
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
@@ -150,17 +153,36 @@ const logic = {
             const newContact = await User.findById(idContact)
 
             if (!newContact) throw new NotFoundError(`user with id ${idContact} not found`)
-
-            if (user.id === newContact.id) throw new NotAllowedError('user cannot add himself as a collaborator')
+            
+            
 
             user.contacts.forEach(_contactId => {
-                if (_contactId === newContact.id) throw new AlreadyExistsError(`user with id ${id} arleady has collaborator with id ${_contactId}`)
+                if (_contactId === newContact.id) throw new AlreadyExistsError(`user with id ${id} arleady has contact with id ${_contactId}`)
             })
-
+            
             user.contacts.push(newContact._id)
+            newContact.contacts.push(user._id)
 
             await user.save()
+            await newContact.save()
         })()
+    },
+
+    listContacts(userId){
+        validate([
+            { key: 'userId', value: userId, type: String }
+        ])
+
+        return (async () => {
+            const user = await User.findById(userId)
+
+            if (!user) throw new NotFoundError(`user with id ${id} not found`)
+
+            const contacts = await Promise.all(user.contacts.map(async contactId => await User.findById(contactId)))
+
+            return contacts.map(({ name, presentation, photo1 }) => ({ name, presentation, photo1 }))
+        })()
+
     },
 
     addMessage(user, sentTo, text) {
@@ -179,7 +201,7 @@ const logic = {
 
             if (!user2) throw new NotFoundError(`user with id ${sentTo} not found`)
 
-            if (!_user.contacts.includes(user2.id)) throw new NotFoundError(`user with id ${sentTo} is not a contact of user with id ${user}`)
+            if (!_user.contacts.includes(user2.id).toString()) throw new NotFoundError(`user with id ${sentTo} is not a contact of user with id ${user}`)
 
             let sentDate = Date.now()
             message = new Message({ text, user, sentTo, sentDate })
@@ -206,7 +228,7 @@ const logic = {
 
             if (!_user2) throw new NotFoundError(`user with id ${user2} not found`)
 
-            if (!_user1.contacts.includes(_user2.id)) throw new NotFoundError(`user with id ${sentTo} is not a contact of user with id ${user}`)
+            if (!_user1.contacts.includes(_user2.id).toString()) throw new NotFoundError(`user with id ${user2} is not a contact of user with id ${user1}`)
 
             var ObjectId = require('mongoose').Types.ObjectId
             let messages = await Message.find({
@@ -217,6 +239,16 @@ const logic = {
             messages.sort(function (a, b) {
                 return (a.sentDate - b.sentDate)
             })
+
+           
+            if (messages[messages.length-1].status==='PENDING' && messages[messages.length-1].user.toString()===user2){
+                let message = await Message.findById(messages[messages.length-1].id.toString())
+                let message2 = await Message.findById(messages[messages.length-2].id.toString())
+                message.status = 'READED'
+                message2.status = 'RESPONDED'
+                await message.save()
+                await message2.save()
+            }
 
             return messages
 
@@ -250,11 +282,11 @@ const logic = {
         })()
     },
 
-    insertPhoto(id, photo, index) {
+    insertPhoto(id, chunk, photo) {
         validate([
             { key: 'id', value: id, type: String },
-            { key: 'photo', value: photo, type: String },
-            { key: 'index', value: index, type: Number }
+            { key: 'chunk', value: chunk, type: String },
+            { key: 'photo', value: photo, type: String }
         ])
 
         return (async () => {
@@ -263,11 +295,12 @@ const logic = {
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
-            const imageCloudinary = await this._saveImage(photo)
+            const imageCloudinary = await this._saveImage(chunk)
+           
+            user.photo1 = imageCloudinary
             
-            user.photos.push(imageCloudinary)
-            debugger
             await user.save()
+            
         })()
 
     }
