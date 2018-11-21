@@ -10,9 +10,14 @@ body {
 ul {
   margin: 0; }
 
+.candidates {
+  background-color: white; }
+
 .subtitle {
   margin-left: auto;
   margin-right: auto;
+  margin-top: 0px;
+  padding-top: 10px;
   width: 80%; }
 
 .presentation, .presentation__name, .presentation__text, .presentation__buttons, .messages__name, .message {
@@ -131,7 +136,8 @@ ul {
   flex-direction: column; }
 
 body {
-  font-family: "Signika", sans-serif; }
+  font-family: "Signika", sans-serif;
+  background-color: #48484A; }
 
 header {
   background-color: #48484A;
@@ -201,6 +207,6 @@ footer {
   text-align: center;
   padding-top: 15px;
   padding-bottom: 15px;
-  margin-top: 30px; }
+  margin-top: 0px; }
 
 /*# sourceMappingURL=styles.css.map */

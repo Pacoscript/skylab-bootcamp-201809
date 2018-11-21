@@ -1,6 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-var cloudinary = require('cloudinary')
+const cloudinary = require('cloudinary')
 const logic = require('../logic')
 const jwt = require('jsonwebtoken')
 const bearerTokenParser = require('../utils/bearer-token-parser')

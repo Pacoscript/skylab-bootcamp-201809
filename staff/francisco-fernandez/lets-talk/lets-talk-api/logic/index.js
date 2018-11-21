@@ -1,7 +1,7 @@
 const { User, Message } = require('../data')
 const { AlreadyExistsError, AuthError, NotAllowedError, NotFoundError } = require('../errors')
 const validate = require('../utils/validate')
-var cloudinary = require('cloudinary')
+const cloudinary = require('cloudinary')
 // const fs = require('fs')
 // const path = require('path')
 
