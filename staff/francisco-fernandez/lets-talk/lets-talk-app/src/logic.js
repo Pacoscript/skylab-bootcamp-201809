@@ -35,8 +35,8 @@ const logic = {
 
     login(username, password) {
         validate([
-        { key: 'username', value: username, type: String },
-        { key: 'password', value: password, type: String }])
+            { key: 'username', value: username, type: String },
+            { key: 'password', value: password, type: String }])
 
         return fetch(`${this.url}/auth`, {
             method: 'POST',
@@ -59,7 +59,27 @@ const logic = {
             })
     },
 
-    retrieveUser(id){
+    retrieveCandidates(id) {
+        validate([
+            { key: 'id', value: id, type: String }])
+
+        return fetch(`${this.url}/users/${id}/candidates`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': `Bearer ${this._token}`
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+                
+                return res.data
+        })     
+
+    },
+
+    retrieveUser(id) {
         validate([{ key: 'id', value: id, type: String }])
 
         return fetch(`${this.url}/users/${id}`, {
@@ -74,6 +94,52 @@ const logic = {
 
                 return res.data
             })
+
+            
+    },
+
+    addContact(id, idContact){
+        debugger
+        validate([
+            { key: 'id', value: id, type: String },
+            { key: 'idContact', value: idContact, type: String }])
+
+            return fetch(`${this.url}/users/${id}/contacts`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${this._token}`,
+                    'Content-Type': 'application/json; charset=utf-8'
+                    
+                },
+                body: JSON.stringify({ id, idContact })
+            })
+                .then(res => res.json())
+                .then(res => {
+                    debugger
+                    if (res.error) throw Error(res.error)
+    
+                })
+        
+    },
+
+    listContacts(id){
+        validate([
+            { key: 'id', value: id, type: String }])
+
+        return fetch(`${this.url}/users/${id}/contacts`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': `Bearer ${this._token}`
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+                
+                return res.data
+        })     
+
     },
 
     get loggedIn() {
@@ -81,7 +147,7 @@ const logic = {
     },
 
     logout() {
-        
+
         this._userId = null
         this._token = null
 

@@ -5,7 +5,7 @@ class Profile extends Component {
     state = { name: '', surname: '', username: '', password: '', sex: '', age: '', city: '', presentation: '', minAge: '', maxAge: '' }
 
     componentDidMount = () => {
-        debugger
+        
         const id = logic._userId
 
         logic.retrieveUser(id)
