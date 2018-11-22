@@ -50,9 +50,13 @@ ul {
   color: #EBEEF4;
   background-color: #48484A; }
 
+.contacts {
+  background-color: #78CD00; }
+
 .contacts__container {
   display: flex;
-  flex-flow: row wrap; }
+  flex-flow: row wrap;
+  background-color: #78CD00; }
 
 .contact, .contact__name {
   margin-left: auto;

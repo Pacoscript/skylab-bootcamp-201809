@@ -180,7 +180,7 @@ const logic = {
 
             const contacts = await Promise.all(user.contacts.map(async contactId => await User.findById(contactId)))
 
-            return contacts.map(({ name, presentation, photo1 }) => ({ name, presentation, photo1 }))
+            return contacts.map(({ id, name, presentation, photo1 }) => ({ id, name, presentation, photo1 }))
         })()
 
     },

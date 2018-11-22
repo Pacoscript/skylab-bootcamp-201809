@@ -17,7 +17,7 @@ logic.url = 'http://localhost:5000/api'
 
 class App extends Component {
 
-  state = { error: null }
+  state = { error: null, contactId: false}
 
   handleGoRegister = () => {
 
@@ -93,7 +93,12 @@ class App extends Component {
     }
   }
 
+  handleGoContact = (contactId) =>{
+    debugger
+    this.setState({contactId}, ()=>this.props.history.push('/messages'))
+    
 
+  }
 
   render() {
     return <div>
@@ -103,8 +108,8 @@ class App extends Component {
       <Route path="/register" render={() => logic.loggedIn ? <Register onRegister={this.handleRegister} /> : <Redirect to="/candidates" />} />
       <Route path="/login" render={() => logic.loggedIn ? <Login onLogin={this.handleLogin} /> : <Redirect to="/candidates" />} />
       <Route path="/candidates" render={() => <Candidates onMessage={this.handleMessage}/>} />
-      <Route path="/messages" render={() => <Messages />} />
-      <Route path="/contacts" render={() => <Contacts />} />
+      <Route path="/messages" render={() => <Messages contactId={this.state.contactId} />} />
+      <Route path="/contacts" render={() => <Contacts onGoContact={this.handleGoContact} />} />
       <Route path="/profile" render={() => <Profile />} />
       <Route path="/" render={() => <Footer />} />
     </div>
