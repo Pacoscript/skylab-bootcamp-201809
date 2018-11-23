@@ -143,7 +143,7 @@ const logic = {
         ])
 
         return (async () => {
-            
+
             if (id === idContact) throw new NotAllowedError('user cannot add himself as a contact')
 
             const user = await User.findById(id)
@@ -153,13 +153,13 @@ const logic = {
             const newContact = await User.findById(idContact)
 
             if (!newContact) throw new NotFoundError(`user with id ${idContact} not found`)
-            
-            
+
+
 
             user.contacts.forEach(_contactId => {
                 if (_contactId === newContact.id) throw new AlreadyExistsError(`user with id ${id} arleady has contact with id ${_contactId}`)
             })
-            
+
             user.contacts.push(newContact._id)
             newContact.contacts.push(user._id)
 
@@ -168,7 +168,7 @@ const logic = {
         })()
     },
 
-    listContacts(userId){
+    listContacts(userId) {
         validate([
             { key: 'userId', value: userId, type: String }
         ])
@@ -204,7 +204,7 @@ const logic = {
             if (!_user.contacts.includes(user2.id).toString()) throw new NotFoundError(`user with id ${sentTo} is not a contact of user with id ${user}`)
 
             let sentDate = Date.now()
-            message = new Message({ text, user, sentTo, sentDate })
+            message = new Message({ text, user, nameUser:_user.name, sentTo, nameSentTo:user2.name, sentDate })
 
             await message.save()
 
@@ -219,7 +219,7 @@ const logic = {
             { key: 'user2', value: user2, type: String }
         ])
         return (async () => {
-
+            
             const _user1 = await User.findById(user1)
 
             if (!_user1) throw new NotFoundError(`user1 with id ${user1} not found`)
@@ -240,17 +240,18 @@ const logic = {
                 return (a.sentDate - b.sentDate)
             })
 
-           
-            if (messages[messages.length-1].status==='PENDING' && messages[messages.length-1].user.toString()===user2){
-                let message = await Message.findById(messages[messages.length-1].id.toString())
-                let message2 = await Message.findById(messages[messages.length-2].id.toString())
-                message.status = 'READED'
-                message2.status = 'RESPONDED'
-                await message.save()
-                await message2.save()
-            }
+            if (messages.length > 0)
+                if (messages[messages.length - 1].status === 'PENDING' && messages[messages.length - 1].user.toString() === user2) {
+                    let message = await Message.findById(messages[messages.length - 1].id.toString())
+                    let message2 = await Message.findById(messages[messages.length - 2].id.toString())
+                    message.status = 'READED'
+                    message2.status = 'RESPONDED'
+                    await message.save()
+                    await message2.save()
+                }
 
-            return messages
+            if (messages.length > 0) return messages
+                else return ('no messages')
 
         })()
     },
@@ -296,11 +297,11 @@ const logic = {
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
             const imageCloudinary = await this._saveImage(chunk)
-           
+
             user.photo1 = imageCloudinary
-            
+
             await user.save()
-            
+
         })()
 
     }

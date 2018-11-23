@@ -10,6 +10,10 @@ const Message = new Schema({
         ref: 'User',
         required: true
     },
+    nameUser: {
+        type: String
+    }
+    ,
     status: {
         type: String,
         default: 'PENDING',
@@ -19,8 +23,11 @@ const Message = new Schema({
         type: ObjectId,
         ref: 'User',
         required: true
-    }
-    ,sentDate:{
+    },
+    nameSentTo: {
+        type: String
+    },
+    sentDate:{
         type: Date,
     }
 })

@@ -4,7 +4,7 @@ function Contact(props) {
 
 
 
-    return <section className='contact' onClick={()=>props.onGoContact(props.id)}>
+    return <section className='contact' onClick={()=>props.onGoContact(props.id, props.name)}>
         <h2 className='contact__name'>
             {props.name}
         </h2>

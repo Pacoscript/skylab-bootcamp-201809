@@ -1,6 +1,55 @@
-import React from 'react'
+import React, {Component} from 'react'
+import Thread from './Thread'
+import logic from '../logic'
 
-function Messages(props) {
+class Messages extends Component{
+    
+    state = {contactId: this.props.contactId, messages: [], text: ''}
+
+    componentDidMount(){
+        
+        const id = logic._userId
+
+        const contactId = this.state.contactId
+     
+        try {
+            logic.retrieveMessages(id, contactId)
+                .then (messages =>this.setState({messages}))
+                .catch(err => this.setState({ error: err.message }))
+          }
+          catch (err) {
+            this.setState({ error: err.message })
+          }
+    }
+
+    handleTextChange = event => {
+        const text = event.target.value
+
+        this.setState({ text })
+    }
+
+    handleSubmit = event => {
+        event.preventDefault()
+
+        const id = logic._userId
+
+        const contactId = this.state.contactId
+
+        const text = this.state.text
+        
+        try {
+            logic.addMessage(id, contactId, text)
+                .then (messages =>this.setState({messages}))
+                .catch(err => this.setState({ error: err.message }))
+          }
+          catch (err) {
+            this.setState({ error: err.message })
+          }
+    }
+    
+
+
+    render (){
     return     <main className='messages__page'>
 
     <section>
@@ -9,44 +58,27 @@ function Messages(props) {
 
 
     <section className='messages'>
-        <h2 className='messages__name'>
-            Ana
-        </h2>
+       
         <div>
-            <div className='message'>
-                <p className='message__name'>Paco:</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe sunt, dolore necessitatibus
-                    repudiandae dicta nemo nihil rem commodi eveniet minima, perspiciatis consequuntur amet odit
-                    incidunt accusamus facere cumque sit beatae?</p>
-            </div>
-            <div className='message'>
-                <p className='message__name'>Ana:</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe sunt, dolore necessitatibus
-                    repudiandae dicta nemo nihil rem commodi eveniet minima, perspiciatis consequuntur amet odit
-                    incidunt accusamus facere cumque sit beatae?</p>
-            </div>
-            <div className='message'>
-                <p className='message__name'>Paco:</p>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe sunt, dolore necessitatibus
-                    repudiandae dicta nemo nihil rem commodi eveniet minima, perspiciatis consequuntur amet odit
-                    incidunt accusamus facere cumque sit beatae?</p>
-            </div>
+        {this.state.messages.map(message => <Thread key={message.id} name= {message.nameUser} id={message.id} photo={message.sentTo} text={message.text}/>)}
         </div>
     </section>
 
-    <section className='new-message'>
-        <textarea className='new-message__text'>text here
+    <form className='new-message' onSubmit={this.handleSubmit}>
+        <textarea className='new-message__text' onChange={this.handleTextChange}>
                 
             </textarea>
-    </section>
-    <div className='button_send'>
-    <a className='button'>Send, good luck!</a>
-    <a className='button'>Photos</a>
+            <div className='button_send'>
+    <button className='button' type= 'submit'>Send, good luck!</button>
+    <button className='button'>Photos</button>
     </div>
+    </form>
+    
 
 
 
 </main>
+}
 }
 
 export default Messages

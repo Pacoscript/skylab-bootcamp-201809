@@ -17,7 +17,7 @@ logic.url = 'http://localhost:5000/api'
 
 class App extends Component {
 
-  state = { error: null, contactId: false}
+  state = { error: null, contactId: false, contactName: false}
 
   handleGoRegister = () => {
 
@@ -85,7 +85,7 @@ class App extends Component {
     try {
       logic.addContact(logic._userId, idContact)
         .then(() => {
-          this.setState({ error: null }, () => this.props.history.push('/messages'))
+          this.setState({ error: null }, () => this.props.history.push(`/messages/${idContact}`))
         })
         .catch(err => this.setState({ error: err.message }))
     } catch (err) {
@@ -93,9 +93,9 @@ class App extends Component {
     }
   }
 
-  handleGoContact = (contactId) =>{
-    debugger
-    this.setState({contactId}, ()=>this.props.history.push('/messages'))
+  handleGoContact = (contactId, contactName) =>{
+    
+    this.setState({contactId, contactName}, ()=>this.props.history.push(`/messages/${contactId}`))
     
 
   }
@@ -108,7 +108,7 @@ class App extends Component {
       <Route path="/register" render={() => logic.loggedIn ? <Register onRegister={this.handleRegister} /> : <Redirect to="/candidates" />} />
       <Route path="/login" render={() => logic.loggedIn ? <Login onLogin={this.handleLogin} /> : <Redirect to="/candidates" />} />
       <Route path="/candidates" render={() => <Candidates onMessage={this.handleMessage}/>} />
-      <Route path="/messages" render={() => <Messages contactId={this.state.contactId} />} />
+      <Route path="/messages/:id" render={(props) => <Messages contactId={props.match.params.id} contactName={this.state.contactName} />} />
       <Route path="/contacts" render={() => <Contacts onGoContact={this.handleGoContact} />} />
       <Route path="/profile" render={() => <Profile />} />
       <Route path="/" render={() => <Footer />} />

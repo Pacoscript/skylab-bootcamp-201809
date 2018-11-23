@@ -73,13 +73,14 @@ const logic = {
             .then(res => res.json())
             .then(res => {
                 if (res.error) throw Error(res.error)
-                
+
                 return res.data
-        })     
+            })
 
     },
 
     retrieveUser(id) {
+        debugger
         validate([{ key: 'id', value: id, type: String }])
 
         return fetch(`${this.url}/users/${id}`, {
@@ -95,34 +96,34 @@ const logic = {
                 return res.data
             })
 
-            
+
     },
 
-    addContact(id, idContact){
+    addContact(id, idContact) {
         debugger
         validate([
             { key: 'id', value: id, type: String },
             { key: 'idContact', value: idContact, type: String }])
 
-            return fetch(`${this.url}/users/${id}/contacts`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${this._token}`,
-                    'Content-Type': 'application/json; charset=utf-8'
-                    
-                },
-                body: JSON.stringify({ id, idContact })
+        return fetch(`${this.url}/users/${id}/contacts`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${this._token}`,
+                'Content-Type': 'application/json; charset=utf-8'
+
+            },
+            body: JSON.stringify({ id, idContact })
+        })
+            .then(res => res.json())
+            .then(res => {
+                debugger
+                if (res.error) throw Error(res.error)
+
             })
-                .then(res => res.json())
-                .then(res => {
-                    debugger
-                    if (res.error) throw Error(res.error)
-    
-                })
-        
+
     },
 
-    listContacts(id){
+    listContacts(id) {
         validate([
             { key: 'id', value: id, type: String }])
 
@@ -131,14 +132,61 @@ const logic = {
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
                 'Authorization': `Bearer ${this._token}`
+
             }
         })
             .then(res => res.json())
             .then(res => {
                 if (res.error) throw Error(res.error)
-                
+
                 return res.data
-        })     
+            })
+
+    },
+
+    addMessage(user, sentTo, text) {
+        validate([
+            { key: 'user', value: user, type: String },
+            { key: 'sentTo', value: sentTo, type: String },
+            { key: 'text', value: text, type: String }])
+        
+        return fetch(`${this.url}/users/${user}/message`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': `Bearer ${this._token}`
+            },
+            body: JSON.stringify({ user, sentTo, text })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+                
+            })
+
+
+    },
+
+    retrieveMessages(id, idContact) {
+
+        validate([
+            { key: 'id', value: id, type: String },
+            { key: 'idContact', value: idContact, type: String }])
+
+        return fetch(`${this.url}/users/${id}/messages/${idContact}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this._token}`,
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.error) throw Error(res.error)
+
+                return res.data
+            })
 
     },
 

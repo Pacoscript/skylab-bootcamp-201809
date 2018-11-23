@@ -152,13 +152,13 @@ router.post('/users/:id/message', [bearerTokenParser, jwtVerifier, jsonBodyParse
 })
 
 //RETRIEVE MESSAGES
-router.get('/users/:id/messages', [bearerTokenParser, jwtVerifier, jsonBodyParser], (req, res) => {
+router.get('/users/:id/messages/:idContact', [bearerTokenParser, jwtVerifier], (req, res) => {
     routeHandler(() => {
-        const { sub, params: { id }, body: { user1, user2 } } = req
+        const { sub, params: { id, idContact } } = req
 
         if (id !== sub) throw Error('token sub does not match user id')
 
-        return logic.retrieveMessages(user1, user2)
+        return logic.retrieveMessages(id, idContact)
             .then(messages => res.json({
                 data: messages
             }))
