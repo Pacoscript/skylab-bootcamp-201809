@@ -100,7 +100,7 @@ const logic = {
     },
 
     addContact(id, idContact) {
-        debugger
+        
         validate([
             { key: 'id', value: id, type: String },
             { key: 'idContact', value: idContact, type: String }])
@@ -116,7 +116,7 @@ const logic = {
         })
             .then(res => res.json())
             .then(res => {
-                debugger
+                
                 if (res.error) throw Error(res.error)
 
             })

@@ -3,7 +3,7 @@ import logic from '../logic'
 
 class Candidates extends Component {
 
-    state = { error: '', listCandidates: undefined, ind: 0 }
+    state = { error: '', listCandidates: false, ind: 0 }
 
     componentDidMount = () => {
         
@@ -17,6 +17,7 @@ class Candidates extends Component {
         catch (err) {
             this.setState({ error: err.message })
         }
+        
     }
 
     handleNext = () => {
@@ -46,7 +47,7 @@ class Candidates extends Component {
     handleNewMessage = () =>{
         const ind = this.state.ind
 
-        const idContact = this.state.listCandidates[ind]._id
+        const idContact = this.state.listCandidates[ind].id
         
         this.props.onMessage(idContact)
     }

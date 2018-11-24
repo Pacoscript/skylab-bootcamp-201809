@@ -76,7 +76,7 @@ const logic = {
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
             user.id = id
-
+            
             return user
         })()
     },
@@ -155,9 +155,10 @@ const logic = {
             if (!newContact) throw new NotFoundError(`user with id ${idContact} not found`)
 
 
-
+            debugger
             user.contacts.forEach(_contactId => {
-                if (_contactId === newContact.id) throw new AlreadyExistsError(`user with id ${id} arleady has contact with id ${_contactId}`)
+                debugger
+                if (_contactId.toString() === newContact._id.toString()) throw new AlreadyExistsError(`user with id ${id} arleady has contact with id ${_contactId}`)
             })
 
             user.contacts.push(newContact._id)
@@ -204,7 +205,7 @@ const logic = {
             if (!_user.contacts.includes(user2.id).toString()) throw new NotFoundError(`user with id ${sentTo} is not a contact of user with id ${user}`)
 
             let sentDate = Date.now()
-            message = new Message({ text, user, nameUser:_user.name, sentTo, nameSentTo:user2.name, sentDate })
+            message = new Message({ text, user, nameUser: _user.name, sentTo, nameSentTo: user2.name, sentDate })
 
             await message.save()
 
@@ -219,7 +220,7 @@ const logic = {
             { key: 'user2', value: user2, type: String }
         ])
         return (async () => {
-            
+
             const _user1 = await User.findById(user1)
 
             if (!_user1) throw new NotFoundError(`user1 with id ${user1} not found`)
@@ -249,9 +250,9 @@ const logic = {
                     await message.save()
                     await message2.save()
                 }
-
+            debugger
             if (messages.length > 0) return messages
-                else return ('no messages')
+            else return ([])
 
         })()
     },
@@ -261,6 +262,11 @@ const logic = {
         validate([
             { key: 'user', value: user, type: String }
         ])
+
+        const candidatesFiltered = []
+
+        let flag = false
+
 
         return (async () => {
 
@@ -273,13 +279,55 @@ const logic = {
             if (_user.sex === 'MALE') sexSearch = 'FEMALE'
             else sexSearch = 'MALE'
 
-            let candidates = await User.find({ sex: sexSearch, age: { $gte: _user.minAgePref, $lte: _user.maxAgePref } })
+            const contacts = _user.contacts
 
-            candidates.sort(function (a, b) {
+            let candidates = await User.find({ sex: sexSearch, age: { $gte: _user.minAgePref, $lte: _user.maxAgePref } }).lean()
+
+            candidates.forEach(candidate => {
+                contacts.forEach(contact => {
+                    debugger
+                    if (candidate._id.toString() === contact._id.toString()) {
+                        flag = true
+                    }
+                    
+                })
+                if (flag === true) flag = false
+                    else {
+                        candidatesFiltered.push(candidate)
+                        flag = false
+                    }
+
+            })
+
+            candidatesFiltered.sort(function (a, b) {
                 return (a.created - b.created)
             })
 
-            return candidates
+            candidatesFiltered.forEach(candidate => {
+                candidate.id = candidate._id.toString()
+
+                delete candidate.__v
+                delete candidate._id
+                delete candidate.contacts
+                delete candidate.city
+                delete candidate.created
+                delete candidate.surname
+                delete candidate.username
+                delete candidate.password
+                delete candidate.sex
+                delete candidate.age
+                delete candidate.maxAgePref
+                delete candidate.minAgePref
+                delete candidate. photo1
+                delete candidate. photo2
+                delete candidate. photo3
+                
+            })
+
+
+            if (candidatesFiltered.length > 0) return candidatesFiltered
+            else return false
+
         })()
     },
 

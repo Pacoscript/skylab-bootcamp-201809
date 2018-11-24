@@ -6,7 +6,7 @@ function routeHandler(callback, res) {
             .catch(err => {
                 const { message } = err
 
-                debugger
+                
 
                 if (err instanceof AuthError) {
                     res.status(401)

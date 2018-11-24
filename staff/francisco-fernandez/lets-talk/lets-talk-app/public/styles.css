@@ -91,7 +91,7 @@ ul {
   border: 1px solid #48484A;
   border-radius: 5px;
   overflow-y: scroll;
-  max-height: 250px;
+  height: 250px;
   margin-bottom: 10px;
   background-color: white; }
 

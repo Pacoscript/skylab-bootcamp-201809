@@ -14,12 +14,15 @@ class Messages extends Component{
      
         try {
             logic.retrieveMessages(id, contactId)
-                .then (messages =>this.setState({messages}))
+                .then (messages =>{
+                    
+                    this.setState({messages})})
                 .catch(err => this.setState({ error: err.message }))
           }
           catch (err) {
             this.setState({ error: err.message })
           }
+          
     }
 
     handleTextChange = event => {
