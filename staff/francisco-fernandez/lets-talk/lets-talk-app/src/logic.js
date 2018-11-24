@@ -80,7 +80,7 @@ const logic = {
     },
 
     retrieveUser(id) {
-        debugger
+        
         validate([{ key: 'id', value: id, type: String }])
 
         return fetch(`${this.url}/users/${id}`, {

@@ -89,7 +89,10 @@ class Register extends Component {
                     <p>Surname <input onChange={this.handleSurnameChange} /> </p>
                     <p>Username <input onChange={this.handleUsernameChange} /> </p>
                     <p>Password <input onChange={this.handlePasswordChange} type='password' /> </p>
-                    <p>Sex <input onChange={this.handleSexChange} /> </p>
+                    <p>Sex <select onChange={this.handleSexChange}>
+                        <option value="MALE">MALE</option>
+                        <option value="FEMALE">FEMALE</option>
+                    </select> </p>
                     <p>Age <input onChange={this.handleAgeChange} /> </p>
                     <p>City <input onChange={this.handleCityChange} /> </p>
                     <p>Presentation <textarea onChange={this.handlePresentationChange}></textarea> </p>
