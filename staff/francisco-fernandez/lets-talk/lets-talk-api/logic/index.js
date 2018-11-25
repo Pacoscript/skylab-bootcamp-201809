@@ -251,7 +251,7 @@ const logic = {
                     await message2.save()
                 }
             debugger
-            if (messages.length > 0) return messages
+            if (messages.length > 0) return messages.map(({ id, nameSentTo, nameUser, text, user }) => ({ id, nameSentTo, nameUser, text, user }))
             else return ([])
 
         })()
