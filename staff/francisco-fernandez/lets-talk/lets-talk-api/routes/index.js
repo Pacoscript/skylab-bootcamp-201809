@@ -72,6 +72,20 @@ router.get('/users/:id', [bearerTokenParser, jwtVerifier], (req, res) => {
     }, res)
 })
 
+//RETRIEVE USER PHOTOS
+router.get('/users/:id/photos', (req, res) => {
+    routeHandler(() => {
+        const { params: { id } } = req
+
+        return logic.retrieveUserPhotos(id)
+        .then(photos =>
+            res.json({
+                data: photos
+            }))
+
+    }, res)
+})
+
 //UPDATE USER
 router.patch('/users/:id', [bearerTokenParser, jwtVerifier, jsonBodyParser], (req, res) => {
     routeHandler(() => {
@@ -79,8 +93,8 @@ router.patch('/users/:id', [bearerTokenParser, jwtVerifier, jsonBodyParser], (re
 
         if (id !== sub) throw Error('token sub does not match user id')
 
-        return logic.updateUser(id, name ? name : null, surname ? surname : null, username ? username : null, newPassword ? newPassword : null, password, 
-            sex ? sex : null, age ? age: null, city ? city : null, presentation ? presentation: null, minAgePref ? minAgePref : null, maxAgePref ? maxAgePref: null)
+        return logic.updateUser(id, name ? name : null, surname ? surname : null, username ? username : null, newPassword ? newPassword : null, password,
+            sex ? sex : null, age ? age : null, city ? city : null, presentation ? presentation : null, minAgePref ? minAgePref : null, maxAgePref ? maxAgePref : null)
             .then(() =>
                 res.json({
                     message: 'user updated'
@@ -123,17 +137,18 @@ router.get('/users/:id/contacts', [bearerTokenParser, jwtVerifier, jsonBodyParse
 
 
 //ADD PHOTO CLOUDINARY
-router.patch('/upload', jsonBodyParser, (req, res) => {
-    const {
-        body: { base64Image },
-    } = req
+router.patch('/upload', [bearerTokenParser, jwtVerifier, jsonBodyParser], (req, res) => {
 
-    return logic._saveImage(base64Image)
-        .then(photo => res.status(200).json({ status: 'OK', photo }))
-        .catch((err) => {
-            const { message } = err
-            res.status(err instanceof LogicError ? 400 : 500).json({ message })
-        })
+    routeHandler(() => {
+        const { sub, body: { base64Image, photo } } = req
+
+        return logic.insertPhoto(sub, base64Image, photo)
+            .then(photo => res.status(200).json({ status: 'OK', photo }))
+            .catch((err) => {
+                const { message } = err
+                res.status(err instanceof LogicError ? 400 : 500).json({ message })
+            })
+    }, res)
 })
 
 //ADD MESSAGE

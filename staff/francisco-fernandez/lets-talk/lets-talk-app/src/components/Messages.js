@@ -4,7 +4,7 @@ import logic from '../logic'
 
 class Messages extends Component {
 
-    state = { contactId: this.props.contactId, contactName: 'name', messages: [], text: '', flag: false }
+    state = { contactId: this.props.contactId, contactPhotos: undefined, contactName: 'name', messages: [], text: '', flag: true, photoFlag: false }
 
     componentDidMount() {
 
@@ -18,11 +18,13 @@ class Messages extends Component {
                     if (messages[messages.length - 1].user === id) {
                         this.setState({ flag: true })
                         this.setState({ contactName: messages[messages.length - 1].nameSentTo })
+
                     }
 
                     else
                         this.setState({ contactName: messages[messages.length - 1].nameUser })
-                    
+                    if (messages.length > 3) this.setState({ photoFlag: true })
+
 
                     this.setState({ messages })
 
@@ -32,9 +34,23 @@ class Messages extends Component {
         catch (err) {
             this.setState({ error: err.message })
         }
-        // debugger
-        // var objDiv = document.getElementById("messages__box")
-        // objDiv.scrollTop = 9999
+
+        try {
+            logic.retrieveUserPhotos(contactId)
+
+                .then(photos => {
+                    this.setState({ contactPhotos: photos })
+                    if (this.state.contactPhotos && photos.photo1 === '#') {
+                        const contactPhotos = this.state.contactPhotos
+                        contactPhotos.photo1 = "./images/blank-profile-picture-973461_640.png"
+                        this.setState({ contactPhotos })
+                    }
+                })
+
+        }
+        catch (err) {
+            this.setState({ error: err.message })
+        }
     }
 
     handleTextChange = event => {
@@ -77,14 +93,17 @@ class Messages extends Component {
     render() {
         return <main className='messages__page'>
 
-            <section>
-                <h3 className='subtitle'>Messages with {this.state.contactName}</h3>
+            <section className='messages__head'>
+                {this.state.photoFlag && <div><img className='imgmini' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img></div>}
+                {!this.state.photoFlag && <div><img className='imgmini' src="./images/blank-profile-picture-973461_640.png"></img></div>}
+                <div><h1 className='messages__name'> {this.state.contactName}</h1></div>
+
             </section>
 
 
             <section className='messages'>
 
-                <div  id='messages__box'>
+                <div id='messages__box'>
                     {this.state.messages.map(message => <Thread key={message.id} name={message.nameUser} id={message.id} photo={message.sentTo} text={message.text} />)}
                 </div>
             </section>

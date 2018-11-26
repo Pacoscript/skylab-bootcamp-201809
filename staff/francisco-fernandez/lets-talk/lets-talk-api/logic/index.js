@@ -81,6 +81,19 @@ const logic = {
         })()
     },
 
+    retrieveUserPhotos(id){
+        validate([{ key: 'id', value: id, type: String }])
+
+        return (async () => {
+            const user = await User.findById(id, { '_id': 0, name: 0, surname: 0, username: 0, password: 0, created: 0, sex: 0, city: 0, maxAgePref: 0, age:0, minAgePref:0, presentation: 0, __v: 0, contacts: 0,  }).lean()
+
+            if (!user) throw new NotFoundError(`user with id ${id} not found`)
+            
+            return user
+        })()
+
+    },
+
     updateUser(id, name, surname, username, newPassword, password, sex, age, city, presentation, minAgePref, maxAgePref) {
         validate([
             { key: 'id', value: id, type: String },
@@ -250,7 +263,7 @@ const logic = {
                     await message.save()
                     await message2.save()
                 }
-            debugger
+            
             if (messages.length > 0) return messages.map(({ id, nameSentTo, nameUser, text, user }) => ({ id, nameSentTo, nameUser, text, user }))
             else return ([])
 
@@ -332,6 +345,7 @@ const logic = {
     },
 
     insertPhoto(id, chunk, photo) {
+        
         validate([
             { key: 'id', value: id, type: String },
             { key: 'chunk', value: chunk, type: String },
@@ -346,7 +360,10 @@ const logic = {
 
             const imageCloudinary = await this._saveImage(chunk)
 
-            user.photo1 = imageCloudinary
+            if (photo === 'photo1') user.photo1 = imageCloudinary
+            else if (photo === 'photo2') user.photo2 = imageCloudinary
+            else user.photo3 = imageCloudinary
+            
 
             await user.save()
 

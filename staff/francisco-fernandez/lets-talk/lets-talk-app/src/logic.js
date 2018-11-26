@@ -99,8 +99,25 @@ const logic = {
 
     },
 
-    addContact(id, idContact) {
+    retrieveUserPhotos(id) {
         
+        validate([{ key: 'id', value: id, type: String }])
+
+        return fetch(`${this.url}/users/${id}/photos`, {
+            method: 'GET'
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+
+                return res.data
+            })
+
+
+    },
+
+    addContact(id, idContact) {
+
         validate([
             { key: 'id', value: id, type: String },
             { key: 'idContact', value: idContact, type: String }])
@@ -116,7 +133,7 @@ const logic = {
         })
             .then(res => res.json())
             .then(res => {
-                
+
                 if (res.error) throw Error(res.error)
 
             })
@@ -149,7 +166,7 @@ const logic = {
             { key: 'user', value: user, type: String },
             { key: 'sentTo', value: sentTo, type: String },
             { key: 'text', value: text, type: String }])
-        
+
         return fetch(`${this.url}/users/${user}/message`, {
             method: 'POST',
             headers: {
@@ -161,7 +178,7 @@ const logic = {
             .then(res => res.json())
             .then(res => {
                 if (res.error) throw Error(res.error)
-                
+
             })
 
 
@@ -186,6 +203,32 @@ const logic = {
                 if (res.error) throw Error(res.error)
 
                 return res.data
+            })
+
+    },
+
+    uploadUserPhoto(base64Image, photo) {
+        
+        validate([
+            { key: 'base64Image', value: base64Image, type: String },
+            { key: 'photo', value: photo, type: String }])
+
+        return fetch(`${this.url}/upload`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${this._token}`,
+                'Content-Type': 'application/json; charset=utf-8'
+
+            },
+            body: JSON.stringify({ base64Image, photo })
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.error) throw Error(res.error)
+
+                return res.photo
+
             })
 
     },
