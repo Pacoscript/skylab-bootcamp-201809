@@ -29,7 +29,7 @@ class Contacts extends Component {
       </section>
 
       <section>
-        {this.state.listContacts.map(contact => <Contact key={contact.id} id={contact.id} name={contact.name} photo={contact.photo} onGoContact={this.props.onGoContact} />)}
+        {this.state.listContacts.map(contact => <Contact key={contact.id} id={contact.id} name={contact.name} onGoContact={this.props.onGoContact} />)}
       </section>
 
     </main>

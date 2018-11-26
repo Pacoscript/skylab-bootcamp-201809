@@ -24,6 +24,14 @@ const logic = {
                 return cloudinary.v2.uploader.upload(base64Image, function (err, data) {
                     if (err) return reject(err)
 
+                    cloudinary.url(data.url,
+                        // Transformation
+                        {
+                            transformation: [
+                                { width: 400, height: 400, gravity: "face", radius: "max", crop: "crop" }
+                            ]
+                        })
+
                     resolve(data.url)
                 })
             })
@@ -76,19 +84,19 @@ const logic = {
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
             user.id = id
-            
+
             return user
         })()
     },
 
-    retrieveUserPhotos(id){
+    retrieveUserPhotos(id) {
         validate([{ key: 'id', value: id, type: String }])
 
         return (async () => {
-            const user = await User.findById(id, { '_id': 0, name: 0, surname: 0, username: 0, password: 0, created: 0, sex: 0, city: 0, maxAgePref: 0, age:0, minAgePref:0, presentation: 0, __v: 0, contacts: 0,  }).lean()
+            const user = await User.findById(id, { '_id': 0, name: 0, surname: 0, username: 0, password: 0, created: 0, sex: 0, city: 0, maxAgePref: 0, age: 0, minAgePref: 0, presentation: 0, __v: 0, contacts: 0, }).lean()
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
-            
+
             return user
         })()
 
@@ -263,7 +271,7 @@ const logic = {
                     await message.save()
                     await message2.save()
                 }
-            
+
             if (messages.length > 0) return messages.map(({ id, nameSentTo, nameUser, text, user }) => ({ id, nameSentTo, nameUser, text, user }))
             else return ([])
 
@@ -302,13 +310,13 @@ const logic = {
                     if (candidate._id.toString() === contact._id.toString()) {
                         flag = true
                     }
-                    
+
                 })
                 if (flag === true) flag = false
-                    else {
-                        candidatesFiltered.push(candidate)
-                        flag = false
-                    }
+                else {
+                    candidatesFiltered.push(candidate)
+                    flag = false
+                }
 
             })
 
@@ -331,10 +339,10 @@ const logic = {
                 delete candidate.age
                 delete candidate.maxAgePref
                 delete candidate.minAgePref
-                delete candidate. photo1
-                delete candidate. photo2
-                delete candidate. photo3
-                
+                delete candidate.photo1
+                delete candidate.photo2
+                delete candidate.photo3
+
             })
 
 
@@ -345,7 +353,7 @@ const logic = {
     },
 
     insertPhoto(id, chunk, photo) {
-        
+
         validate([
             { key: 'id', value: id, type: String },
             { key: 'chunk', value: chunk, type: String },
@@ -363,7 +371,7 @@ const logic = {
             if (photo === 'photo1') user.photo1 = imageCloudinary
             else if (photo === 'photo2') user.photo2 = imageCloudinary
             else user.photo3 = imageCloudinary
-            
+
 
             await user.save()
 

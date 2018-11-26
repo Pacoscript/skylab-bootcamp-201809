@@ -164,17 +164,21 @@ class Profile extends Component {
                             <option value="photo2">photo2</option>
                             <option value="photo3">photo3</option>
                         </select> </p>
+                        
                         <div className="container-input">
                             <FileBase64 className="input" multiple={false} onDone={this.getFiles} />
                         </div>
+                        <h3>Photo 1</h3>
                         <div className='img_container'>
-                            <div>{this.state.photo1 ? <img className='contact__image' src={this.state.photo1}></img> : ""}</div>
+                            <div>{(this.state.photo1!='#') ? <img className='contact__image' src={this.state.photo1}></img> : ""}</div>
                         </div>
+                        <h3>Photo 2</h3>
                         <div className='img_container'>
-                            <div>{this.state.photo2 ? <img className='contact__image' src={this.state.photo2}></img> : ""}</div>
+                            <div>{(this.state.photo2!='#') ? <img className='contact__image' src={this.state.photo2}></img> : <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
                         </div>
+                        <h3>Photo 3</h3>
                         <div className='img_container'>
-                            <div>{this.state.photo3 ? <img className='contact__image' src={this.state.photo3}></img> : ""}</div>
+                            <div>{(this.state.photo3!='#') ? <img className='contact__image' src={this.state.photo3}></img> : <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
                         </div>
                     </div>
                     

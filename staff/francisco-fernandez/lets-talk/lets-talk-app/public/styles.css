@@ -128,10 +128,22 @@ ul {
   display: flex;
   justify-content: space-around; }
 
+.imgmini__container {
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  display: flex;
+  justify-content: space-around; }
+
 .imgmini {
-  height: 60px;
-  weight: 30px;
-  padding-left: 10px; }
+  width: auto;
+  max-width: 100px;
+  height: auto;
+  max-height: 100px; }
 
 .messages__head {
   padding-top: 20px;

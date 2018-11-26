@@ -4,7 +4,7 @@ import logic from '../logic'
 
 class Messages extends Component {
 
-    state = { contactId: this.props.contactId, contactPhotos: undefined, contactName: 'name', messages: [], text: '', flag: true, photoFlag: false }
+    state = { contactId: this.props.contactId, contactPhotos: undefined, contactName: 'name', messages: [], text: '', flag: false, photoFlag: false }
 
     componentDidMount() {
 
@@ -94,8 +94,8 @@ class Messages extends Component {
         return <main className='messages__page'>
 
             <section className='messages__head'>
-                {this.state.photoFlag && <div><img className='imgmini' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img></div>}
-                {!this.state.photoFlag && <div><img className='imgmini' src="./images/blank-profile-picture-973461_640.png"></img></div>}
+                {this.state.photoFlag && <div className='imgmini__container'><img className='imgmini' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img></div>}
+                {!this.state.photoFlag && <div className='imgmini__container'><img className='imgmini' src="./images/blank-profile-picture-973461_640.png"></img></div>}
                 <div><h1 className='messages__name'> {this.state.contactName}</h1></div>
 
             </section>
