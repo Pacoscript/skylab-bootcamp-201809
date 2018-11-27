@@ -10,6 +10,7 @@ import Contacts from './components/Contacts'
 import Messages from './components/Messages'
 import Navbar from './components/Navbar'
 import Profile from './components/Profile'
+import Photos from './components/Photos'
 import logic from './logic'
 import { Route, withRouter, Redirect } from 'react-router-dom'
 
@@ -17,7 +18,7 @@ logic.url = 'http://localhost:5000/api'
 
 class App extends Component {
 
-  state = { error: null, contactId: false, contactName: false}
+  state = { error: null, contactId: false, contactName: false, contactPhotos: undefined }
 
   handleGoRegister = () => {
 
@@ -34,10 +35,10 @@ class App extends Component {
     return this.props.history.push('/login')
   }
 
-  handleRegister = (name, surname, username, password, sex, age, city, presentation, minAge, maxAge) => {
+  handleRegister = (name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref) => {
 
     try {
-      logic.registerUser(name, surname, username, password, sex, age, city, presentation, minAge, maxAge)
+      logic.registerUser(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref)
         .then(() => {
           this.setState({ error: null }, () => this.props.history.push('/login'))
         })
@@ -97,6 +98,12 @@ class App extends Component {
     
     this.setState({contactId, contactName}, ()=>this.props.history.push(`/messages/${contactId}`))
     
+  }
+
+  handleGoPhotos = (contactId, contactName) => {
+    
+    this.setState ({contactId, contactName})
+    this.props.history.push(`/photos/${contactId}/${contactName}`)
 
   }
 
@@ -105,12 +112,13 @@ class App extends Component {
       {logic.loggedIn && <Route path="/" render={() => <LandingNavbar onGoRegisterClick={this.handleGoRegister} onGoLandingClick={this.handleGoLanding} onGoLoginClick={this.handleGoLogin} />} />}
       {!logic.loggedIn && <Route path="/" render={() => <Navbar onLogoutClick={this.handleLogout} onGoProfileClick={this.handleProfile} onGoCandidatesClick={this.handleCandidates} onGoContactsClick={this.handleContacts} />} />}
       <Route exact path="/" render={() => logic.loggedIn ? <Landing /> : <Redirect to="/candidates" />} />
-      <Route path="/register" render={() => logic.loggedIn ? <Register onRegister={this.handleRegister} /> : <Redirect to="/candidates" />} />
-      <Route path="/login" render={() => logic.loggedIn ? <Login onLogin={this.handleLogin} /> : <Redirect to="/candidates" />} />
+      <Route path="/register" render={() => logic.loggedIn ? <Register onRegister={this.handleRegister} error={this.state.error} /> : <Redirect to="/candidates" />} />
+      <Route path="/login" render={() => logic.loggedIn ? <Login onLogin={this.handleLogin} error={this.state.error}/> : <Redirect to="/candidates" />} />
       <Route path="/candidates" render={() => <Candidates onMessage={this.handleMessage}/>} />
-      <Route path="/messages/:id" render={(props) => <Messages contactId={props.match.params.id} contactName={this.state.contactName} />} />
+      <Route path="/messages/:id" render={(props) => <Messages contactId={props.match.params.id} contactName={this.state.contactName} onGoPhotos={this.handleGoPhotos}/>} />
       <Route path="/contacts" render={() => <Contacts onGoContact={this.handleGoContact} />} />
       <Route path="/profile" render={() => <Profile />} />
+      <Route path="/photos/:id/:name" render={(props) => <Photos contactId={props.match.params.id} contactName={props.match.params.name}/>} />
       <Route path="/" render={() => <Footer />} />
     </div>
 

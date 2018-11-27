@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import logic from '../logic'
+import Error from './Error'
 
 class Candidates extends Component {
 
-    state = { error: '', listCandidates: false, ind: 0 }
+    state = { error: null, listCandidates: false, ind: 0 }
 
     componentDidMount = () => {
         
@@ -54,12 +55,15 @@ class Candidates extends Component {
 
     render() {
 
+        const error = this.state.error
+
         return <main className='candidates'>
 
             <section>
                 <h3 className='subtitle'>Say something interesting, funny...</h3>
             </section>
 
+            {error && <Error message={error} />}
 
             <section className='presentation'>
                 <h2 className='presentation__name' >

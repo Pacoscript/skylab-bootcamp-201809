@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import Contact from './Contact'
 import logic from '../logic'
+import Error from './Error'
 
 class Contacts extends Component {
 
-  state = { listContacts: [] }
+  state = { error: null, listContacts: [] }
 
   componentDidMount = () => {
 
@@ -20,10 +21,13 @@ class Contacts extends Component {
     }
   }
 
-    
-  render() {
-    return <main className='contacts'>
 
+  render() {
+
+    const error = this.state.error
+
+    return <main className='contacts'>
+      {error && <Error message={error} />}
       <section>
         <h3 class='subtitle'>My contacts...</h3>
       </section>

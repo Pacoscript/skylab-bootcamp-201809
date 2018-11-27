@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import Error from './Error'
 
 class Register extends Component {
-    state = { name: '', surname: '', username: '', password: '', sex: '', age: '', city: '', presentation: '', minAge: '', maxAge: '' }
+    state = { name: '', surname: '', username: '', password: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', error: undefined }
 
     handleNameChange = event => {
         const name = event.target.value
@@ -54,50 +55,58 @@ class Register extends Component {
     }
 
     handleMinAgeChange = event => {
-        let minAge = event.target.value
+        let minAgePref = event.target.value
 
-        minAge = Number(minAge)
+        minAgePref = Number(minAgePref)
 
-        this.setState({ minAge })
+        this.setState({ minAgePref })
     }
 
     handleMaxAgeChange = event => {
-        let maxAge = event.target.value
+        let maxAgePref = event.target.value
 
-        maxAge = Number(maxAge)
+        maxAgePref = Number(maxAgePref)
 
-        this.setState({ maxAge })
+        this.setState({ maxAgePref })
     }
 
     handleSubmit = event => {
         event.preventDefault()
 
-        const { name, surname, username, password, sex, age, city, presentation, minAge, maxAge } = this.state
+        const { name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref } = this.state
 
-        this.props.onRegister(name, surname, username, password, sex, age, city, presentation, minAge, maxAge)
+        this.props.onRegister(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref)
+
     }
-    render() {
-        return <main className='landing'>
 
+
+
+    render() {
+
+        const error = this.props.error
+
+        return <main className='landing'>
+            
             <section>
                 <h1 className='subtitle'>Register</h1>
             </section>
-
-            <section className='login'>
+            {error && <Error message={error} />}
+            <section className='register'>
                 <form className='login__form' onSubmit={this.handleSubmit}>
-                    <p>Name  <input onChange={this.handleNameChange} /></p>
-                    <p>Surname <input onChange={this.handleSurnameChange} /> </p>
-                    <p>Username <input onChange={this.handleUsernameChange} /> </p>
-                    <p>Password <input onChange={this.handlePasswordChange} type='password' /> </p>
-                    <p>Sex <select onChange={this.handleSexChange}>
+                    <p>Name  <input maxLength='16' onChange={this.handleNameChange} /></p>
+                    <p>Surname <input maxLength='16' onChange={this.handleSurnameChange} /> </p>
+                    <p>Username <input maxLength='16' onChange={this.handleUsernameChange} /> </p>
+                    <p>Password <input maxLength='16' onChange={this.handlePasswordChange} type='password' /> </p>
+                    <p>Sex <select defaultValue="" onChange={this.handleSexChange}>
+                        <option value="">CHOSE YOUR SEX</option>
                         <option value="MALE">MALE</option>
                         <option value="FEMALE">FEMALE</option>
                     </select> </p>
-                    <p>Age <input onChange={this.handleAgeChange} /> </p>
-                    <p>City <input onChange={this.handleCityChange} /> </p>
-                    <p>Presentation <textarea onChange={this.handlePresentationChange}></textarea> </p>
-                    <p>Min Age <input onChange={this.handleMinAgeChange} /> </p>
-                    <p>Max Age <input onChange={this.handleMaxAgeChange} /> </p>
+                    <p>Age <input maxLength='16' onChange={this.handleAgeChange} /> </p>
+                    <p>City <input maxLength='16' onChange={this.handleCityChange} /> </p>
+                    <p>Presentation <textarea maxLength='280' onChange={this.handlePresentationChange}></textarea> </p>
+                    <p>Min Age <input maxLength='16' onChange={this.handleMinAgeChange} /> </p>
+                    <p>Max Age <input maxLength='16' onChange={this.handleMaxAgeChange} /> </p>
 
                     <p><button type='submit' className='button'>Register</button></p>
                 </form>

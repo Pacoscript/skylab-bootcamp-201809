@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import logic from '../logic'
+import Error from './Error'
 
 
 class Contact extends Component {
 
-    state = { photoFlag: false, contactPhotos: [] }
+    state = { error: null, photoFlag: false, contactPhotos: [] }
 
     componentDidMount() {
 
@@ -44,7 +45,11 @@ class Contact extends Component {
     }
 
     render() {
+
+        const error = this.state.error
+
         return <section className='contact' onClick={() => this.props.onGoContact(this.props.id, this.props.name)}>
+            {error && <Error message={error} />}
             <h2 className='contact__name'>
                 {this.props.name}
             </h2>

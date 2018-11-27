@@ -39,6 +39,7 @@ const logic = {
     },
 
     registerUser(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref) {
+        
         validate([{ key: 'name', value: name, type: String },
         { key: 'surname', value: surname, type: String },
         { key: 'username', value: username, type: String },
@@ -102,13 +103,16 @@ const logic = {
 
     },
 
-    updateUser(id, name, surname, username, newPassword, password, sex, age, city, presentation, minAgePref, maxAgePref) {
+    updateUser(id, name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref) {
+        
         validate([
             { key: 'id', value: id, type: String },
             { key: 'name', value: name, type: String, optional: true },
             { key: 'surname', value: surname, type: String, optional: true },
             { key: 'username', value: username, type: String, optional: true },
             { key: 'password', value: password, type: String },
+            { key: 'newPassword', value: newPassword, type: String },
+            { key: 'newPassword2', value: newPassword2, type: String },
             { key: 'sex', value: sex, type: String, optional: true },
             { key: 'age', value: age, type: Number, optional: true },
             { key: 'city', value: city, type: String, optional: true },
@@ -124,7 +128,9 @@ const logic = {
 
             if (user.password !== password) throw new AuthError('invalid password')
 
-            if (username) {
+            if (newPassword !== newPassword2) throw new AuthError('the new password is incorrect')
+            
+            if (username && username !== user.username) {
                 const _user = await User.findOne({ username })
 
                 if (_user) throw new AlreadyExistsError(`username ${username} already exists`)
@@ -236,6 +242,7 @@ const logic = {
     },
 
     retrieveMessages(user1, user2) {
+
         validate([
             { key: 'user1', value: user1, type: String },
             { key: 'user2', value: user2, type: String }
@@ -265,11 +272,13 @@ const logic = {
             if (messages.length > 0)
                 if (messages[messages.length - 1].status === 'PENDING' && messages[messages.length - 1].user.toString() === user2) {
                     let message = await Message.findById(messages[messages.length - 1].id.toString())
-                    let message2 = await Message.findById(messages[messages.length - 2].id.toString())
+                    // if (messages.length > 1) {
+                    //     let message2 = await Message.findById(messages[messages.length - 2].id.toString())
                     message.status = 'READED'
-                    message2.status = 'RESPONDED'
+                    //     message2.status = 'RESPONDED'
                     await message.save()
-                    await message2.save()
+                    //     await message2.save()
+                    // }
                 }
 
             if (messages.length > 0) return messages.map(({ id, nameSentTo, nameUser, text, user }) => ({ id, nameSentTo, nameUser, text, user }))

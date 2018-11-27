@@ -8,7 +8,7 @@ const logic = {
     url: 'NO-URL',
 
     registerUser(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref) {
-
+        
         validate([{ key: 'name', value: name, type: String },
         { key: 'surname', value: surname, type: String },
         { key: 'username', value: username, type: String },
@@ -31,6 +31,37 @@ const logic = {
             .then(res => {
                 if (res.error) throw Error(res.error)
             })
+    },
+
+    updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref){
+        
+        validate([{ key: 'name', value: name, type: String },
+        { key: 'surname', value: surname, type: String },
+        { key: 'username', value: username, type: String },
+        { key: 'password', value: password, type: String },
+        { key: 'newPassword', value: newPassword, type: String },
+        { key: 'newPassword2', value: newPassword2, type: String },
+        { key: 'sex', value: sex, type: String },
+        { key: 'age', value: age, type: Number },
+        { key: 'city', value: city, type: String },
+        { key: 'presentation', value: presentation, type: String },
+        { key: 'minAgePref', value: minAgePref, type: Number },
+        { key: 'maxAgePref', value: maxAgePref, type: Number }])
+
+        return fetch(`${this.url}/users/${this._userId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'Authorization': `Bearer ${this._token}`
+            },
+            body: JSON.stringify({ name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref })
+        })
+            .then(res => res.json())
+            .then(res => {
+                if (res.error) throw Error(res.error)
+            })
+
+        
     },
 
     login(username, password) {
@@ -185,7 +216,7 @@ const logic = {
     },
 
     retrieveMessages(id, idContact) {
-
+        
         validate([
             { key: 'id', value: id, type: String },
             { key: 'idContact', value: idContact, type: String }])
@@ -201,7 +232,7 @@ const logic = {
             .then(res => {
 
                 if (res.error) throw Error(res.error)
-
+                
                 return res.data
             })
 

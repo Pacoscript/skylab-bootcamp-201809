@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Error from './Error'
 
 class Login extends Component {
 
@@ -26,17 +27,21 @@ class Login extends Component {
 
 
     render() {
+
+        const error = this.props.error
+
         return <main className='landing'>
 
             <section>
                 <h1 className='subtitle'>Login</h1>
             </section>
 
+            {error && <Error message={error} />}
 
             <section className='login'>
                 <form className='login__form' onSubmit={this.handleSubmit}>
-                    <p>Username <input onChange={this.handleUsernameChange}/> </p>
-                    <p>Password <input onChange={this.handlePasswordChange} type='password'/> </p>
+                    <p>Username <input maxLength='16' onChange={this.handleUsernameChange}/> </p>
+                    <p>Password <input  maxLength='16' onChange={this.handlePasswordChange} type='password'/> </p>
 
                     <p><button type='submit' className='button' >Login</button></p>
                 </form>

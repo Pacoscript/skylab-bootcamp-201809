@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import logic from '../logic'
 import FileBase64 from "react-file-base64"
+import Error from './Error'
 
 class Profile extends Component {
-    state = { name: '', surname: '', username: '', password: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', photo1: undefined, photo2: undefined, photo3: undefined, whichPhoto: 'photo1', loading: false }
+    state = { name: '', surname: '', username: '', password: '', newPassword: '', newPassword2: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', photo1: undefined, photo2: undefined, photo3: undefined, whichPhoto: 'photo1', loading: false, error: null }
 
     componentDidMount = () => {
 
@@ -13,8 +14,11 @@ class Profile extends Component {
             .then(user => {
 
                 const name = user.name
-                const surname = user.name
-                const username = user.name
+                const surname = user.surname
+                const username = user.username
+                const password = 'password'
+                const newPassword = undefined
+                const newPassword2 = undefined
                 const sex = user.sex
                 const age = user.age
                 const city = user.city
@@ -24,7 +28,7 @@ class Profile extends Component {
                 const photo1 = user.photo1
                 const photo2 = user.photo2
                 const photo3 = user.photo3
-                this.setState({ name, surname, username, sex, age, city, presentation, minAgePref, maxAgePref, photo1, photo2, photo3 })
+                this.setState({ name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref, photo1, photo2, photo3 })
             })
 
 
@@ -46,6 +50,18 @@ class Profile extends Component {
         const username = event.target.value
 
         this.setState({ username })
+    }
+
+    handleNewPasswordChange = event => {
+        const newPassword = event.target.value
+
+        this.setState({ newPassword })
+    }
+
+    handleRepeatPasswordChange = event => {
+        const newPassword2 = event.target.value
+
+        this.setState({ newPassword2 })
     }
 
     handlePasswordChange = event => {
@@ -81,27 +97,32 @@ class Profile extends Component {
     }
 
     handleMinAgeChange = event => {
-        let minAge = event.target.value
+        let minAgePref = event.target.value
 
-        minAge = Number(minAge)
+        minAgePref = Number(minAgePref)
 
-        this.setState({ minAge })
+        this.setState({ minAgePref })
     }
 
     handleMaxAgeChange = event => {
-        let maxAge = event.target.value
+        let maxAgePref = event.target.value
 
-        maxAge = Number(maxAge)
+        maxAgePref = Number(maxAgePref)
 
-        this.setState({ maxAge })
+        this.setState({ maxAgePref })
     }
 
     handleSubmit = event => {
-        event.preventDefault()
+        // event.preventDefault()
 
-        const { name, surname, username, password, sex, age, city, presentation, minAge, maxAge } = this.state
+        const { name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref } = this.state
+        
+        try {
+            logic.updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref)
+        } catch (error) {
+            this.setState({ error: error.message })
+        }
 
-        this.props.onRegister(name, surname, username, password, sex, age, city, presentation, minAge, maxAge)
     }
 
     handlePhotoChange = event => {
@@ -134,7 +155,12 @@ class Profile extends Component {
 
 
     render() {
+
+        const error = this.state.error
+
         return <main className='landing'>
+
+        {error && <Error message={error} />}
 
             <section>
                 <h1 className='subtitle'>Edit your profile</h1>
@@ -142,16 +168,18 @@ class Profile extends Component {
 
             <section className='login'>
                 <form className='login__form' onSubmit={this.handleSubmit}>
-                    <p>Name  <input value={this.state.name} onChange={this.handleNameChange} /></p>
-                    <p>Surname <input value={this.state.surname} onChange={this.handleSurnameChange} /> </p>
-                    <p>Username <input value={this.state.username} onChange={this.handleUsernameChange} /> </p>
-                    <p>Password <input onChange={this.handlePasswordChange} type='password' /> </p>
+                    <p>Name  <input maxLength='16' value={this.state.name} onChange={this.handleNameChange} /></p>
+                    <p>Surname <input maxLength='16' value={this.state.surname} onChange={this.handleSurnameChange} /> </p>
+                    <p>Username <input maxLength='16' value={this.state.username} onChange={this.handleUsernameChange} /> </p>
+                    <p>New Passw <input maxLength='16' onChange={this.handleNewPasswordChange} type='password' /> </p>
+                    <p>Repeat Passw <input maxLength='16' onChange={this.handleRepeatPasswordChange} type='password' /> </p>
+                    <p>Password <input maxLength='16' onChange={this.handlePasswordChange} type='password' /> </p>
                     <p>Sex <input value={this.state.sex} onChange={this.handleSexChange} /> </p>
-                    <p>Age <input value={this.state.age} onChange={this.handleAgeChange} /> </p>
-                    <p>City <input value={this.state.city} onChange={this.handleCityChange} /> </p>
-                    <p>Presentation <textarea value={this.state.presentation} onChange={this.handlePresentationChange}></textarea> </p>
-                    <p>Min Age <input value={this.state.minAgePref} onChange={this.handleMinAgeChange} /> </p>
-                    <p>Max Age <input value={this.state.maxAgePref} onChange={this.handleMaxAgeChange} /> </p>
+                    <p>Age <input maxLength='16' value={this.state.age} onChange={this.handleAgeChange} /> </p>
+                    <p>City <input maxLength='16' value={this.state.city} onChange={this.handleCityChange} /> </p>
+                    <p>Presentation <textarea maxLength='280' value={this.state.presentation} onChange={this.handlePresentationChange}></textarea> </p>
+                    <p>Min Age <input maxLength='16' value={this.state.minAgePref} onChange={this.handleMinAgeChange} /> </p>
+                    <p>Max Age <input maxLength='16' value={this.state.maxAgePref} onChange={this.handleMaxAgeChange} /> </p>
 
                     <p><button type='submit' className='button'>Update</button></p>
 
@@ -164,24 +192,24 @@ class Profile extends Component {
                             <option value="photo2">photo2</option>
                             <option value="photo3">photo3</option>
                         </select> </p>
-                        
+
                         <div className="container-input">
                             <FileBase64 className="input" multiple={false} onDone={this.getFiles} />
                         </div>
                         <h3>Photo 1</h3>
                         <div className='img_container'>
-                            <div>{(this.state.photo1!='#') ? <img className='contact__image' src={this.state.photo1}></img> : ""}</div>
+                            <div>{(this.state.photo1 != '#') ? <img className='contact__image' src={this.state.photo1}></img> : ""}</div>
                         </div>
                         <h3>Photo 2</h3>
                         <div className='img_container'>
-                            <div>{(this.state.photo2!='#') ? <img className='contact__image' src={this.state.photo2}></img> : <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
+                            <div>{(this.state.photo2 != '#') ? <img className='contact__image' src={this.state.photo2}></img> : <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
                         </div>
                         <h3>Photo 3</h3>
                         <div className='img_container'>
-                            <div>{(this.state.photo3!='#') ? <img className='contact__image' src={this.state.photo3}></img> : <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
+                            <div>{(this.state.photo3 != '#') ? <img className='contact__image' src={this.state.photo3}></img> : <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
                         </div>
                     </div>
-                    
+
                 </section>
             </section>
         </main>

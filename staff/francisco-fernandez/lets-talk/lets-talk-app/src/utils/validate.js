@@ -7,8 +7,8 @@ function validate(params) {
                 if (optional && value === null) break
 
                 if (typeof value !== 'string') throw TypeError(`${value} is not a string`)
-
-                if (!value.trim().length) throw new ValueError(`${key} is empty or blank`)
+                
+                if (!value.trim().length) throw TypeError (`${key} is empty or blank`)
 
                 break
             case Boolean:

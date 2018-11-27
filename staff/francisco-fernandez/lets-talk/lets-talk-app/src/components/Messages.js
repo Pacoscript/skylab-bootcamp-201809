@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import Thread from './Thread'
 import logic from '../logic'
+import Error from './Error'
+
 
 class Messages extends Component {
 
-    state = { contactId: this.props.contactId, contactPhotos: undefined, contactName: 'name', messages: [], text: '', flag: false, photoFlag: false }
+    state = { error: null, contactId: this.props.contactId, contactPhotos: undefined, contactName: 'name', messages: [], text: '', flag: false, photoFlag: false }
 
     componentDidMount() {
 
@@ -18,7 +20,6 @@ class Messages extends Component {
                     if (messages[messages.length - 1].user === id) {
                         this.setState({ flag: true })
                         this.setState({ contactName: messages[messages.length - 1].nameSentTo })
-
                     }
 
                     else
@@ -51,7 +52,17 @@ class Messages extends Component {
         catch (err) {
             this.setState({ error: err.message })
         }
+
+        this.scrollToBottom()
     }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+      }
+
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView();
+      }
 
     handleTextChange = event => {
         const text = event.target.value
@@ -60,7 +71,7 @@ class Messages extends Component {
     }
 
     handleSubmit = event => {
-        event.preventDefault()
+        // event.preventDefault()
 
         const id = logic._userId
 
@@ -89,10 +100,20 @@ class Messages extends Component {
         }
     }
 
+    handlePhotos = () => {
+        const contactId = this.state.contactId
+        const contactName = this.state.contactName
+
+        this.props.onGoPhotos(contactId, contactName)
+    }
+
 
     render() {
-        return <main className='messages__page'>
 
+        const error = this.state.error
+
+        return <main className='messages__page'>
+            {error && <Error message={error} />}
             <section className='messages__head'>
                 {this.state.photoFlag && <div className='imgmini__container'><img className='imgmini' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img></div>}
                 {!this.state.photoFlag && <div className='imgmini__container'><img className='imgmini' src="./images/blank-profile-picture-973461_640.png"></img></div>}
@@ -105,27 +126,28 @@ class Messages extends Component {
 
                 <div id='messages__box'>
                     {this.state.messages.map(message => <Thread key={message.id} name={message.nameUser} id={message.id} photo={message.sentTo} text={message.text} />)}
+                    <div style={{ float: "left", clear: "both" }}
+                        ref={(el) => { this.messagesEnd = el; }}>
+                    </div>
                 </div>
             </section>
 
             <form className='new-message' onSubmit={this.handleSubmit}>
-                {this.state.flag && <textarea className='new-message__text' onChange={this.handleTextChange}>
+                {this.state.flag && <textarea maxLength='280' className='new-message__text' onChange={this.handleTextChange}>
                     You must wait to be responded until send a message again
                 </textarea>}
-                {!this.state.flag && <textarea className='new-message__text' onChange={this.handleTextChange}>
+                {!this.state.flag && <textarea maxLength='280' className='new-message__text' onChange={this.handleTextChange}>
 
                 </textarea>}
                 <div className='button_send'>
                     {this.state.flag && <button disabled className='button' type='submit'>Send, good luck!</button>}
-                    {!this.state.flag && <button disabled className='button' type='submit'>Send, good luck!</button>}
-                    <button className='button'>Photos</button>
+                    {!this.state.flag && <button className='button' type='submit'>Send, good luck!</button>}
+                    <button className='button' onClick={this.handlePhotos}>Photos</button>
                 </div>
             </form>
 
-
-
-
         </main>
+
     }
 }
 
