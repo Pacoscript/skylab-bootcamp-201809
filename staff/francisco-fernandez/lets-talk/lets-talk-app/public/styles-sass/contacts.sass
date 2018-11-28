@@ -1,20 +1,27 @@
 .contacts
-    background-color: $landing_color
+    background-color: $lets-talk-white
+    min-height: 450px
+    padding-bottom: 20px
+        
     
-.contacts__container
-    display: flex
-    flex-flow: row wrap
-    background-color: $landing_color
+// .contacts__container
+//     display: flex
+//     flex-flow: row wrap
+//     background-color: $lets_talk_green
 
-
+.contacts__section
+    background-color: $lets-talk-white
 
 .contact
+    
     margin-left: auto
     margin-right: auto
     width: 80%
-    border: 1px solid $background_header_footer
+    border: 1px solid $lets-talk-grey
     border-radius: 5px
     margin-bottom: 20px
+    
+   
 
 .contact__name
     @extend .contact
@@ -23,14 +30,27 @@
     border: none
 
     
-.img_container
-    display: flex
-    justify-content: space-around
+.contact__img__container
+    width: 200px
+    height: 200px
+    background: none
+    overflow: hidden
+    margin: auto
+    padding-bottom: 20px
     
-.contact__image 
-    text-align: center
-    width: 80%
-    height: 80%
-    padding-bottom: 15px
+
+.contact__image
+    width: 100%
+    height: auto
+    
+
+@supports(object-fit: cover)
+    .contact__image
+        height: 100%
+        object-fit: cover
+        object-position: center center
+
+
+    
     
     

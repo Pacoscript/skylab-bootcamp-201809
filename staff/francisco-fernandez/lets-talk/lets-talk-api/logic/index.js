@@ -384,6 +384,8 @@ const logic = {
 
             await user.save()
 
+            return imageCloudinary
+
         })()
 
     }

@@ -15,10 +15,10 @@ function Navbar(props) {
             <div className='dropdown'>
                 <button className='dropbtn'>Menu</button>
                 <div className='dropdown-content'>
-                    <button className='button' onClick={()=>props.onGoContactsClick()} >Contacts</button><br/>
-                    <button className='button' onClick={()=>props.onGoCandidatesClick()}>Candidates</button><br/>
-                    <button className='button' onClick={()=>props.onGoProfileClick()}>Profile</button><br/>
-                    <button className='button' onClick={()=>props.onLogoutClick()}>Logout</button>
+                    <button className='drop__button' onClick={()=>props.onGoContactsClick()} >Contacts</button><br/>
+                    <button className='drop__button' onClick={()=>props.onGoCandidatesClick()}>Candidates</button><br/>
+                    <button className='drop__button' onClick={()=>props.onGoProfileClick()}>Profile</button><br/>
+                    <button className='drop__button' onClick={()=>props.onLogoutClick()}>Logout</button>
                     
                 </div>
             </div>

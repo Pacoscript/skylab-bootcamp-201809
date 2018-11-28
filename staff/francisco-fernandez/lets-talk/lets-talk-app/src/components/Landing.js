@@ -4,7 +4,7 @@ function Landing(props) {
     return <main className='landing'>
 
         <section>
-            <h1 className='subtitle'>How it works</h1>
+            <h1 className='landing__subtitle'>SLOW LOVE...</h1>
         </section>
 
 
@@ -12,13 +12,19 @@ function Landing(props) {
 
             <div className='landing__message'>
 
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe sunt, dolore necessitatibus
-                    repudiandae dicta nemo nihil rem commodi eveniet minima, perspiciatis consequuntur amet odit
-                incidunt accusamus facere cumque sit beatae?</p>
+                <p>This app is for the people who like to take their life calmly. For people who prefer talking
+                    to get to know one another.
+                </p>
+                <p>For these reason, whe have some simple rules. You have 280 charachters to send a message to who you want. But you
+                    will have to wait to be responded to send another message. So choose well your words ; )
+                </p>
+                <p>
+                    We know you want to see the aspects of the other one. But let's not be impatient. You will see the first photo of eachother
+                    after 4 messages. The second after 8 messages and the last one after 12 messages. If you arrive there, congratulations,
+                    you have connected with someone!!
+                </p>
             </div>
-            <div className='landing__img'>
-                <img />
-            </div>
+            
 
         </section>
 

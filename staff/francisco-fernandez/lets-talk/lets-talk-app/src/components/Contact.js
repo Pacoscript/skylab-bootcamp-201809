@@ -53,7 +53,7 @@ class Contact extends Component {
             <h2 className='contact__name'>
                 {this.props.name}
             </h2>
-            <div className='img_container'>
+            <div className='contact__img__container'>
                 {this.state.photoFlag && <img className='contact__image' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img>}
                 {!this.state.photoFlag && <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}
             </div>

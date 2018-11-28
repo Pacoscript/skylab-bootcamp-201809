@@ -8,7 +8,7 @@ const logic = {
     url: 'NO-URL',
 
     registerUser(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref) {
-        
+
         validate([{ key: 'name', value: name, type: String },
         { key: 'surname', value: surname, type: String },
         { key: 'username', value: username, type: String },
@@ -19,6 +19,9 @@ const logic = {
         { key: 'presentation', value: presentation, type: String },
         { key: 'minAgePref', value: minAgePref, type: Number },
         { key: 'maxAgePref', value: maxAgePref, type: Number }])
+
+        if ((age < 18) || (minAgePref < 18)) throw Error('not for children under 18')
+        if ((minAgePref > maxAgePref)) throw Error('minAgePref must be inferior to maxAgePref')
 
         return fetch(`${this.url}/users`, {
             method: 'POST',
@@ -33,8 +36,8 @@ const logic = {
             })
     },
 
-    updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref){
-        
+    updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref) {
+
         validate([{ key: 'name', value: name, type: String },
         { key: 'surname', value: surname, type: String },
         { key: 'username', value: username, type: String },
@@ -47,6 +50,9 @@ const logic = {
         { key: 'presentation', value: presentation, type: String },
         { key: 'minAgePref', value: minAgePref, type: Number },
         { key: 'maxAgePref', value: maxAgePref, type: Number }])
+
+        if ((age < 18) || (minAgePref < 18)) throw Error('not for children under 18')
+        if ((minAgePref > maxAgePref)) throw Error('minAgePref must be inferior to maxAgePref')
 
         return fetch(`${this.url}/users/${this._userId}`, {
             method: 'PATCH',
@@ -61,7 +67,7 @@ const logic = {
                 if (res.error) throw Error(res.error)
             })
 
-        
+
     },
 
     login(username, password) {
@@ -111,7 +117,7 @@ const logic = {
     },
 
     retrieveUser(id) {
-        
+
         validate([{ key: 'id', value: id, type: String }])
 
         return fetch(`${this.url}/users/${id}`, {
@@ -131,7 +137,7 @@ const logic = {
     },
 
     retrieveUserPhotos(id) {
-        
+
         validate([{ key: 'id', value: id, type: String }])
 
         return fetch(`${this.url}/users/${id}/photos`, {
@@ -216,7 +222,7 @@ const logic = {
     },
 
     retrieveMessages(id, idContact) {
-        
+
         validate([
             { key: 'id', value: id, type: String },
             { key: 'idContact', value: idContact, type: String }])
@@ -232,14 +238,14 @@ const logic = {
             .then(res => {
 
                 if (res.error) throw Error(res.error)
-                
+
                 return res.data
             })
 
     },
 
     uploadUserPhoto(base64Image, photo) {
-        
+
         validate([
             { key: 'base64Image', value: base64Image, type: String },
             { key: 'photo', value: photo, type: String }])
@@ -258,7 +264,9 @@ const logic = {
 
                 if (res.error) throw Error(res.error)
 
+
                 return res.photo
+
 
             })
 

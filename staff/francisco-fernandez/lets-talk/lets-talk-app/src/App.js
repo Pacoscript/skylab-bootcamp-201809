@@ -82,7 +82,7 @@ class App extends Component {
     this.props.history.push('/contacts')
   }
 
-  handleMessage = (idContact) =>{
+  handleMessage = (idContact, nameContact) =>{
     try {
       logic.addContact(logic._userId, idContact)
         .then(() => {
@@ -92,6 +92,8 @@ class App extends Component {
     } catch (err) {
       this.setState({ error: err.message })
     }
+    const contactName = nameContact
+    this.setState({contactName})
   }
 
   handleGoContact = (contactId, contactName) =>{

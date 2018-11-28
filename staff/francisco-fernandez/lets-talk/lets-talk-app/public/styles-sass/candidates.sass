@@ -1,5 +1,6 @@
 .candidates
-    background-color: white
+    background-color: $lets-talk-white
+    height: 400px
     
 .subtitle
     margin-left: auto
@@ -12,7 +13,7 @@
     margin-left: auto
     margin-right: auto
     width: 80%
-    border: 1px solid $background_header_footer
+    border: 1px solid $lets-talk-grey
     border-radius: 5px
 
 .presentation__name
@@ -23,9 +24,10 @@
 
 .presentation__text
     @extend .presentation
-    color: $background_header_footer
+    color: $lets-talk-grey
     text-align: justify
     border: none
+    height: 100px
 
 .presentation__buttons
     @extend .presentation
@@ -35,9 +37,17 @@
     margin-top: 15px
 
 .button
-    border: 1px solid $text_header
+    border: 1px solid $lets-talk-white
     border-radius: 5px
     padding: 10px
-    color: $text_header
-    background-color: $background_header_footer
+    color: $lets-talk-white
+    background-color: $lets-talk-grey
+
+.candidates__button
+    border: 1px solid $lets-talk-grey
+    border-radius: 5px
+    padding: 10px
+    color: $lets-talk-grey
+    background-color: $lets-talk-green
+    margin: 3px
 

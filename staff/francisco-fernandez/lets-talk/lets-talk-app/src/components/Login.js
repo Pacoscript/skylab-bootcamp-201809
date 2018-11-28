@@ -30,24 +30,23 @@ class Login extends Component {
 
         const error = this.props.error
 
-        return <main className='landing'>
+        return <main className='login'>
 
-            <section>
+            <section >
                 <h1 className='subtitle'>Login</h1>
             </section>
 
             {error && <Error message={error} />}
 
-            <section className='login'>
+            <section className='login__section'>
                 <form className='login__form' onSubmit={this.handleSubmit}>
-                    <p>Username <input maxLength='16' onChange={this.handleUsernameChange}/> </p>
-                    <p>Password <input  maxLength='16' onChange={this.handlePasswordChange} type='password'/> </p>
+                    <label>Username</label>
+                    <input className='login__input' maxLength='16' onChange={this.handleUsernameChange}/> 
+                    <label>Password</label>
+                    <input className='login__input' maxLength='16' onChange={this.handlePasswordChange} type='password'/> 
 
-                    <p><button type='submit' className='button' >Login</button></p>
+                    <p><button className='login__button' type='submit' >Login</button></p>
                 </form>
-
-
-
             </section>
 
         </main>

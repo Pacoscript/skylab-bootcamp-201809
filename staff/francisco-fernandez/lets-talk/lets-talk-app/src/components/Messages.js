@@ -6,30 +6,34 @@ import Error from './Error'
 
 class Messages extends Component {
 
-    state = { error: null, contactId: this.props.contactId, contactPhotos: undefined, contactName: 'name', messages: [], text: '', flag: false, photoFlag: false }
+    state = { error: null, contactId: this.props.contactId, contactPhotos: undefined, contactName: this.props.contactName, messages: [], text: '', flag: false, photoFlag: false }
 
     componentDidMount() {
 
         const id = logic._userId
 
         const contactId = this.state.contactId
-
+        
         try {
             logic.retrieveMessages(id, contactId)
                 .then(messages => {
-                    if (messages[messages.length - 1].user === id) {
-                        this.setState({ flag: true })
-                        this.setState({ contactName: messages[messages.length - 1].nameSentTo })
-                    }
+                    if (messages.length > 0) {
+                        if (messages[messages.length - 1].user === id) {
+                            debugger
+                            this.setState({ flag: true })
+                            this.setState({ contactName: messages[messages.length - 1].nameSentTo })
+                        }
 
-                    else
-                        this.setState({ contactName: messages[messages.length - 1].nameUser })
+                        else
+                            this.setState({ contactName: messages[messages.length - 1].nameUser })
+                    }
                     if (messages.length > 3) this.setState({ photoFlag: true })
 
 
                     this.setState({ messages })
 
                 })
+
                 .catch(err => this.setState({ error: err.message }))
         }
         catch (err) {
@@ -58,11 +62,11 @@ class Messages extends Component {
 
     componentDidUpdate() {
         this.scrollToBottom();
-      }
+    }
 
     scrollToBottom = () => {
         this.messagesEnd.scrollIntoView();
-      }
+    }
 
     handleTextChange = event => {
         const text = event.target.value
@@ -71,7 +75,7 @@ class Messages extends Component {
     }
 
     handleSubmit = event => {
-        // event.preventDefault()
+        event.preventDefault()
 
         const id = logic._userId
 
@@ -90,7 +94,7 @@ class Messages extends Component {
         try {
             logic.retrieveMessages(id, contactId)
                 .then(messages => {
-
+                    if (messages[messages.length - 1].user === id) this.setState({ flag: true })
                     this.setState({ messages })
                 })
                 .catch(err => this.setState({ error: err.message }))
@@ -98,6 +102,7 @@ class Messages extends Component {
         catch (err) {
             this.setState({ error: err.message })
         }
+
     }
 
     handlePhotos = () => {
@@ -140,9 +145,9 @@ class Messages extends Component {
 
                 </textarea>}
                 <div className='button_send'>
-                    {this.state.flag && <button disabled className='button' type='submit'>Send, good luck!</button>}
-                    {!this.state.flag && <button className='button' type='submit'>Send, good luck!</button>}
-                    <button className='button' onClick={this.handlePhotos}>Photos</button>
+                    {this.state.flag && <button disabled className='message__button' type='submit'>Send, good luck!</button>}
+                    {!this.state.flag && <button className='message__button' type='submit'>Send, good luck!</button>}
+                    <button className='message__button' onClick={this.handlePhotos}>Photos</button>
                 </div>
             </form>
 

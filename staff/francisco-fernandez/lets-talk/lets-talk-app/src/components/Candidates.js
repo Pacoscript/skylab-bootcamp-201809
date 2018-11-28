@@ -49,8 +49,10 @@ class Candidates extends Component {
         const ind = this.state.ind
 
         const idContact = this.state.listCandidates[ind].id
+
+        const nameContact = this.state.listCandidates[ind].name
         
-        this.props.onMessage(idContact)
+        this.props.onMessage(idContact, nameContact)
     }
 
     render() {
@@ -72,13 +74,14 @@ class Candidates extends Component {
                 </h2>
                 <p className='presentation__text'>
                     {this.state.listCandidates && this.state.listCandidates[this.state.ind].presentation}
+                    {!this.state.listCandidates && `Sorry, you don´t have more candidates in yur area`}
                 </p>
             </section>
 
             <section className='presentation__buttons'>
-                <button className='button' onClick={this.handlePrev}>Prev</button>
-                <button className='button' onClick={this.handleNewMessage}>New message</button>
-                <button className='button' onClick={this.handleNext}>Next</button>
+                <button className='candidates__button' onClick={this.handlePrev}>Prev</button>
+                <button className='candidates__button' onClick={this.handleNewMessage}>New message</button>
+                <button className='candidates__button' onClick={this.handleNext}>Next</button>
             </section>
 
 

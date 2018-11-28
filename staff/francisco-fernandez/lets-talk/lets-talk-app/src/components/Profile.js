@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import logic from '../logic'
 import FileBase64 from "react-file-base64"
 import Error from './Error'
+import MDSpinner from "react-md-spinner"
 
 class Profile extends Component {
-    state = { name: '', surname: '', username: '', password: '', newPassword: '', newPassword2: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', photo1: undefined, photo2: undefined, photo3: undefined, whichPhoto: 'photo1', loading: false, error: null }
+    state = { name: '', surname: '', username: '', password: '', newPassword: '', newPassword2: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', photo1: undefined, photo2: undefined, photo3: undefined, whichPhoto: 'photo1', loading: false, error: null, loading: true }
 
     componentDidMount = () => {
 
@@ -142,46 +143,60 @@ class Profile extends Component {
 
     uploadUserPhoto(photo) {
         const whichPhoto = this.state.whichPhoto
+
         logic.uploadUserPhoto(photo, whichPhoto)
             .then(photo => {
                 this.setState({
-                    photo,
+                    [whichPhoto]: photo,
                     loading: true
                 })
+
+
             })
             .catch(err => this.setState({ error: err.message }))
 
     }
 
-
     render() {
 
         const error = this.state.error
 
-        return <main className='landing'>
-
-        {error && <Error message={error} />}
+        return <main className='profile'>
 
             <section>
                 <h1 className='subtitle'>Edit your profile</h1>
             </section>
 
-            <section className='login'>
-                <form className='login__form' onSubmit={this.handleSubmit}>
-                    <p>Name  <input maxLength='16' value={this.state.name} onChange={this.handleNameChange} /></p>
-                    <p>Surname <input maxLength='16' value={this.state.surname} onChange={this.handleSurnameChange} /> </p>
-                    <p>Username <input maxLength='16' value={this.state.username} onChange={this.handleUsernameChange} /> </p>
-                    <p>New Passw <input maxLength='16' onChange={this.handleNewPasswordChange} type='password' /> </p>
-                    <p>Repeat Passw <input maxLength='16' onChange={this.handleRepeatPasswordChange} type='password' /> </p>
-                    <p>Password <input maxLength='16' onChange={this.handlePasswordChange} type='password' /> </p>
-                    <p>Sex <input value={this.state.sex} onChange={this.handleSexChange} /> </p>
-                    <p>Age <input maxLength='16' value={this.state.age} onChange={this.handleAgeChange} /> </p>
-                    <p>City <input maxLength='16' value={this.state.city} onChange={this.handleCityChange} /> </p>
-                    <p>Presentation <textarea maxLength='280' value={this.state.presentation} onChange={this.handlePresentationChange}></textarea> </p>
-                    <p>Min Age <input maxLength='16' value={this.state.minAgePref} onChange={this.handleMinAgeChange} /> </p>
-                    <p>Max Age <input maxLength='16' value={this.state.maxAgePref} onChange={this.handleMaxAgeChange} /> </p>
+            {error && <Error message={error} />}
 
-                    <p><button type='submit' className='button'>Update</button></p>
+            <section className='profile__section'>
+                <form className='profile__form' onSubmit={this.handleSubmit}>
+                    <label>Name  </label>
+                    <input className='profile__input' maxLength='16' value={this.state.name} onChange={this.handleNameChange} />
+                    <label>Surname </label>
+                    <input className='profile__input' maxLength='16' value={this.state.surname} onChange={this.handleSurnameChange} />
+                    <label>Username </label>
+                    <input className='profile__input' maxLength='16' value={this.state.username} onChange={this.handleUsernameChange} />
+                    <label>New Passw </label>
+                    <input className='profile__input' maxLength='16' onChange={this.handleNewPasswordChange} type='password' />
+                    <label>Repeat Passw </label>
+                    <input className='profile__input' maxLength='16' onChange={this.handleRepeatPasswordChange} type='password' />
+                    <label>Password</label>
+                    <input className='profile__input' maxLength='16' onChange={this.handlePasswordChange} type='password' />
+                    <label>Sex </label>
+                    <input className='profile__input' value={this.state.sex} onChange={this.handleSexChange} />
+                    <label>Age</label>
+                    <input className='profile__input' maxLength='16' value={this.state.age} onChange={this.handleAgeChange} />
+                    <label>City</label>
+                    <input className='profile__input' maxLength='16' value={this.state.city} onChange={this.handleCityChange} />
+                    <label>Presentation</label>
+                    <textarea className='profile__textarea' maxLength='280' value={this.state.presentation} onChange={this.handlePresentationChange}></textarea>
+                    <label>Min Age</label>
+                    <input name='quantity' min='18' max='100' className='profile__input' maxLength='16' value={this.state.minAgePref} onChange={this.handleMinAgeChange} />
+                    <label>Max Age</label>
+                    <input name='quantity' min='18' max='100' className='profile__input' maxLength='16' value={this.state.maxAgePref} onChange={this.handleMaxAgeChange} />
+
+                    <p><button type='submit' className='profile__button'>Update</button></p>
 
                 </form>
                 <section>
@@ -193,20 +208,22 @@ class Profile extends Component {
                             <option value="photo3">photo3</option>
                         </select> </p>
 
+                        <div className="spinner">{!this.state.loading ? <MDSpinner /> : ''}</div>
+
                         <div className="container-input">
                             <FileBase64 className="input" multiple={false} onDone={this.getFiles} />
                         </div>
                         <h3>Photo 1</h3>
-                        <div className='img_container'>
-                            <div>{(this.state.photo1 != '#') ? <img className='contact__image' src={this.state.photo1}></img> : ""}</div>
+                        <div className='profile__img__container'>
+                            {(this.state.photo1 != '#') ? <img className='profile__image' src={this.state.photo1}></img> : <img className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}
                         </div>
                         <h3>Photo 2</h3>
-                        <div className='img_container'>
-                            <div>{(this.state.photo2 != '#') ? <img className='contact__image' src={this.state.photo2}></img> : <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
+                        <div className='profile__img__container'>
+                            <div>{(this.state.photo2 != '#') ? <img className='profile__image' src={this.state.photo2}></img> : <img className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
                         </div>
                         <h3>Photo 3</h3>
-                        <div className='img_container'>
-                            <div>{(this.state.photo3 != '#') ? <img className='contact__image' src={this.state.photo3}></img> : <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
+                        <div className='profile__img__container'>
+                            <div>{(this.state.photo3 != '#') ? <img className='profile__image' src={this.state.photo3}></img> : <img className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
                         </div>
                     </div>
 
