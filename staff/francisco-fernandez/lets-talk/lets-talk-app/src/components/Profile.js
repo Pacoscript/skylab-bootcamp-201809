@@ -18,8 +18,8 @@ class Profile extends Component {
                 const surname = user.surname
                 const username = user.username
                 const password = 'password'
-                const newPassword = undefined
-                const newPassword2 = undefined
+                const newPassword = null
+                const newPassword2 = null
                 const sex = user.sex
                 const age = user.age
                 const city = user.city

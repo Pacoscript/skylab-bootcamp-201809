@@ -39,11 +39,11 @@ const logic = {
     updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref) {
 
         validate([{ key: 'name', value: name, type: String },
-        { key: 'surname', value: surname, type: String },
-        { key: 'username', value: username, type: String },
+        { key: 'surname', value: surname, type: String},
+        { key: 'username', value: username, type: String},
         { key: 'password', value: password, type: String },
-        { key: 'newPassword', value: newPassword, type: String },
-        { key: 'newPassword2', value: newPassword2, type: String },
+        { key: 'newPassword', value: newPassword, type: String, optional: true },
+        { key: 'newPassword2', value: newPassword2, type: String, optional: true },
         { key: 'sex', value: sex, type: String },
         { key: 'age', value: age, type: Number },
         { key: 'city', value: city, type: String },
@@ -241,6 +241,50 @@ const logic = {
 
                 return res.data
             })
+
+    },
+
+    checkMessages(id, idContact){
+
+        validate([
+            { key: 'id', value: id, type: String },
+            { key: 'idContact', value: idContact, type: String }])
+
+            return fetch(`${this.url}/users/${id}/messages/${idContact}/check`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this._token}`,
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+    
+                    if (res.error) throw Error(res.error)
+    
+                    return res.data
+                })
+
+    },
+
+    checkNewMessages(id){
+
+        validate([{ key: 'id', value: id, type: String }])
+
+            return fetch(`${this.url}/users/${id}/newMessages`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this._token}`,
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
+            })
+                .then(res => res.json())
+                .then(res => {
+    
+                    if (res.error) throw Error(res.error)
+    
+                    return res.data
+                })
 
     },
 

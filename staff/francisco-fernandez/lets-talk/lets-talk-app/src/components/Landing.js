@@ -16,7 +16,7 @@ function Landing(props) {
                     to get to know one another.
                 </p>
                 <p>For these reason, whe have some simple rules. You have 280 charachters to send a message to who you want. But you
-                    will have to wait to be responded to send another message. So choose well your words ; )
+                    will have to wait to be responded to send another message. So choose well your words.
                 </p>
                 <p>
                     We know you want to see the aspects of the other one. But let's not be impatient. You will see the first photo of eachother

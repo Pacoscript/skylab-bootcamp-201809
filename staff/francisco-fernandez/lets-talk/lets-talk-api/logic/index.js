@@ -39,7 +39,7 @@ const logic = {
     },
 
     registerUser(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref) {
-        
+
         validate([{ key: 'name', value: name, type: String },
         { key: 'surname', value: surname, type: String },
         { key: 'username', value: username, type: String },
@@ -104,15 +104,15 @@ const logic = {
     },
 
     updateUser(id, name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref) {
-        
+            
         validate([
             { key: 'id', value: id, type: String },
             { key: 'name', value: name, type: String, optional: true },
             { key: 'surname', value: surname, type: String, optional: true },
             { key: 'username', value: username, type: String, optional: true },
             { key: 'password', value: password, type: String },
-            { key: 'newPassword', value: newPassword, type: String },
-            { key: 'newPassword2', value: newPassword2, type: String },
+            { key: 'newPassword', value: newPassword, type: String, optional: true },
+            { key: 'newPassword2', value: newPassword2, type: String, optional: true },
             { key: 'sex', value: sex, type: String, optional: true },
             { key: 'age', value: age, type: Number, optional: true },
             { key: 'city', value: city, type: String, optional: true },
@@ -122,6 +122,7 @@ const logic = {
         ])
 
         return (async () => {
+            
             const user = await User.findById(id)
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
@@ -129,7 +130,7 @@ const logic = {
             if (user.password !== password) throw new AuthError('invalid password')
 
             if (newPassword !== newPassword2) throw new AuthError('the new password is incorrect')
-            
+
             if (username && username !== user.username) {
                 const _user = await User.findOne({ username })
 
@@ -285,6 +286,64 @@ const logic = {
             else return ([])
 
         })()
+    },
+
+    checkMessages(user1, user2) {
+
+        validate([
+            { key: 'user1', value: user1, type: String },
+            { key: 'user2', value: user2, type: String }
+        ])
+        return (async () => {
+
+            const _user1 = await User.findById(user1)
+
+            if (!_user1) throw new NotFoundError(`user1 with id ${user1} not found`)
+
+            const _user2 = await User.findById(user2)
+
+            if (!_user2) throw new NotFoundError(`user with id ${user2} not found`)
+
+            if (!_user1.contacts.includes(_user2.id).toString()) throw new NotFoundError(`user with id ${user2} is not a contact of user with id ${user1}`)
+
+            var ObjectId = require('mongoose').Types.ObjectId
+            let messages = await Message.find({
+                $or: [{ user: new ObjectId(user1), sentTo: new ObjectId(user2) },
+                { user: new ObjectId(user2), sentTo: new ObjectId(user1) }]
+            })
+
+            messages.sort(function (a, b) {
+                return (a.sentDate - b.sentDate)
+            })
+
+            if (messages.length > 0) return messages.map(({ id, nameSentTo, nameUser, text, user }) => ({ id, nameSentTo, nameUser, text, user }))
+            else return ([])
+
+        })()
+    },
+
+    checkNewMessages(user) {
+
+        validate([{ key: 'user', value: user, type: String }])
+
+        return (async () => {
+
+            const _user = await User.findById(user)
+
+            if (!_user) throw new NotFoundError(`user1 with id ${user} not found`)
+
+            const messages = await Message.find({ sentTo: user, status: 'PENDING' }).lean()
+
+            let contacts = []
+
+            messages.forEach(message => {
+                contacts.push(message.user)
+            })
+
+            return contacts
+
+        })()
+
     },
 
     listCandidates(user) {

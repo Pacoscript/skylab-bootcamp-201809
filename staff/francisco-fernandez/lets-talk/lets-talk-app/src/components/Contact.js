@@ -5,7 +5,7 @@ import Error from './Error'
 
 class Contact extends Component {
 
-    state = { error: null, photoFlag: false, contactPhotos: [] }
+    state = { error: null, photoFlag: false, contactPhotos: [], newMessageFlag: false }
 
     componentDidMount() {
 
@@ -14,7 +14,7 @@ class Contact extends Component {
         const contactId = this.props.id
 
         try {
-            logic.retrieveMessages(id, contactId)
+            logic.checkMessages(id, contactId)
                 .then(messages => {
 
                     if (messages.length > 3) this.setState({ photoFlag: true })
@@ -42,6 +42,20 @@ class Contact extends Component {
         catch (err) {
             this.setState({ error: err.message })
         }
+
+        try {
+            logic.checkNewMessages(id)
+                .then(contacts => {
+                    contacts.forEach(contact => {
+                        
+                        if (contact === contactId) this.setState({ newMessageFlag: true })
+                    })
+                })
+                .catch(err => this.setState({ error: err.message }))
+        }
+        catch (err) {
+            this.setState({ error: err.message })
+        }
     }
 
     render() {
@@ -51,7 +65,7 @@ class Contact extends Component {
         return <section className='contact' onClick={() => this.props.onGoContact(this.props.id, this.props.name)}>
             {error && <Error message={error} />}
             <h2 className='contact__name'>
-                {this.props.name}
+                {this.props.name}    {this.state.newMessageFlag && <i class="far fa-envelope"></i>}
             </h2>
             <div className='contact__img__container'>
                 {this.state.photoFlag && <img className='contact__image' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img>}

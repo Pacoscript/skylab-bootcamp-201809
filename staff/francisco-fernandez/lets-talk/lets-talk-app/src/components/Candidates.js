@@ -4,10 +4,10 @@ import Error from './Error'
 
 class Candidates extends Component {
 
-    state = { error: null, listCandidates: false, ind: 0 }
+    state = { error: null, listCandidates: false, ind: 0, newMessageFlag: false }
 
     componentDidMount = () => {
-        
+
         const id = logic._userId
 
         try {
@@ -18,15 +18,28 @@ class Candidates extends Component {
         catch (err) {
             this.setState({ error: err.message })
         }
-        
+
+        try {
+            logic.checkNewMessages(id)
+                .then(contacts => {
+
+                    if (contacts.length > 0) this.setState({ newMessageFlag: true })
+
+                })
+                .catch(err => this.setState({ error: err.message }))
+        }
+        catch (err) {
+            this.setState({ error: err.message })
+        }
+
     }
 
     handleNext = () => {
-        
+
         let ind = this.state.ind
-        
+
         let length = this.state.listCandidates.length
-        if(ind < length-1) ind++
+        if (ind < length - 1) ind++
         else ind = 0
 
         this.setState({ ind })
@@ -34,24 +47,24 @@ class Candidates extends Component {
     }
 
     handlePrev = () => {
-        
+
         let ind = this.state.ind
 
         let length = this.state.listCandidates.length
-        if(ind === 0) ind = length-1
+        if (ind === 0) ind = length - 1
         else ind--
-        
+
         this.setState({ ind })
 
     }
 
-    handleNewMessage = () =>{
+    handleNewMessage = () => {
         const ind = this.state.ind
 
         const idContact = this.state.listCandidates[ind].id
 
         const nameContact = this.state.listCandidates[ind].name
-        
+
         this.props.onMessage(idContact, nameContact)
     }
 
@@ -62,7 +75,7 @@ class Candidates extends Component {
         return <main className='candidates'>
 
             <section>
-                <h3 className='subtitle'>Say something interesting, funny...</h3>
+                <h3 className='presentation__header'>Search for interesting people!</h3>
             </section>
 
             {error && <Error message={error} />}
@@ -83,6 +96,8 @@ class Candidates extends Component {
                 <button className='candidates__button' onClick={this.handleNewMessage}>New message</button>
                 <button className='candidates__button' onClick={this.handleNext}>Next</button>
             </section>
+
+            <div className='presentation__alert'>{this.state.newMessageFlag && <p>You have new messages!! <i className="far fa-envelope"></i></p>}</div>
 
 
         </main>

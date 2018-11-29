@@ -16,9 +16,9 @@ function LandingNavbar(props) {
             <div className='dropdown'>
                 <button className='dropbtn'>Menu</button>
                 <div className='dropdown-content'>
-                    <button className='button' onClick={()=>props.onGoLandingClick()} >Landing</button><br/>
-                    <button className='button' onClick={()=>props.onGoRegisterClick()}>Register</button><br/>
-                    <button className='button' onClick={()=>props.onGoLoginClick()}>Login</button>
+                    <button className='drop__button' onClick={()=>props.onGoLandingClick()} >Landing</button><br/>
+                    <button className='drop__button' onClick={()=>props.onGoRegisterClick()}>Register</button><br/>
+                    <button className='drop__button' onClick={()=>props.onGoLoginClick()}>Login</button>
                 </div>
             </div>
         </div>

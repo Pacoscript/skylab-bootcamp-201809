@@ -180,6 +180,35 @@ router.get('/users/:id/messages/:idContact', [bearerTokenParser, jwtVerifier], (
     }, res)
 })
 
+//CHECK NUMBER OF MESSAGES
+router.get('/users/:id/messages/:idContact/check', [bearerTokenParser, jwtVerifier], (req, res) => {
+    routeHandler(() => {
+        const { sub, params: { id, idContact } } = req
+
+        if (id !== sub) throw Error('token sub does not match user id')
+
+        return logic.checkMessages(id, idContact)
+            .then(messages => res.json({
+                data: messages
+            }))
+    }, res)
+})
+
+// CHECK CONTACTS MESSAGES NO READED
+
+router.get('/users/:id/newMessages', [bearerTokenParser, jwtVerifier], (req, res) => {
+    routeHandler(() => {
+        const { sub, params: { id } } = req
+
+        if (id !== sub) throw Error('token sub does not match user id')
+
+        return logic.checkNewMessages(id)
+            .then(contacts => res.json({
+                data: contacts
+            }))
+    }, res)
+})
+
 //RETRIEVE CANDIDATES
 router.get('/users/:id/candidates', [bearerTokenParser, jwtVerifier], (req, res) => {
     routeHandler(() => {

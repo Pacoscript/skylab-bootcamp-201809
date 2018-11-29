@@ -19,7 +19,7 @@ class Messages extends Component {
                 .then(messages => {
                     if (messages.length > 0) {
                         if (messages[messages.length - 1].user === id) {
-                            debugger
+                            
                             this.setState({ flag: true })
                             this.setState({ contactName: messages[messages.length - 1].nameSentTo })
                         }

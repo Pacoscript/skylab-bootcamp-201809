@@ -1,29 +1,50 @@
-import React from 'react'
+import React, { Component } from 'react'
+import logic from '../logic'
+import Error from './Error'
 
-function Navbar(props) {
+class Navbar extends Component {
 
+    state = { error: null, name: 'name' }
 
-    return <header><div className='header__logo'>
-        <i className='fas fa-hand-holding-heart'></i>
-    </div>
+    componentDidMount() {
 
-        <div className='header__title'>
-            <h1>LETS TALK!!</h1>
+        const id = logic._userId
+
+        logic.retrieveUser(id)
+            .then(user => {
+
+                const name = user.name
+
+                this.setState({ name })
+
+            })
+    }
+
+    render() {
+        return <header><div className='header__logo'>
+            <i className='fas fa-hand-holding-heart'></i>
         </div>
 
-        <div className='header__menu'>
-            <div className='dropdown'>
-                <button className='dropbtn'>Menu</button>
-                <div className='dropdown-content'>
-                    <button className='drop__button' onClick={()=>props.onGoContactsClick()} >Contacts</button><br/>
-                    <button className='drop__button' onClick={()=>props.onGoCandidatesClick()}>Candidates</button><br/>
-                    <button className='drop__button' onClick={()=>props.onGoProfileClick()}>Profile</button><br/>
-                    <button className='drop__button' onClick={()=>props.onLogoutClick()}>Logout</button>
-                    
+            <div className='header__title'>
+                <h1>LETS TALK!!</h1>
+            </div>
+
+            <div className='header__menu'>
+            <label className= 'header__label'>Hi {this.state.name}</label>
+                <div className='dropdown'>
+                    <button className='dropbtn'>Menu</button>
+                    <div className='dropdown-content'>
+                        <button className='drop__button' onClick={() => this.props.onGoContactsClick()} >Contacts</button><br />
+                        <button className='drop__button' onClick={() => this.props.onGoCandidatesClick()}>Candidates</button><br />
+                        <button className='drop__button' onClick={() => this.props.onGoProfileClick()}>Profile</button><br />
+                        <button className='drop__button' onClick={() => this.props.onLogoutClick()}>Logout</button>
+
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+            <div>{this.state.error && <Error message={this.state.error} />}</div>
+        </header>
+    }
 }
 
 
