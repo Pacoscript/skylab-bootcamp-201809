@@ -120,8 +120,8 @@ class Messages extends Component {
         return <main className='messages__page'>
             {error && <Error message={error} />}
             <section className='messages__head'>
-                {this.state.photoFlag && <div className='imgmini__container'><img className='imgmini' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img></div>}
-                {!this.state.photoFlag && <div className='imgmini__container'><img className='imgmini' src="./images/blank-profile-picture-973461_640.png"></img></div>}
+                {this.state.photoFlag && <div className='imgmini__container'><img alt="imgmini face" className='imgmini' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img></div>}
+                {!this.state.photoFlag && <div className='imgmini__container'><img alt="imgmini face" className='imgmini' src="./images/blank-profile-picture-973461_640.png"></img></div>}
                 <div><h1 className='messages__name'> {this.state.contactName}</h1></div>
 
             </section>

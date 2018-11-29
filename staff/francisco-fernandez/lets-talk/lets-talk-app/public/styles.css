@@ -21,14 +21,19 @@ ul {
   padding-top: 10px;
   width: 80%; }
 
-.presentation, .presentation__name, .presentation__text, .presentation__buttons, .messages__name, .message {
+.presentation, .presentation__name, .presentation__buttons {
   margin-left: auto;
   margin-right: auto;
   width: 80%;
+  max-width: 400px;
   border: 1px solid #48484A;
   border-radius: 5px; }
 
 .presentation__header {
+  display: flex;
+  justify-content: space-around; }
+
+.presentation__title {
   color: #EF5C92;
   text-align: center;
   font-weight: bold;
@@ -42,6 +47,9 @@ ul {
   border: none; }
 
 .presentation__text {
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
   color: #48484A;
   text-align: justify;
   border: none;
@@ -73,6 +81,12 @@ ul {
   text-align: center;
   font-weight: bold; }
 
+@media (min-width: 768px) {
+  .presentation, .presentation__name, .presentation__buttons {
+    width: 40%; } }
+@media (min-width: 1024px) {
+  .presentation, .presentation__name, .presentation__buttons {
+    width: 30%; } }
 .contacts {
   background-color: #EBEEF4;
   min-height: 450px;
@@ -111,6 +125,12 @@ ul {
     height: 100%;
     object-fit: cover;
     object-position: center center; } }
+@media (min-width: 768px) {
+  .contact, .contact__name {
+    width: 40%; } }
+@media (min-width: 1024px) {
+  .contact, .contact__name {
+    width: 30%; } }
 .messages__page {
   background-color: #EBEEF4;
   padding-bottom: 15px; }
@@ -127,6 +147,12 @@ ul {
   background-color: white; }
 
 .messages__name {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  max-width: 400px;
+  border: 1px solid #48484A;
+  border-radius: 5px;
   color: #EF5C92;
   text-align: center;
   border: none; }
@@ -160,22 +186,22 @@ ul {
   margin: 3px; }
 
 .imgmini__container {
-  width: 70px;
-  height: 70px;
-  border-radius: 35px;
-  overflow: hidden;
-  position: relative;
-  margin-bottom: 10px;
-  margin-left: 10px;
-  display: flex;
-  justify-content: space-around; }
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  border: 1px solid #48484A;
+  background: none;
+  overflow: hidden; }
 
 .imgmini {
-  width: auto;
-  max-width: 100px;
-  height: auto;
-  max-height: 100px; }
+  width: 100%;
+  height: auto; }
 
+@supports(object-fit: cover) {
+  .profile__image {
+    height: 100%;
+    object-fit: cover;
+    object-position: center center; } }
 .messages__head {
   padding-top: 20px;
   margin-left: auto;
@@ -187,6 +213,24 @@ ul {
   align-self: right;
   padding-left: 20px; }
 
+@media (min-width: 768px) {
+  .messages__head {
+    width: 40%; }
+
+  .messages {
+    width: 40%; }
+
+  .new-message {
+    width: 40%; } }
+@media (min-width: 1024px) {
+  .messages__head {
+    width: 30%; }
+
+  .messages {
+    width: 30%; }
+
+  .new-message {
+    width: 30%; } }
 .landing {
   background-color: #BCED74;
   text-align: center;
@@ -208,6 +252,12 @@ ul {
   border: 2px solid #48484A;
   border-radius: 10px; }
 
+@media (min-width: 768px) {
+  .landing__instructions {
+    width: 70%; } }
+@media (min-width: 1024px) {
+  .landing__instructions {
+    width: 50%; } }
 .login {
   background-color: #EBEEF4;
   text-align: left;
@@ -226,7 +276,8 @@ ul {
   flex-direction: column; }
 
 .login__input {
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  max-width: 300px; }
 
 .login__button {
   border: 1px solid #EBEEF4;
@@ -235,6 +286,14 @@ ul {
   color: #48484A;
   background-color: #BCED74; }
 
+@media (min-width: 768px) {
+  .login {
+    padding-left: 20%;
+    padding-right: 20%; } }
+@media (min-width: 1024px) {
+  .login {
+    padding-left: 30%;
+    padding-right: 30%; } }
 .photos {
   background-color: white;
   padding-top: 20px; }
@@ -251,7 +310,8 @@ ul {
   padding-bottom: 30px; }
 
 .profile__input {
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  max-width: 300px; }
 
 .profile__textarea {
   height: 150px; }
@@ -291,6 +351,14 @@ ul {
     height: 100%;
     object-fit: cover;
     object-position: center center; } }
+@media (min-width: 768px) {
+  .profile {
+    padding-left: 20%;
+    padding-right: 20%; } }
+@media (min-width: 1024px) {
+  .profile {
+    padding-left: 30%;
+    padding-right: 30%; } }
 footer {
   background-color: #48484A;
   color: #EBEEF4;
@@ -329,10 +397,11 @@ h3 {
 
 .fa-envelope {
   color: #EF5C92;
-  font-size: 150%; }
+  font-weight: 80%; }
 
 .header__title {
-  color: #EBEEF4; }
+  color: #EBEEF4;
+  size: 80%; }
 
 .fa-hand-holding-heart {
   color: #EF5C92;
@@ -391,6 +460,48 @@ h3 {
 .dropdown:hover .dropbtn {
   background-color: #48484A; }
 
+.header__menu_2 {
+  display: none;
+  visibility: hidden; }
+
+@media (min-width: 768px) {
+  header {
+    justify-content: space-around; }
+
+  .header__menu_2 {
+    display: none;
+    visibility: hidden; } }
+@media (min-width: 1024px) {
+  header {
+    justify-content: flex-start; }
+
+  .header__logo {
+    padding-left: 200px; }
+
+  .header__title {
+    padding-left: 120px; }
+
+  .header__menu {
+    padding-left: 100px; }
+
+  .drop__button {
+    display: none; }
+
+  .dropdown {
+    display: none; }
+
+  .header__menu_2 {
+    visibility: visible;
+    display: flex;
+    justify-content: space-around; }
+
+  .menu__button {
+    width: 100px;
+    padding: 10px;
+    border: none;
+    color: #EBEEF4;
+    background-color: #48484A;
+    outline: none; } }
 .register {
   background-color: #EBEEF4;
   text-align: left;
@@ -400,7 +511,8 @@ h3 {
   padding-bottom: 30px; }
 
 .register__input {
-  margin-bottom: 10px; }
+  margin-bottom: 10px;
+  max-width: 300px; }
 
 .regist__textarea {
   height: 150px; }
@@ -417,11 +529,27 @@ h3 {
   color: #48484A;
   background-color: #BCED74; }
 
+@media (min-width: 768px) {
+  .register {
+    padding-left: 20%;
+    padding-right: 20%; } }
+@media (min-width: 1024px) {
+  .register {
+    padding-left: 30%;
+    padding-right: 30%; } }
 .message {
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  border: 1px solid #48484A;
+  border-radius: 5px;
+  overflow-y: scroll;
+  margin-bottom: 10px;
+  background-color: white;
   color: #48484A;
   text-align: justify;
   border: none;
-  max-width: 90%; }
+  overflow: hidden; }
 
 .message__paragraph {
   text-align: justify;

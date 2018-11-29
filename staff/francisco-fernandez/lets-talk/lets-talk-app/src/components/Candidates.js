@@ -74,8 +74,8 @@ class Candidates extends Component {
 
         return <main className='candidates'>
 
-            <section>
-                <h3 className='presentation__header'>Search for interesting people!</h3>
+            <section className='presentation__header'>
+                <h3 className='presentation__title'>Search for interesting people!</h3>
             </section>
 
             {error && <Error message={error} />}

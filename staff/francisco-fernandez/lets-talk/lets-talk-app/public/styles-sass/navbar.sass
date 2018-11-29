@@ -28,10 +28,11 @@ h3
     
 .fa-envelope
     color: $logo
-    font-size: 150%
+    font-weight: 80%
 
 .header__title
     color: #EBEEF4
+    size: 80%
 
 
 .fa-hand-holding-heart
@@ -68,8 +69,6 @@ h3
 .dropdown 
     position: relative
     display: inline-block
-    
-    
 
 
 .dropdown-content 
@@ -96,3 +95,55 @@ h3
 
 .dropdown:hover .dropbtn 
     background-color: $lets-talk-grey
+
+.header__menu_2
+    display: none
+    visibility: hidden
+
+@media (min-width: 768px)
+
+    header
+        justify-content: space-around
+    .header__menu_2
+        display: none
+        visibility: hidden
+        
+        
+
+@media (min-width: 1024px)
+
+    header
+        justify-content: flex-start
+
+    .header__logo
+        padding-left: 200px
+        
+    .header__title
+        padding-left: 120px
+
+    .header__menu
+        padding-left: 100px
+
+    .drop__button
+        display: none
+    
+    .dropdown 
+        display: none
+
+    .header__menu_2
+        visibility: visible
+        display: flex
+        justify-content: space-around
+
+    .menu__button
+        width: 100px
+        padding: 10px
+        border: none
+        color: $lets-talk-white
+        background-color: $lets-talk-grey
+        outline: none
+    
+
+        
+    
+  

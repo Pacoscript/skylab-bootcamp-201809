@@ -8,15 +8,21 @@
     margin-top: 0px
     padding-top: 10px
     width: 80%
+    
 
 .presentation
     margin-left: auto
     margin-right: auto
     width: 80%
+    max-width: 400px
     border: 1px solid $lets-talk-grey
     border-radius: 5px
 
 .presentation__header
+    display: flex
+    justify-content: space-around
+
+.presentation__title
     color: $logo
     text-align: center
     font-weight: bold
@@ -31,7 +37,9 @@
     border: none
 
 .presentation__text
-    @extend .presentation
+    margin-left: auto
+    margin-right: auto
+    width: 90%
     color: $lets-talk-grey
     text-align: justify
     border: none
@@ -64,3 +72,14 @@
     text-align: center
     font-weight: bold
 
+@media (min-width: 768px)
+
+    .presentation
+        width: 40%
+         
+
+@media (min-width: 1024px)
+
+    .presentation
+        width: 30%
+    

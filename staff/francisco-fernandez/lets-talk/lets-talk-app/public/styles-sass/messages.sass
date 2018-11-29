@@ -14,12 +14,15 @@
     background-color: white
 
 .messages__name
-    @extend .presentation
+    margin-left: auto
+    margin-right: auto
+    width: 80%
+    max-width: 400px
+    border: 1px solid $lets-talk-grey
+    border-radius: 5px
     color: $logo
     text-align: center
     border: none
-
-
 
 .new-message 
     display: flex
@@ -49,33 +52,26 @@
     background-color: $lets-talk-green
     margin: 3px
       
-
 .imgmini__container
-    width: 70px
-    height: 70px   
-    border-radius: 35px
+    width: 60px
+    height: 60px
+    border-radius: 30px
+    border: 1px solid $lets-talk-grey
+    background: none
     overflow: hidden
-    position: relative
-    margin-bottom: 10px
-    margin-left: 10px
-    display: flex
-    justify-content: space-around
-    
-   
 
 .imgmini
-    // position: absolute
-    // width: 100%
-    // height: 100%
-    width: auto
-    max-width: 100px
+    width: 100%
     height: auto
-    max-height: 100px
+
+@supports(object-fit: cover)
+    .profile__image
+        height: 100%
+        object-fit: cover
+        object-position: center center
    
 
     
-    
-
 .messages__head
     padding-top: 20px
     margin-left: auto
@@ -88,3 +84,25 @@
     align-self: right
     padding-left: 20px
     
+@media (min-width: 768px)
+
+    .messages__head
+        width: 40%
+
+    .messages
+        width: 40%
+
+    .new-message
+        width: 40%
+         
+
+@media (min-width: 1024px)
+
+    .messages__head
+        width: 30%
+
+    .messages
+        width: 30%
+
+    .new-message
+        width: 30%

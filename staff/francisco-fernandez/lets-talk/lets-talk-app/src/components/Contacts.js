@@ -28,13 +28,14 @@ class Contacts extends Component {
 
     return <main className='contacts'>
       {error && <Error message={error} />}
-      <section>
-        <h3 className='subtitle'>My contacts...</h3>
+      <section className='presentation__header'>
+        <h3 className='presentation__title'>My contacts...</h3>
       </section>
+
 
       <section className='contacts__section'>
         {this.state.listContacts.map(contact => <Contact key={contact.id} id={contact.id} name={contact.name} onGoContact={this.props.onGoContact} />)}
-        {(this.state.listContacts.length===0) && `You don´t have any contact yet, what are you waiting for?`}
+        {(this.state.listContacts.length === 0) && `You don´t have any contact yet, what are you waiting for?`}
       </section>
 
     </main>
