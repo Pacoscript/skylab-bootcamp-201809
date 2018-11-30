@@ -1,5 +1,3 @@
-const { ValueError } = require('../errors')
-
 function validate(params) {
     params.forEach(({ key, value, type, optional }) => {
         switch (type) {
@@ -21,6 +19,10 @@ function validate(params) {
                 if (optional && value === null) break
 
                 if (typeof value !== 'number') throw TypeError(`${value} is not a number`)
+
+                break
+            default:
+                break
         }
     })
 }

@@ -54,27 +54,27 @@ class Photos extends Component {
             <h2 className='contact__name'>
                 Photo 1 of {this.state.contactName}
             </h2>
-            <div className='img_container'>
-                {this.state.flag1 && <img className='contact__image' src={this.state.contactPhotos.photo1}></img>}
-                {!this.state.flag1 && <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}
+            <div className='photos__img__container'>
+                {this.state.flag1 && <img alt='' className='photos__image' src={this.state.contactPhotos.photo1}></img>}
+                {!this.state.flag1 && <img alt=''  className='photos__image' src="./images/blank-profile-picture-973461_640.png"></img>}
             </div>
             <p className='img_footer'>You need four messages to see the photo1</p>
 
             <h2 className='contact__name'>
                 Photo 2 of {this.state.contactName}
             </h2>
-            <div className='img_container'>
-                {this.state.flag2 && <img className='contact__image' src={this.state.contactPhotos.photo2}></img>}
-                {!this.state.flag2 && <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}
+            <div className='photos__img__container'>
+                {this.state.flag2 && <img alt=''  className='photos__image' src={this.state.contactPhotos.photo2}></img>}
+                {!this.state.flag2 && <img alt=''  className='photos__image' src="./images/blank-profile-picture-973461_640.png"></img>}
             </div>
             <p className='img_footer'>You need eight messages to see the photo2</p>
 
             <h2 className='contact__name'>
                 Photo 3 of {this.state.contactName}
             </h2>
-            <div className='img_container'>
-                {this.state.flag3 && <img className='contact__image' src={this.state.contactPhotos.photo3}></img>}
-                {!this.state.flag3 && <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}
+            <div className='photos__img__container'>
+                {this.state.flag3 && <img alt='' className='photos__image' src={this.state.contactPhotos.photo3}></img>}
+                {!this.state.flag3 && <img alt=''  className='photos__image' src="./images/blank-profile-picture-973461_640.png"></img>}
             </div>
             <p className='img_footer'>You need twelve messages to see the photo3</p>
         </section>

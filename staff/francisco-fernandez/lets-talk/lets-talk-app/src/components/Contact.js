@@ -68,8 +68,8 @@ class Contact extends Component {
                 {this.props.name}    {this.state.newMessageFlag && <i class="far fa-envelope"></i>}
             </h2>
             <div className='contact__img__container'>
-                {this.state.photoFlag && <img className='contact__image' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img>}
-                {!this.state.photoFlag && <img className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}
+                {this.state.photoFlag && <img alt='' className='contact__image' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img>}
+                {!this.state.photoFlag && <img alt=''  className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}
             </div>
         </section>
 

@@ -5,7 +5,7 @@ import Error from './Error'
 import MDSpinner from "react-md-spinner"
 
 class Profile extends Component {
-    state = { name: '', surname: '', username: '', password: '', newPassword: '', newPassword2: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', photo1: undefined, photo2: undefined, photo3: undefined, whichPhoto: 'photo1', loading: false, error: null, loading: true }
+    state = { name: '', surname: '', username: '', password: '', newPassword: '', newPassword2: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', photo1: undefined, photo2: undefined, photo3: undefined, whichPhoto: 'photo1', loading: true, error: null}
 
     componentDidMount = () => {
 
@@ -215,15 +215,15 @@ class Profile extends Component {
                         </div>
                         <h3>Photo 1</h3>
                         <div className='profile__img__container'>
-                            {(this.state.photo1 != '#') ? <img className='profile__image' src={this.state.photo1}></img> : <img className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}
+                            {(this.state.photo1 !== '#') ? <img alt='' className='profile__image' src={this.state.photo1}></img> : <img alt='' className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}
                         </div>
                         <h3>Photo 2</h3>
                         <div className='profile__img__container'>
-                            <div>{(this.state.photo2 != '#') ? <img className='profile__image' src={this.state.photo2}></img> : <img className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
+                            <div>{(this.state.photo2 !== '#') ? <img alt='' className='profile__image' src={this.state.photo2}></img> : <img alt='' className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
                         </div>
                         <h3>Photo 3</h3>
                         <div className='profile__img__container'>
-                            <div>{(this.state.photo3 != '#') ? <img className='profile__image' src={this.state.photo3}></img> : <img className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
+                            <div>{(this.state.photo3 !== '#') ? <img alt='' className='profile__image' src={this.state.photo3}></img> : <img alt='' className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
                         </div>
                     </div>
 

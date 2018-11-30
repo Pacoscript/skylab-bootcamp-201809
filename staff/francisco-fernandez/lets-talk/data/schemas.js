@@ -17,7 +17,7 @@ const Message = new Schema({
     status: {
         type: String,
         default: 'PENDING',
-        enum: ['PENDING', 'READED', 'RESPONDED'],
+        enum: ['PENDING', 'READED'],
     },
     sentTo: {
         type: ObjectId,

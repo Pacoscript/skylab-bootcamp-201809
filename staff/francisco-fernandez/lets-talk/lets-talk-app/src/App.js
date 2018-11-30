@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import LandingNavbar from './components/LandingNavbar'
 import Footer from './components/Footer'
 import Landing from './components/Landing'

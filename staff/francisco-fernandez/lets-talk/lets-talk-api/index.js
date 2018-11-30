@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-const mongoose = require('mongoose')
+const { mongoose } = require('data')
 const express = require('express')
 const package = require('./package.json')
 const router = require('./routes')

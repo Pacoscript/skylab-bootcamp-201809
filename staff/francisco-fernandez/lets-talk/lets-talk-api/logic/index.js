@@ -1,4 +1,4 @@
-const { User, Message } = require('../data')
+const { mongoose, models: { User, Message } } = require('data')
 const { AlreadyExistsError, AuthError, NotAllowedError, NotFoundError } = require('../errors')
 const validate = require('../utils/validate')
 const cloudinary = require('cloudinary')
@@ -78,9 +78,13 @@ const logic = {
 
     retrieveUser(id) {
         validate([{ key: 'id', value: id, type: String }])
-
+        let user = undefined
         return (async () => {
-            const user = await User.findById(id, { '_id': 0, password: 0, __v: 0 }).lean()
+            try{
+                user = await User.findById(id, { '_id': 0, password: 0, __v: 0 }).lean()
+            }
+            catch(error){   
+            }
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
 
@@ -104,7 +108,7 @@ const logic = {
     },
 
     updateUser(id, name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref) {
-            
+
         validate([
             { key: 'id', value: id, type: String },
             { key: 'name', value: name, type: String, optional: true },
@@ -122,7 +126,7 @@ const logic = {
         ])
 
         return (async () => {
-            
+
             const user = await User.findById(id)
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
@@ -183,9 +187,9 @@ const logic = {
             if (!newContact) throw new NotFoundError(`user with id ${idContact} not found`)
 
 
-            debugger
+            
             user.contacts.forEach(_contactId => {
-                debugger
+                
                 if (_contactId.toString() === newContact._id.toString()) throw new AlreadyExistsError(`user with id ${id} arleady has contact with id ${_contactId}`)
             })
 
@@ -203,9 +207,16 @@ const logic = {
         ])
 
         return (async () => {
-            const user = await User.findById(userId)
+            let user = undefined
+            
+            try{
+                user = await User.findById(userId)
+            }
+            catch(error){
 
-            if (!user) throw new NotFoundError(`user with id ${id} not found`)
+            }
+            
+            if (!user) throw new NotFoundError(`user with id ${userId} not found`)
 
             const contacts = await Promise.all(user.contacts.map(async contactId => await User.findById(contactId)))
 
@@ -221,12 +232,22 @@ const logic = {
             { key: 'text', value: text, type: String }
         ])
         return (async () => {
+            let _user = undefined
+            let user2 = undefined
+            try{
+                _user = await User.findById(user)
 
-            const _user = await User.findById(user)
+            }catch(error){
+
+            }
 
             if (!_user) throw new NotFoundError(`user with id ${user} not found`)
 
-            const user2 = await User.findById(sentTo)
+            try{
+                user2 = await User.findById(sentTo)
+            } catch(error) {
+
+            }
 
             if (!user2) throw new NotFoundError(`user with id ${sentTo} not found`)
 
@@ -260,7 +281,7 @@ const logic = {
 
             if (!_user1.contacts.includes(_user2.id).toString()) throw new NotFoundError(`user with id ${user2} is not a contact of user with id ${user1}`)
 
-            var ObjectId = require('mongoose').Types.ObjectId
+            var ObjectId = mongoose.Types.ObjectId
             let messages = await Message.find({
                 $or: [{ user: new ObjectId(user1), sentTo: new ObjectId(user2) },
                 { user: new ObjectId(user2), sentTo: new ObjectId(user1) }]
@@ -306,7 +327,7 @@ const logic = {
 
             if (!_user1.contacts.includes(_user2.id).toString()) throw new NotFoundError(`user with id ${user2} is not a contact of user with id ${user1}`)
 
-            var ObjectId = require('mongoose').Types.ObjectId
+            var ObjectId = mongoose.Types.ObjectId
             let messages = await Message.find({
                 $or: [{ user: new ObjectId(user1), sentTo: new ObjectId(user2) },
                 { user: new ObjectId(user2), sentTo: new ObjectId(user1) }]
@@ -337,7 +358,9 @@ const logic = {
             let contacts = []
 
             messages.forEach(message => {
-                contacts.push(message.user)
+                
+                id = message.user._id.toString()
+                contacts.push(id)
             })
 
             return contacts
@@ -347,7 +370,7 @@ const logic = {
     },
 
     listCandidates(user) {
-
+        
         validate([
             { key: 'user', value: user, type: String }
         ])
@@ -374,7 +397,7 @@ const logic = {
 
             candidates.forEach(candidate => {
                 contacts.forEach(contact => {
-                    debugger
+                    
                     if (candidate._id.toString() === contact._id.toString()) {
                         flag = true
                     }
