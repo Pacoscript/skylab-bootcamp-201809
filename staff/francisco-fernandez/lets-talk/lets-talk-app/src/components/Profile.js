@@ -120,8 +120,9 @@ class Profile extends Component {
         
         try {
             logic.updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref)
-        } catch (error) {
-            this.setState({ error: error.message })
+        } catch (err) {
+            
+            this.setState({ error: err.message })
         }
 
     }

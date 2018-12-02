@@ -5,7 +5,9 @@ const logic = {
     _userId: sessionStorage.getItem('userId') || null,
     _token: sessionStorage.getItem('token') || null,
 
-    url: 'NO-URL',
+    // url: 'NO-URL',
+
+    url : 'http://localhost:5000/api',
 
     registerUser(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref) {
 
@@ -22,7 +24,7 @@ const logic = {
 
         if ((age < 18) || (minAgePref < 18)) throw Error('not for children under 18')
         if ((minAgePref > maxAgePref)) throw Error('minAgePref must be inferior to maxAgePref')
-
+        
         return fetch(`${this.url}/users`, {
             method: 'POST',
             headers: {
@@ -32,24 +34,25 @@ const logic = {
         })
             .then(res => res.json())
             .then(res => {
+                
                 if (res.error) throw Error(res.error)
             })
     },
 
     updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref) {
 
-        validate([{ key: 'name', value: name, type: String },
-        { key: 'surname', value: surname, type: String},
-        { key: 'username', value: username, type: String},
+        validate([{ key: 'name', value: name, type: String, optional: true },
+        { key: 'surname', value: surname, type: String, optional: true},
+        { key: 'username', value: username, type: String, optional: true},
         { key: 'password', value: password, type: String },
         { key: 'newPassword', value: newPassword, type: String, optional: true },
         { key: 'newPassword2', value: newPassword2, type: String, optional: true },
-        { key: 'sex', value: sex, type: String },
-        { key: 'age', value: age, type: Number },
-        { key: 'city', value: city, type: String },
-        { key: 'presentation', value: presentation, type: String },
-        { key: 'minAgePref', value: minAgePref, type: Number },
-        { key: 'maxAgePref', value: maxAgePref, type: Number }])
+        { key: 'sex', value: sex, type: String , optional: true},
+        { key: 'age', value: age, type: Number , optional: true},
+        { key: 'city', value: city, type: String , optional: true},
+        { key: 'presentation', value: presentation, type: String , optional: true},
+        { key: 'minAgePref', value: minAgePref, type: Number , optional: true},
+        { key: 'maxAgePref', value: maxAgePref, type: Number , optional: true}])
 
         if ((age < 18) || (minAgePref < 18)) throw Error('not for children under 18')
         if ((minAgePref > maxAgePref)) throw Error('minAgePref must be inferior to maxAgePref')
@@ -64,6 +67,7 @@ const logic = {
         })
             .then(res => res.json())
             .then(res => {
+                
                 if (res.error) throw Error(res.error)
             })
 
@@ -129,7 +133,7 @@ const logic = {
             .then(res => res.json())
             .then(res => {
                 if (res.error) throw Error(res.error)
-
+                
                 return res.data
             })
 
@@ -236,7 +240,7 @@ const logic = {
         })
             .then(res => res.json())
             .then(res => {
-
+                
                 if (res.error) throw Error(res.error)
 
                 return res.data

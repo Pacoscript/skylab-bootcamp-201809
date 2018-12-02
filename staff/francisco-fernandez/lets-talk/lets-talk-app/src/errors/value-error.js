@@ -12,3 +12,4 @@ class ValueError extends Error {
 }
 
 export default ValueError
+// module.exports = ValueError

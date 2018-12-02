@@ -12,3 +12,11 @@ export default {
     NotFoundError,
     ValueError
 }
+
+// module.exports = {
+//     AlreadyExistsError,
+//     AuthError,
+//     NotAllowedError,
+//     NotFoundError,
+//     ValueError
+// }
