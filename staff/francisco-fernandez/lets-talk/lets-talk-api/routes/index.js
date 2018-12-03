@@ -78,10 +78,10 @@ router.get('/users/:id/photos', (req, res) => {
         const { params: { id } } = req
 
         return logic.retrieveUserPhotos(id)
-        .then(photos =>
-            res.json({
-                data: photos
-            }))
+            .then(photos =>
+                res.json({
+                    data: photos
+                }))
 
     }, res)
 })
@@ -221,6 +221,24 @@ router.get('/users/:id/candidates', [bearerTokenParser, jwtVerifier], (req, res)
                 data: candidates
             }))
     }, res)
+})
+
+//BLOCK USER
+router.patch('/users/:id/block', [bearerTokenParser, jwtVerifier, jsonBodyParser], (req, res) => {
+    routeHandler(() => {
+        const { sub, params: { id }, body: {user1, user2} } = req
+
+        if (id !== sub) throw Error('token sub does not match user id')
+
+        return logic.blockUser(user1, user2)
+            .then(() => {
+                res.status(201)
+
+                res.json({
+                    message: `${user2} successfully blocked`
+                })
+            })
+    })
 })
 
 

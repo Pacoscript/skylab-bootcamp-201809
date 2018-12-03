@@ -101,7 +101,17 @@ ul {
   width: 80%;
   border: 1px solid #48484A;
   border-radius: 5px;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  text-align: center; }
+
+.contact__button {
+  border: 1px solid #48484A;
+  border-radius: 5px;
+  padding: 10px;
+  color: #48484A;
+  background-color: #BCED74;
+  margin: 3px;
+  margin-bottom: 10px; }
 
 .contact__name {
   color: #EF5C92;

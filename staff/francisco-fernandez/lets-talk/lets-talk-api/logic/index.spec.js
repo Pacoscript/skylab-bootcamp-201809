@@ -619,6 +619,8 @@ describe('logic', () => {
             let user
             let user2
             let user3
+            let user4
+            let user5
 
             beforeEach(async () => {
                 user = new User({
@@ -645,10 +647,23 @@ describe('logic', () => {
                     maxAgePref: 23, created: Date.now()
                 })
 
+                user5 = new User({
+                    name: 'Pamela', surname: 'Anderson', username: 'pam', password: '123',
+                    age: 25, sex: 'FEMALE', city: 'Barcelona', presentation: 'Im not another good girl', minAgePref: 20,
+                    maxAgePref: 23, created: Date.now()
+                })
+
                 user.contacts.push(user3.id)
                 user.contacts.push(user2.id)
+                user.contacts.push(user5.id)
+                user.contacts.push(user4.id)
+                user.blocks.push(user5.id)
+                user5.blockedBy.push(user.id)
+                user.blockedBy.push(user4.id)
+                user4.blocks.push(user.id)
+                
 
-                await Promise.all([user.save(), user2.save(), user3.save()])
+                await Promise.all([user.save(), user2.save(), user3.save()], user5.save())
             })
 
 
@@ -664,7 +679,7 @@ describe('logic', () => {
 
             it('should fail is the user doesn`t exist', async () => {
                 const wrongId = user4.id
-                
+
                 try {
                     await logic.listContacts(wrongId)
 
@@ -884,10 +899,10 @@ describe('logic', () => {
             it('should fail on non existent user', async () => {
                 const text = 'hola mundo'
                 const wrongId = 'wrong'
-                try{
+                try {
                     const res = await logic.addMessage(wrongId, user2.id, text)
 
-                }catch(error){
+                } catch (error) {
                     expect(error).not.to.be.undefined
                     expect(error).to.be.an.instanceOf(NotFoundError)
                     expect(error.message).to.be.equal(`user with id ${wrongId} not found`)
@@ -899,10 +914,10 @@ describe('logic', () => {
             it('should fail on non existent sentTo', async () => {
                 const text = 'hola mundo'
                 const wrongId = 'wrong'
-                try{
+                try {
                     const res = await logic.addMessage(user.id, wrongId, text)
 
-                }catch(error){
+                } catch (error) {
                     expect(error).not.to.be.undefined
                     expect(error).to.be.an.instanceOf(NotFoundError)
                     expect(error.message).to.be.equal(`user with id ${wrongId} not found`)
@@ -1038,7 +1053,7 @@ describe('logic', () => {
 
                 expect(conversation[2].text).to.equal('lets talk!')
 
-                
+
             })
 
 
@@ -1101,10 +1116,10 @@ describe('logic', () => {
                 const contacts = await logic.checkNewMessages(user2.id)
 
                 expect(contacts.length).to.equal(1)
-                
+
                 expect(contacts[0]).to.equal(user.id)
 
-                                
+
             })
 
 
@@ -1143,6 +1158,101 @@ describe('logic', () => {
         })
 
     })
+
+    describe('block a user', () => {
+
+        let user
+        let user2
+
+        beforeEach(async () => {
+            user = new User({
+                name: 'John', surname: 'Doe', username: 'jd', password: '123',
+                age: 20, sex: 'MALE', city: 'Barcelona', presentation: 'Im a good guy', minAgePref: 20,
+                maxAgePref: 25, created: Date.now()
+            })
+
+            user2 = new User({
+                name: 'Mary', surname: 'Jane', username: 'ma', password: '123',
+                age: 20, sex: 'FEMALE', city: 'Barcelona', presentation: 'Im a good girl', minAgePref: 20,
+                maxAgePref: 25, created: Date.now()
+            })
+
+            user.contacts.push(user2.id)
+            user2.contacts.push(user.id)
+
+            await Promise.all([user.save(), user2.save()])
+        })
+
+        it('should succed on correct data', async () => {
+
+            await logic.blockUser(user.id, user2.id)
+
+            const _user = await User.findById(user.id)
+            const _user2 = await User.findById(user2.id)
+
+            expect(_user.blocks.length).to.equal(1)
+            expect(_user.blocks[0]).to.equal(user2.id)
+            expect(_user2.blockedBy.length).to.equal(1)
+            expect(_user2.blockedBy[0]).to.equal(user.id)
+            
+
+        })
+
+        it('should fail if user try to block himself', async()=>{
+            try{
+                await logic.blockUser(user.id, user.id)
+            } catch (error){
+                expect(error.message).to.equal('user cannot add himself as a blocked')
+            }
+        })
+
+        it('should fail tryin to block two times same user', async()=>{
+            await logic.blockUser(user.id, user2.id)
+
+            try{
+                await logic.blockUser(user.id, user2.id)
+            } catch (error){
+                expect(error.message).to.equal(`user with id ${user2.id} arleady blocked by ${user.id}`)
+            }
+
+        })
+
+        it('should fail on undefined user1', () => {
+            expect(() => logic.blockUser(undefined, user2.id)).to.throw(TypeError, 'undefined is not a string')
+        })
+
+        it('should fail on empty user1', () => {
+            expect(() => logic.blockUser('', user2.id)).to.throw(ValueError, 'user1 is empty or blank')
+        })
+
+        it('should fail on blank user1', () => {
+            expect(() => logic.blockUser('   \t\n', user2.id)).to.throw(ValueError, 'user1 is empty or blank')
+        })
+
+        it('should fail on non string user1', () => {
+            expect(() => logic.blockUser(10, user2.id)).to.throw(TypeError, '10 is not a string')
+        })
+
+        it('should fail on undefined user2', () => {
+            expect(() => logic.blockUser(user.id, undefined)).to.throw(TypeError, 'undefined is not a string')
+        })
+
+        it('should fail on empty user2', () => {
+            expect(() => logic.blockUser(user.id, '')).to.throw(ValueError, 'user2 is empty or blank')
+        })
+
+        it('should fail on blank user2', () => {
+            expect(() => logic.blockUser(user.id, '   \t\n')).to.throw(ValueError, 'user2 is empty or blank')
+        })
+
+        it('should fail on non string user2', () => {
+            expect(() => logic.blockUser(user.id, 10)).to.throw(TypeError, '10 is not a string')
+        })
+
+
+
+    })
+
 
 
     afterEach(() => Promise.all([User.deleteMany(), Message.deleteMany()]))

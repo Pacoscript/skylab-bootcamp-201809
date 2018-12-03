@@ -32,6 +32,7 @@ const Message = new Schema({
     }
 })
 
+
 const User = new Schema({
     name: {
         type: String,
@@ -99,6 +100,16 @@ const User = new Schema({
     photo3: {
         type: String,
         default: '#'
+    },
+    
+    blocks: {
+        type: Array,
+        required: true 
+    },
+    
+    blockedBy: {
+        type: Array,
+        required: true
     }
     
 })

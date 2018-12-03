@@ -80,10 +80,10 @@ const logic = {
         validate([{ key: 'id', value: id, type: String }])
         let user = undefined
         return (async () => {
-            try{
+            try {
                 user = await User.findById(id, { '_id': 0, password: 0, __v: 0 }).lean()
             }
-            catch(error){   
+            catch (error) {
             }
 
             if (!user) throw new NotFoundError(`user with id ${id} not found`)
@@ -187,9 +187,9 @@ const logic = {
             if (!newContact) throw new NotFoundError(`user with id ${idContact} not found`)
 
 
-            
+
             user.contacts.forEach(_contactId => {
-                
+
                 if (_contactId.toString() === newContact._id.toString()) throw new AlreadyExistsError(`user with id ${id} arleady has contact with id ${_contactId}`)
             })
 
@@ -208,17 +208,26 @@ const logic = {
 
         return (async () => {
             let user = undefined
-            
-            try{
+
+            try {
                 user = await User.findById(userId)
             }
-            catch(error){
+            catch (error) {
 
             }
-            
+
             if (!user) throw new NotFoundError(`user with id ${userId} not found`)
 
             const contacts = await Promise.all(user.contacts.map(async contactId => await User.findById(contactId)))
+
+            contacts.forEach((contact, index) => {
+                user.blocks.forEach(id => {
+                    if (id === contact.id) contacts.splice(index, 1)
+                })
+                contact.blockedBy.forEach(blockedBy => {
+                    if (blockedBy === userId) contacts.splice(index, 1)
+                })
+            })
 
             return contacts.map(({ id, name, presentation, photo1 }) => ({ id, name, presentation, photo1 }))
         })()
@@ -234,18 +243,18 @@ const logic = {
         return (async () => {
             let _user = undefined
             let user2 = undefined
-            try{
+            try {
                 _user = await User.findById(user)
 
-            }catch(error){
+            } catch (error) {
 
             }
 
             if (!_user) throw new NotFoundError(`user with id ${user} not found`)
 
-            try{
+            try {
                 user2 = await User.findById(sentTo)
-            } catch(error) {
+            } catch (error) {
 
             }
 
@@ -358,7 +367,7 @@ const logic = {
             let contacts = []
 
             messages.forEach(message => {
-                
+
                 id = message.user._id.toString()
                 contacts.push(id)
             })
@@ -370,7 +379,7 @@ const logic = {
     },
 
     listCandidates(user) {
-        
+
         validate([
             { key: 'user', value: user, type: String }
         ])
@@ -397,7 +406,7 @@ const logic = {
 
             candidates.forEach(candidate => {
                 contacts.forEach(contact => {
-                    
+
                     if (candidate._id.toString() === contact._id.toString()) {
                         flag = true
                     }
@@ -470,6 +479,37 @@ const logic = {
 
         })()
 
+    },
+
+    blockUser(user1, user2) {
+        validate([
+            { key: 'user1', value: user1, type: String },
+            { key: 'user2', value: user2, type: String }
+        ])
+
+        return (async () => {
+
+            if (user1 === user2) throw new NotAllowedError('user cannot add himself as a blocked')
+
+            const user = await User.findById(user1)
+
+            if (!user) throw new NotFoundError(`user with id ${user1} not found`)
+
+            const contactBlocked = await User.findById(user2)
+
+            if (!contactBlocked) throw new NotFoundError(`user with id ${user2} not found`)
+
+            user.blocks.forEach(idBlocked => {
+                if (idBlocked === user2) throw new AlreadyExistsError(`user with id ${user2} arleady blocked by ${user1}`)
+            })
+
+            user.blocks.push(user2)
+            contactBlocked.blockedBy.push(user1)
+
+            await user.save()
+            await contactBlocked.save()
+
+        })()
     }
 
 

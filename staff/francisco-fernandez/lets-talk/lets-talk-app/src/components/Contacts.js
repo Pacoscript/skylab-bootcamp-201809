@@ -21,6 +21,11 @@ class Contacts extends Component {
     }
   }
 
+  handleBlock = (user1, user2) =>{
+    
+    logic.blockUser(user1, user2)
+
+  }
 
   render() {
 
@@ -34,7 +39,7 @@ class Contacts extends Component {
 
 
       <section className='contacts__section'>
-        {this.state.listContacts.map(contact => <Contact key={contact.id} id={contact.id} name={contact.name} onGoContact={this.props.onGoContact} />)}
+        {this.state.listContacts.map(contact => <Contact key={contact.id} id={contact.id} name={contact.name} onGoContact={this.props.onGoContact} onBlockContact={this.handleBlock} />)}
         {(this.state.listContacts.length === 0) && `You don´t have any contact yet, what are you waiting for?`}
       </section>
 

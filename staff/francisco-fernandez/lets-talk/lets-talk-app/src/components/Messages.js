@@ -6,7 +6,7 @@ import Error from './Error'
 
 class Messages extends Component {
 
-    state = { error: null, contactId: this.props.contactId, contactPhotos: undefined, contactName: this.props.contactName, messages: [], text: '', flag: false, photoFlag: false }
+    state = { time: null, error: null, contactId: this.props.contactId, contactPhotos: undefined, contactName: this.props.contactName, messages: [], text: '', flag: false, photoFlag: false }
 
     componentDidMount() {
 
@@ -56,9 +56,13 @@ class Messages extends Component {
         catch (err) {
             this.setState({ error: err.message })
         }
-
+        // this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000)
         this.scrollToBottom()
     }
+
+    // componentWillUnmount() {
+    //     clearInterval(this.interval);
+    //   }
 
     componentDidUpdate() {
         this.scrollToBottom();

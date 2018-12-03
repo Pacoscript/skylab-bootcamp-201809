@@ -181,6 +181,30 @@ const logic = {
 
     },
 
+    blockUser(user1, user2){
+
+        validate([
+            { key: 'user1', value: user1, type: String },
+            { key: 'user2', value: user2, type: String }])
+            debugger
+            return fetch(`${this.url}/users/${user1}/block`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${this._token}`,
+                    'Content-Type': 'application/json; charset=utf-8'
+    
+                },
+                body: JSON.stringify({ user1, user2 })
+            })
+                .then(res => res.json())
+                .then(res => {
+    
+                    if (res.error) throw Error(res.error)
+    
+                })
+
+    },
+
     listContacts(id) {
         validate([
             { key: 'id', value: id, type: String }])

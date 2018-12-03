@@ -47,7 +47,7 @@ class Contact extends Component {
             logic.checkNewMessages(id)
                 .then(contacts => {
                     contacts.forEach(contact => {
-                        
+
                         if (contact === contactId) this.setState({ newMessageFlag: true })
                     })
                 })
@@ -58,21 +58,26 @@ class Contact extends Component {
         }
     }
 
+
     render() {
 
         const error = this.state.error
 
-        return <section className='contact' onClick={() => this.props.onGoContact(this.props.id, this.props.name)}>
+        return <div className='contact'><section onClick={() => this.props.onGoContact(this.props.id, this.props.name)}>
             {error && <Error message={error} />}
             <h2 className='contact__name'>
                 {this.props.name}    {this.state.newMessageFlag && <i class="far fa-envelope"></i>}
             </h2>
             <div className='contact__img__container'>
                 {this.state.photoFlag && <img alt='' className='contact__image' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img>}
-                {!this.state.photoFlag && <img alt=''  className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}
+                {!this.state.photoFlag && <img alt='' className='contact__image' src="./images/blank-profile-picture-973461_640.png"></img>}
             </div>
-        </section>
 
+        </section>
+        <section>
+            <button className='contact__button' onClick={() => this.props.onBlockContact(logic._userId, this.props.id)}>Block User</button>
+        </section>
+        </div>
     }
 
 }
