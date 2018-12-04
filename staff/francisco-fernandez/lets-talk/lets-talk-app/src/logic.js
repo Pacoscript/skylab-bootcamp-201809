@@ -186,7 +186,7 @@ const logic = {
         validate([
             { key: 'user1', value: user1, type: String },
             { key: 'user2', value: user2, type: String }])
-            debugger
+            
             return fetch(`${this.url}/users/${user1}/block`, {
                 method: 'PATCH',
                 headers: {
@@ -206,6 +206,7 @@ const logic = {
     },
 
     listContacts(id) {
+        
         validate([
             { key: 'id', value: id, type: String }])
 

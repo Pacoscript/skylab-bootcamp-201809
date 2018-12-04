@@ -8,7 +8,7 @@ const jwtVerifier = require('./jwt-verifier')
 const routeHandler = require('./route-handler')
 const fs = require('fs')
 
-const jsonBodyParser = bodyParser.json()
+const jsonBodyParser = bodyParser.json({ limit: '50mb' })
 
 const router = express.Router()
 

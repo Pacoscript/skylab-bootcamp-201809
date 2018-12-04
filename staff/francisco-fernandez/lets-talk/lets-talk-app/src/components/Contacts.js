@@ -21,9 +21,30 @@ class Contacts extends Component {
     }
   }
 
-  handleBlock = (user1, user2) =>{
-    
-    logic.blockUser(user1, user2)
+  handleBlock = (user1, user2) => {
+    return (async () => {
+      try {
+
+        await logic.blockUser(user1, user2)
+
+      }
+      catch (err) {
+
+        this.setState({ error: err.message })
+      }
+
+
+      const id = logic._userId
+
+      try {
+        await logic.listContacts(id)
+          .then(listContacts => this.setState({ listContacts }))
+          .catch(err => this.setState({ error: err.message }))
+      }
+      catch (err) {
+        this.setState({ error: err.message })
+      }
+    })()
 
   }
 

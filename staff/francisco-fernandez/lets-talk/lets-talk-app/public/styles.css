@@ -12,7 +12,7 @@ ul {
 
 .candidates {
   background-color: #EBEEF4;
-  height: 400px; }
+  min-height: 400px; }
 
 .subtitle {
   margin-left: auto;
@@ -53,7 +53,7 @@ ul {
   color: #48484A;
   text-align: justify;
   border: none;
-  height: 100px; }
+  height: 200px; }
 
 .presentation__buttons {
   display: flex;

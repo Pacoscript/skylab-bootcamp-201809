@@ -2,30 +2,32 @@ import React, { Component } from 'react'
 import Thread from './Thread'
 import logic from '../logic'
 import Error from './Error'
+import ReactDOM from 'react-dom'
 
 
 class Messages extends Component {
 
-    state = { time: null, error: null, contactId: this.props.contactId, contactPhotos: undefined, contactName: this.props.contactName, messages: [], text: '', flag: false, photoFlag: false }
+    state = { error: null, contactId: this.props.contactId, contactPhotos: undefined, contactName: this.props.contactName, messages: [], text: '', flag: false, photoFlag: false }
 
     componentDidMount() {
 
         const id = logic._userId
 
         const contactId = this.state.contactId
-        
+
         try {
             logic.retrieveMessages(id, contactId)
                 .then(messages => {
                     if (messages.length > 0) {
                         if (messages[messages.length - 1].user === id) {
-                            
-                            this.setState({ flag: true })
                             this.setState({ contactName: messages[messages.length - 1].nameSentTo })
+                            this.setState({ flag: true })
                         }
 
-                        else
+                        else {
                             this.setState({ contactName: messages[messages.length - 1].nameUser })
+                            this.setState({ flag: false })
+                        }
                     }
                     if (messages.length > 3) this.setState({ photoFlag: true })
 
@@ -35,8 +37,10 @@ class Messages extends Component {
                 })
 
                 .catch(err => this.setState({ error: err.message }))
+
         }
         catch (err) {
+
             this.setState({ error: err.message })
         }
 
@@ -54,22 +58,79 @@ class Messages extends Component {
 
         }
         catch (err) {
+
             this.setState({ error: err.message })
         }
-        // this.interval = setInterval(() => this.setState({ time: Date.now() }), 1000)
+
+        this.interval = setInterval(() => this.refresh(), 1000)
+
         this.scrollToBottom()
+
     }
 
-    // componentWillUnmount() {
-    //     clearInterval(this.interval);
-    //   }
+    refresh() {
+
+        clearInterval(this.interval)
+
+        const id = logic._userId
+
+        const contactId = this.props.contactId
+
+        const messagesActual = this.state.messages
+
+        try {
+            logic.retrieveMessages(id, contactId)
+                .then(messages => {
+                    if (messages.length > messagesActual.length) {
+                        if (messages.length > 0) {
+                            if (messages[messages.length - 1].user === id) {
+
+                                this.setState({ flag: true })
+                                this.setState({ contactName: messages[messages.length - 1].nameSentTo })
+                            }
+
+                            else {
+                                this.setState({ contactName: messages[messages.length - 1].nameUser })
+                                this.setState({ flag: false })
+                            }
+                        }
+                        if (messages.length > 3) this.setState({ photoFlag: true })
+
+
+                        this.setState({ messages })
+                    }
+
+                })
+
+                .catch(err => this.setState({ error: err.message }))
+
+        }
+        catch (err) {
+
+            this.setState({ error: err.message })
+        }
+
+        this.interval = setInterval(() => this.refresh(), 2000)
+
+    }
+
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
 
     componentDidUpdate() {
         this.scrollToBottom();
     }
 
     scrollToBottom = () => {
-        this.messagesEnd.scrollIntoView();
+        // this.messagesEnd.scrollIntoView();
+        const { messageList } = this.refs;
+        const scrollHeight = messageList.scrollHeight;
+
+        const height = messageList.clientHeight;
+        const maxScrollTop = scrollHeight - height;
+        ReactDOM.findDOMNode(messageList).scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }
 
     handleTextChange = event => {
@@ -79,7 +140,7 @@ class Messages extends Component {
     }
 
     handleSubmit = event => {
-        event.preventDefault()
+        // event.preventDefault()
 
         const id = logic._userId
 
@@ -87,25 +148,31 @@ class Messages extends Component {
 
         const text = this.state.text
 
-        try {
-            logic.addMessage(id, contactId, text)
-                .catch(err => this.setState({ error: err.message }))
-        }
-        catch (err) {
-            this.setState({ error: err.message })
-        }
+        return (async () => {
+            try {
+                await logic.addMessage(id, contactId, text)
+                    .catch(err => this.setState({ error: err.message }))
 
-        try {
-            logic.retrieveMessages(id, contactId)
-                .then(messages => {
-                    if (messages[messages.length - 1].user === id) this.setState({ flag: true })
-                    this.setState({ messages })
-                })
-                .catch(err => this.setState({ error: err.message }))
-        }
-        catch (err) {
-            this.setState({ error: err.message })
-        }
+            }
+            catch (err) {
+
+                this.setState({ error: err.message })
+            }
+
+            try {
+                await logic.retrieveMessages(id, contactId)
+                    .then(messages => {
+                        if (messages[messages.length - 1].user === id) this.setState({ flag: true })
+                        this.setState({ messages })
+                    })
+                    .catch(err => this.setState({ error: err.message }))
+
+            }
+            catch (err) {
+
+                this.setState({ error: err.message })
+            }
+        })()
 
     }
 
@@ -122,7 +189,7 @@ class Messages extends Component {
         const error = this.state.error
 
         return <main className='messages__page'>
-            {error && <Error message={error} />}
+
             <section className='messages__head'>
                 {this.state.photoFlag && <div className='imgmini__container'><img alt="imgmini face" className='imgmini' src={this.state.contactPhotos && this.state.contactPhotos.photo1}></img></div>}
                 {!this.state.photoFlag && <div className='imgmini__container'><img alt="imgmini face" className='imgmini' src="./images/blank-profile-picture-973461_640.png"></img></div>}
@@ -130,14 +197,14 @@ class Messages extends Component {
 
             </section>
 
-
-            <section className='messages'>
+            {error && <Error message={error} />}
+            <section className='messages' ref='messageList'>
 
                 <div id='messages__box'>
                     {this.state.messages.map(message => <Thread key={message.id} name={message.nameUser} id={message.id} photo={message.sentTo} text={message.text} />)}
-                    <div style={{ float: "left", clear: "both" }}
+                    {/* <div style={{ float: "left", clear: "both" }}
                         ref={(el) => { this.messagesEnd = el; }}>
-                    </div>
+                    </div> */}
                 </div>
             </section>
 

@@ -663,11 +663,11 @@ describe('logic', () => {
                 user4.blocks.push(user.id)
                 
 
-                await Promise.all([user.save(), user2.save(), user3.save()], user5.save())
+                await Promise.all([user.save(), user2.save(), user3.save(), user4.save(), user5.save()])
             })
 
 
-            it('should succed on correct data', async () => {
+            it('should succed on correct data with user', async () => {
                 const res = await logic.listContacts(user.id)
 
                 expect(res).not.to.be.undefined
@@ -676,6 +676,7 @@ describe('logic', () => {
 
 
             })
+
 
             it('should fail is the user doesn`t exist', async () => {
                 const wrongId = user4.id

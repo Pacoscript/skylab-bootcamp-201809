@@ -219,16 +219,18 @@ const logic = {
             if (!user) throw new NotFoundError(`user with id ${userId} not found`)
 
             const contacts = await Promise.all(user.contacts.map(async contactId => await User.findById(contactId)))
-
+            
             contacts.forEach((contact, index) => {
                 user.blocks.forEach(id => {
+                    
                     if (id === contact.id) contacts.splice(index, 1)
                 })
-                contact.blockedBy.forEach(blockedBy => {
-                    if (blockedBy === userId) contacts.splice(index, 1)
+                user.blockedBy.forEach(blockedBy => {
+                    
+                    if (blockedBy === contact.id) contacts.splice(index, 1)
                 })
             })
-
+            debugger
             return contacts.map(({ id, name, presentation, photo1 }) => ({ id, name, presentation, photo1 }))
         })()
 
@@ -366,10 +368,22 @@ const logic = {
 
             let contacts = []
 
+
             messages.forEach(message => {
+                let flag = false
 
                 id = message.user._id.toString()
-                contacts.push(id)
+
+                _user.blocks.forEach(userBlocked => {
+                    if(id === userBlocked) flag = true
+                })
+
+                _user.blockedBy.forEach(userBlockedBy =>{
+                    if(id === userBlockedBy) flag = true
+
+                })
+                
+                if (flag != true) contacts.push(id)
             })
 
             return contacts
