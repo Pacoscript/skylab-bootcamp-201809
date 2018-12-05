@@ -412,11 +412,13 @@ const logic = {
             let sexSearch = ''
 
             if (_user.sex === 'MALE') sexSearch = 'FEMALE'
-            else sexSearch = 'MALE'
+            else sexSearch = 'MALE' 
+            
+            let city = _user.city
 
             const contacts = _user.contacts
 
-            let candidates = await User.find({ sex: sexSearch, age: { $gte: _user.minAgePref, $lte: _user.maxAgePref } }).lean()
+            let candidates = await User.find({ sex: sexSearch, age: { $gte: _user.minAgePref, $lte: _user.maxAgePref }, city: city}).lean()
 
             candidates.forEach(candidate => {
                 contacts.forEach(contact => {

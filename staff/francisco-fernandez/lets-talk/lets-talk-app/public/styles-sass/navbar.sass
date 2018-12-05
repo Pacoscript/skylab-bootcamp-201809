@@ -5,6 +5,10 @@ header
     border-bottom: 1px solid $lets-talk-white
     padding: 10px
     box-shadow: 10px 15px 
+
+.header__title
+        
+    font-size: 70%
     
     
 h3 
@@ -47,23 +51,27 @@ h3
     padding-right: 20px
 
 .header__label
-    color: $lets-talk-white
+    color: $logo
     padding-bottom: 5px
+    font-size: 80%
 
 .dropbtn 
-    background-color: transparent
+    background-color: $lets-talk-grey
     color: $lets-talk-white
-    padding: 16px
-    font-size: 16px
-    border: 1px solid $lets-talk-white
-    border-radius: 5px
+    font-size: 18px
+    font-weight: bold
+    border: none
+    
 
 .drop__button
-    width: 100px
-    border-radius: 5px
+    width: 90px
+    border: none
     padding: 10px
     color: $lets-talk-white
     background-color: $lets-talk-grey
+    font-weight: bold
+    text-align: left
+    
     
     
 .dropdown 
@@ -75,7 +83,7 @@ h3
     display: none
     position: absolute
     background-color: none
-    min-width: 160px
+    min-width: 120px
     z-index: 1
 
 
@@ -84,7 +92,7 @@ h3
     padding: 12px 16px
     text-decoration: none
     display: block
-    width: 100px
+    width: 80px
 
 
 .dropdown-content a:hover 
@@ -104,6 +112,10 @@ h3
 
     header
         justify-content: space-around
+    
+    .header__title    
+        font-size: 100%
+
     .header__menu_2
         display: none
         visibility: hidden
@@ -116,13 +128,14 @@ h3
         justify-content: flex-start
 
     .header__logo
-        padding-left: 200px
+        padding-left: 180px
         
     .header__title
-        padding-left: 120px
+        padding-left: 100px
+        font-size: 100%
 
     .header__menu
-        padding-left: 100px
+        padding-left: 70px
 
     .drop__button
         display: none

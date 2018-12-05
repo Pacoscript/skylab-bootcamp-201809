@@ -51,7 +51,8 @@ class Photos extends Component {
 
         return <section className='photos'>
             {error && <Error message={error} />}
-            <h2 className='contact__name'>
+            
+            <h2 className='photos__name'>
                 Photo 1 of {this.state.contactName}
             </h2>
             <div className='photos__img__container'>
@@ -60,7 +61,7 @@ class Photos extends Component {
             </div>
             <p className='img_footer'>You need four messages to see the photo1</p>
 
-            <h2 className='contact__name'>
+            <h2 className='photos__name'>
                 Photo 2 of {this.state.contactName}
             </h2>
             <div className='photos__img__container'>
@@ -69,7 +70,7 @@ class Photos extends Component {
             </div>
             <p className='img_footer'>You need eight messages to see the photo2</p>
 
-            <h2 className='contact__name'>
+            <h2 className='photos__name'>
                 Photo 3 of {this.state.contactName}
             </h2>
             <div className='photos__img__container'>

@@ -13,29 +13,31 @@
     background-color: $lets-talk-white
 
 .contact
-    
     margin-left: auto
     margin-right: auto
     width: 80%
-    border: 1px solid $lets-talk-grey
+    max-width: 400px
+    // border: 1px solid $lets-talk-grey
     border-radius: 5px
+    background-color: white
     margin-bottom: 20px
     text-align: center
 
 .contact__button
-    border: 1px solid $lets-talk-grey
-    border-radius: 5px
-    padding: 10px
-    color: $lets-talk-grey
-    background-color: $lets-talk-green
     margin: 3px
-    margin-bottom: 10px
+    border: none
+    border-radius: 20px
+    padding: 10px
+    color: $lets-talk-white
+    background-color: $logo
+    
 
 .contact__name
     @extend .contact
     color: $logo
     text-align: center
     border: none
+    padding-top: 5px
 
     
 .contact__img__container
@@ -45,6 +47,12 @@
     overflow: hidden
     margin: auto
     padding-bottom: 20px
+
+.contacts__message
+    text-align: justify
+    margin: auto
+    max-width: 90%
+    color: $logo
     
 
 .contact__image
@@ -60,11 +68,19 @@
 
 @media (min-width: 768px)
 
+    .contacts__section
+        display: flex
+        flex-wrap: wrap
+
     .contact
         width: 40%
          
 
 @media (min-width: 1024px)
+
+    .contacts__section
+        display: flex
+        flex-wrap: wrap
 
     .contact
         width: 30%

@@ -220,11 +220,11 @@ class Profile extends Component {
                         </div>
                         <h3>Photo 2</h3>
                         <div className='profile__img__container'>
-                            <div>{(this.state.photo2 !== '#') ? <img alt='' className='profile__image' src={this.state.photo2}></img> : <img alt='' className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
+                            {(this.state.photo2 !== '#') ? <img alt='' className='profile__image' src={this.state.photo2}></img> : <img alt='' className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}
                         </div>
                         <h3>Photo 3</h3>
                         <div className='profile__img__container'>
-                            <div>{(this.state.photo3 !== '#') ? <img alt='' className='profile__image' src={this.state.photo3}></img> : <img alt='' className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}</div>
+                            {(this.state.photo3 !== '#') ? <img alt='' className='profile__image' src={this.state.photo3}></img> : <img alt='' className='profile__image' src="./images/blank-profile-picture-973461_640.png"></img>}
                         </div>
                     </div>
 

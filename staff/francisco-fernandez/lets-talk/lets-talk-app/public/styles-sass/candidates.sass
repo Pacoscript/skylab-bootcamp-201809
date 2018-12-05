@@ -15,15 +15,16 @@
     margin-right: auto
     width: 80%
     max-width: 400px
-    border: 1px solid $lets-talk-grey
+    // border: 1px solid $lets-talk-grey
     border-radius: 5px
+    background-color: white
 
 .presentation__header
     display: flex
     justify-content: space-around
 
 .presentation__title
-    color: $logo
+    color: $lets-talk-grey
     text-align: center
     font-weight: bold
     margin-top: 0px
@@ -47,6 +48,7 @@
 
 .presentation__buttons
     @extend .presentation
+    background-color: transparent
     display: flex
     justify-content: space-around
     border: none
@@ -59,18 +61,29 @@
     color: $lets-talk-white
     background-color: $lets-talk-grey
 
+.fa-angle-left
+    font-size: 165% 
+    padding-left: 6px
+    padding-right: 6px
+
+.fa-angle-right
+    font-size: 165%
+    padding-left: 6px
+    padding-right: 6px
+
 .candidates__button
-    border: 1px solid $lets-talk-grey
-    border-radius: 5px
-    padding: 10px
-    color: $lets-talk-grey
-    background-color: $lets-talk-green
     margin: 3px
+    border: none
+    border-radius: 20px
+    padding: 10px
+    color: $lets-talk-white
+    background-color: $logo
 
 .presentation__alert
     color: $logo
     text-align: center
     font-weight: bold
+    padding-bottom: 10px
 
 @media (min-width: 768px)
 

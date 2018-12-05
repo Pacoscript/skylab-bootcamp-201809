@@ -21,15 +21,21 @@ class App extends Component {
 
   handleGoRegister = () => {
 
+    this.setState({ error: null})
+
     return this.props.history.push('/register')
   }
 
   handleGoLanding = () => {
 
+    this.setState({ error: null})
+
     return this.props.history.push('/')
   }
 
   handleGoLogin = () => {
+
+    this.setState({ error: null})
 
     return this.props.history.push('/login')
   }
