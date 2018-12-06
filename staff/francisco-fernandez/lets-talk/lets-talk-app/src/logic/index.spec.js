@@ -7,7 +7,6 @@ global.sessionStorage = require('sessionstorage')
 const logic = require('.')
 const { mongoose, models: { User, Message } } = require('lets-talk-data')
 
-const { TypeError, NotFoundError } = require('../errors')
 const base64Image = require('./base64-image')
 
 const { expect } = require('chai')
