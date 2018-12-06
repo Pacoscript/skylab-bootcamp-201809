@@ -1,6 +1,8 @@
 
 # LETS TALK documentation
 
+![](images/logoSkylab.png)
+
 ## Intro
 
 This application is a contacts app, to find interesting people and discover to each other. The photos of the user will be showed when the contacts send a number of messages between them. You can add photos to your profile and choose the city and range of age of the people you are looking for. The program will offer you a list of candidates in your city adjusted to your choosen characteristics.
@@ -19,7 +21,14 @@ All the persons have the opportunity of write to someone. But you only will be a
 
 
 # Technical description
-The front end of the application was built using React and React Router. As a database, we use The movie DB. A fantastic database of movies and series, completely updated and in diferents languages.
+The application is a web application for works in a browser. It uses React.js to mount the frontend. With SASS/CSS for the styling. The app connect with one API.
+
+The API handles user data and messages data. And it´s constructed with node and mongo data base.
+
+User data is persistent across page reloads, as local data is stored in the user's SessionStorage
+
+
+![](images/slidesLogos.png)
 
 ## Blocks Diagram
 
