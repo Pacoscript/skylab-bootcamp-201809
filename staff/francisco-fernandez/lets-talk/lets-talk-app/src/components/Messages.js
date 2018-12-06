@@ -150,7 +150,7 @@ class Messages extends Component {
 
         return (async () => {
             try {
-                await logic.addMessage(id, contactId, text)
+                await logic.addMessage(contactId, text)
                     .catch(err => this.setState({ error: err.message }))
 
             }

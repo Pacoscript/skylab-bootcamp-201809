@@ -9,10 +9,8 @@ class Contacts extends Component {
 
   componentDidMount = () => {
 
-    const id = logic._userId
-
     try {
-      logic.listContacts(id)
+      logic.listContacts()
         .then(listContacts => this.setState({ listContacts }))
         .catch(err => this.setState({ error: err.message }))
     }
@@ -21,11 +19,11 @@ class Contacts extends Component {
     }
   }
 
-  handleBlock = (user1, user2) => {
+  handleBlock = (user2) => {
     return (async () => {
       try {
 
-        await logic.blockUser(user1, user2)
+        await logic.blockUser(user2)
 
       }
       catch (err) {
@@ -34,10 +32,8 @@ class Contacts extends Component {
       }
 
 
-      const id = logic._userId
-
       try {
-        await logic.listContacts(id)
+        await logic.listContacts()
           .then(listContacts => this.setState({ listContacts }))
           .catch(err => this.setState({ error: err.message }))
       }

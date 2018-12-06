@@ -75,7 +75,7 @@ class Contact extends Component {
 
         </section>
         <section>
-            <button className='contact__button' onClick={() => this.props.onBlockContact(logic._userId, this.props.id)}>Block User</button>
+            <button className='contact__button' onClick={() => this.props.onBlockContact(this.props.id)}>Block User</button>
         </section>
         </div>
     }

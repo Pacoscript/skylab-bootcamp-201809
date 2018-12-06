@@ -89,7 +89,7 @@ class App extends Component {
 
   handleMessage = (idContact, nameContact) =>{
     try {
-      logic.addContact(logic._userId, idContact)
+      logic.addContact(idContact)
         .then(() => {
           this.setState({ error: null }, () => this.props.history.push(`/messages/${idContact}`))
         })
