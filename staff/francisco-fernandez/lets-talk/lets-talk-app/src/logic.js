@@ -9,6 +9,24 @@ const logic = {
 
     url : 'http://localhost:5000/api',
 
+    /**
+     * registerUser: save a new user in the data base
+     * 
+     * @param {string} name the name of the user
+     * @param {string} surname the surname of the user
+     * @param {string} username the username
+     * @param {string} password the password for the user
+     * @param {string} sex the sex of the user
+     * @param {number} age age of the user
+     * @param {string} city city of the user
+     * @param {string} presentation presentation to be showed to the other users
+     * @param {number} minAgePref looking for this minim age
+     * @param {number} maxAgePref looking for this max age
+     * 
+     * @return {string} user succesfully registered
+     * 
+     */
+
     registerUser(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref) {
 
         validate([{ key: 'name', value: name, type: String },
@@ -38,6 +56,27 @@ const logic = {
                 if (res.error) throw Error(res.error)
             })
     },
+
+    /**
+     * updateUser: this function is used by the user to change the parameters of his profile, photos not included
+     * 
+     * @param {string} id 
+     * @param {string} name 
+     * @param {string} surname 
+     * @param {string} username 
+     * @param {string} password 
+     * @param {string} newPassword 
+     * @param {string} newPassword2 
+     * @param {string} sex 
+     * @param {number} age 
+     * @param {string} city 
+     * @param {string} presentation 
+     * @param {number} minAgePref 
+     * @param {number} maxAgePref 
+     * 
+     * @returns message: user updated
+     * 
+     */
 
     updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref) {
 
@@ -74,6 +113,15 @@ const logic = {
 
     },
 
+    /**
+     * login: it checks username and password and if it is ok return id, and token of the user.
+     * 
+     * @param {string} username 
+     * @param {string} password 
+     * 
+     * @returns anything, it saves the id and the token in session Storage
+     * 
+     */
     login(username, password) {
         validate([
             { key: 'username', value: username, type: String },
@@ -100,6 +148,15 @@ const logic = {
             })
     },
 
+    /**
+     * retrieveCandidates: it returns a list of persons who are of the sex, city and range of age choosen by
+     * the user, to show him their names and presentations
+     * 
+     * @param {string} id of the user logged
+     * 
+     * @returns {array} of candidates whit their id, name and presentation
+     * 
+     */
     retrieveCandidates(id) {
         validate([
             { key: 'id', value: id, type: String }])
@@ -120,6 +177,14 @@ const logic = {
 
     },
 
+    /**
+     * retrieveUser: it get the user information
+     * 
+     * @param {string} id 
+     * 
+     * @returns: returns all the user parameters (no mongo stuff)
+     * 
+     */
     retrieveUser(id) {
 
         validate([{ key: 'id', value: id, type: String }])
@@ -140,6 +205,15 @@ const logic = {
 
     },
 
+     /**
+         * retrieveUserPhotos: it returns all the photos uploaded by the user in his profile
+         * 
+         * @param {string} id 
+         * 
+         * @returns {array} array with photos of the user
+         * 
+         */
+
     retrieveUserPhotos(id) {
 
         validate([{ key: 'id', value: id, type: String }])
@@ -156,6 +230,16 @@ const logic = {
 
 
     },
+
+    /**
+     * addContact: add another person to the list of contacts of the user, 
+     * it saves there the id of the user added
+     * 
+     * @param {string} id id of the user logged
+     * @param {string} idContact id of the contact to add to the list
+     * 
+     * @returns {string} message: 'contact added'
+     */
 
     addContact(id, idContact) {
 
@@ -181,6 +265,16 @@ const logic = {
 
     },
 
+    /**
+     * blockUser: it add the contact id to the list of blocked users of the user logged, and to the list
+     * of blockedBy of the contact
+     * 
+     * @param {string} user1 id of the user logged
+     * @param {string} user2 id of the user to block
+     * 
+     * @returns {string} message: `user successfully blocked`
+     */
+
     blockUser(user1, user2){
 
         validate([
@@ -205,6 +299,15 @@ const logic = {
 
     },
 
+    /**
+     * listContacts: this function is used to retrieve all the contacts of a user, all their id´s
+     * 
+     * @param {string} userId the id of the user logged
+     * 
+     * @returns {array} array of objects with id, name, presentation, photo1 of the contacts
+     * 
+     */
+
     listContacts(id) {
         
         validate([
@@ -226,6 +329,17 @@ const logic = {
             })
 
     },
+
+    /**
+     * addMessage: creates a new Message with the author, the destinatary and the text of the message, 
+     * with the date of creation too, and saves it in the data base
+     * 
+     * @param {string} user id of the user logged
+     * @param {string} sentTo id of the contact to send a message
+     * @param {string} text text of the message
+     * 
+     * @returns {string} message: 'message added'
+     */
 
     addMessage(user, sentTo, text) {
         validate([
@@ -250,6 +364,17 @@ const logic = {
 
     },
 
+    /**
+     * retrieveMessages: it search a conversation between two users, all the messages, and order them
+     * by date. If the the last message is pending and the user is who is sended than message, pass it 
+     * to readed
+     *
+     * @param {string} user1 id jof the user logged
+     * @param {string} user2 id of the contact
+     * 
+     * @returns {array} array of objects with id, nameSentTo, nameUser, text, user
+     */
+
     retrieveMessages(id, idContact) {
 
         validate([
@@ -272,6 +397,15 @@ const logic = {
             })
 
     },
+
+    /**
+     * checkMessages: it is used when we need the list of messages but we don´t want to change anything of them
+     * 
+     * @param {string} user1 id of the user logged
+     * @param {string} user2 id of the contact
+     * 
+     * @returns {array} array of objects with id, nameSentTo, nameUser, text, user
+     */
 
     checkMessages(id, idContact){
 
@@ -296,6 +430,16 @@ const logic = {
 
     },
 
+    /**
+     * checkNewMessages: it check if a user have new messages and from who
+     * 
+     * @param {string} user the id of the user
+     * 
+     * @returns {array} an array of id of the contacts with messages for the user. Messages with the status
+     * pending only.
+     * 
+     */
+
     checkNewMessages(id){
 
         validate([{ key: 'id', value: id, type: String }])
@@ -316,6 +460,16 @@ const logic = {
                 })
 
     },
+
+    /**
+     * uploadUserPhoto: it saves a photo in cloudinary and at the same time saves the url in the profile 
+     * of the user
+     * 
+     * @param {string} base64Image 
+     * @param {string} photo it indicates the number of the profile photo to save
+     * 
+     * @returns {string} message ok
+     */
 
     uploadUserPhoto(base64Image, photo) {
 

@@ -759,7 +759,7 @@ describe('logic', () => {
             })
         })
 
-        false && describe('add photo', () => {
+        describe('add photo', () => {
             let user
 
             beforeEach(async () => {
@@ -776,7 +776,7 @@ describe('logic', () => {
 
                 const res = await logic.insertPhoto(user.id, chunk, photo)
 
-                expect(res).to.be.undefined
+                expect(res).not.to.be.undefined
 
                 const _user = await User.findById(user.id)
 
@@ -786,6 +786,38 @@ describe('logic', () => {
             })
 
         })
+
+        describe('retrieve photos', () => {
+            let user
+
+            beforeEach(async () => {
+                user = new User({
+                    name: 'John', surname: 'Doe', username: 'jd', password: '123',
+                    age: 20, sex: 'MALE', city: 'Barcelona', presentation: 'Im a good guy', minAgePref: 20,
+                    maxAgePref: 25, created: Date.now()
+                })
+
+                await user.save()
+
+                const photo = 'photo1'
+
+                await logic.insertPhoto(user.id, chunk, photo)
+            })
+
+            it('should succed on correct data', async () => {
+
+
+                const photos = await logic.retrieveUserPhotos(user.id)
+
+                expect(photos).not.to.be.undefined
+                
+                expect(photos.photo2).to.be.equal('#')
+                expect(photos.photo3).to.be.equal('#')
+            })
+
+        })
+
+       
 
     })
 

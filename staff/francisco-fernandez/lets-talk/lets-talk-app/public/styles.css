@@ -80,6 +80,7 @@ ul {
   padding-right: 6px; }
 
 .candidates__button {
+  cursor: pointer;
   margin: 3px;
   border: none;
   border-radius: 20px;
@@ -108,6 +109,7 @@ ul {
   background-color: #d0d4db; }
 
 .contact, .contact__name, .photos__name {
+  cursor: pointer;
   margin-left: auto;
   margin-right: auto;
   width: 80%;
@@ -118,6 +120,7 @@ ul {
   text-align: center; }
 
 .contact__button {
+  cursor: pointer;
   margin: 3px;
   border: none;
   border-radius: 20px;
@@ -213,6 +216,7 @@ ul {
   justify-content: space-around; }
 
 .message__button {
+  cursor: pointer;
   margin: 3px;
   border: none;
   border-radius: 20px;
@@ -495,6 +499,7 @@ h3 {
   font-size: 80%; }
 
 .dropbtn {
+  cursor: pointer;
   background-color: #48484A;
   color: #d0d4db;
   font-size: 18px;
@@ -502,6 +507,7 @@ h3 {
   border: none; }
 
 .drop__button {
+  cursor: pointer;
   width: 90px;
   border: none;
   padding: 10px;
@@ -511,10 +517,12 @@ h3 {
   text-align: left; }
 
 .dropdown {
+  cursor: pointer;
   position: relative;
   display: inline-block; }
 
 .dropdown-content {
+  cursor: pointer;
   display: none;
   position: absolute;
   background-color: none;
@@ -577,6 +585,7 @@ h3 {
     justify-content: space-around; }
 
   .menu__button {
+    cursor: pointer;
     width: 100px;
     padding: 10px;
     border: none;
