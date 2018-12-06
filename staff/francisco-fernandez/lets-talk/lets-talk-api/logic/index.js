@@ -319,7 +319,7 @@ const logic = {
                     if (blockedBy === user.id) contacts.splice(index, 1)
                 })
             })
-            debugger
+            
             return contacts.map(({ id, name, presentation, photo1 }) => ({ id, name, presentation, photo1 }))
         })()
 

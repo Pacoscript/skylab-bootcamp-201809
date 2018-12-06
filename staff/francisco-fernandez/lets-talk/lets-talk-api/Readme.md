@@ -2,7 +2,7 @@
 
 1- You should run the api server (Need a mongodb initiated)
 
-$ git clone https://github.com/pacoscript/final-project-SkylabCoders.git
+$ git clone https://github.com/pacoscript/lets-talk.git
 
 $ cd lets-talk/server/api
 

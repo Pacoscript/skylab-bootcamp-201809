@@ -5,7 +5,7 @@ import Error from './Error'
 import MDSpinner from "react-md-spinner"
 
 class Profile extends Component {
-    state = { name: '', surname: '', username: '', password: '', newPassword: '', newPassword2: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', photo1: undefined, photo2: undefined, photo3: undefined, whichPhoto: 'photo1', loading: true, error: null}
+    state = { name: '', surname: '', username: '', password: '', newPassword: '', newPassword2: '', sex: '', age: '', city: '', presentation: '', minAgePref: '', maxAgePref: '', photo1: undefined, photo2: undefined, photo3: undefined, whichPhoto: 'photo1', loading: true, error: null }
 
     componentDidMount = () => {
 
@@ -117,11 +117,11 @@ class Profile extends Component {
         // event.preventDefault()
 
         const { name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref } = this.state
-        
+
         try {
             logic.updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref)
         } catch (err) {
-            
+
             this.setState({ error: err.message })
         }
 
@@ -188,8 +188,64 @@ class Profile extends Component {
                     <input className='profile__input' value={this.state.sex} onChange={this.handleSexChange} />
                     <label>Age</label>
                     <input className='profile__input' maxLength='16' value={this.state.age} onChange={this.handleAgeChange} />
-                    <label>City</label>
-                    <input className='profile__input' maxLength='16' value={this.state.city} onChange={this.handleCityChange} />
+                    {/* <label>City</label>
+                    <input className='profile__input' maxLength='16' value={this.state.city} onChange={this.handleCityChange} /> */}
+                    <select className='register__input' defaultValue="" onChange={this.handleCityChange}>
+                        <option value="">CHOSE YOUR CITY</option>
+                        <option value='A Coruña' >A Coruña</option>
+                        <option value='Álava'>Álava</option>
+                        <option value='Albacete' >Albacete</option>
+                        <option value='Alicante'>Alicante</option>
+                        <option value='Almería' >Almería</option>
+                        <option value='Asturias' >Asturias</option>
+                        <option value='Ávila' >Ávila</option>
+                        <option value='Badajoz' >Badajoz</option>
+                        <option value='Barcelona'>Barcelona</option>
+                        <option value='Burgos' >Burgos</option>
+                        <option value='Cáceres' >Cáceres</option>
+                        <option value='Cádiz' >Cádiz</option>
+                        <option value='Cantabria' >Cantabria</option>
+                        <option value='Castellón' >Castellón</option>
+                        <option value='Ceuta' >Ceuta</option>
+                        <option value='Ciudad Real' >Ciudad Real</option>
+                        <option value='Córdoba' >Córdoba</option>
+                        <option value='Cuenca' >Cuenca</option>
+                        <option value='Gerona' >Gerona</option>
+                        <option value='Girona' >Girona</option>
+                        <option value='Las Palmas' >Las Palmas</option>
+                        <option value='Granada' >Granada</option>
+                        <option value='Guadalajara' >Guadalajara</option>
+                        <option value='Guipúzcoa' >Guipúzcoa</option>
+                        <option value='Huelva' >Huelva</option>
+                        <option value='Huesca' >Huesca</option>
+                        <option value='Jaén' >Jaén</option>
+                        <option value='La Rioja' >La Rioja</option>
+                        <option value='León' >León</option>
+                        <option value='Lleida' >Lleida</option>
+                        <option value='Lugo' >Lugo</option>
+                        <option value='Madrid' >Madrid</option>
+                        <option value='Malaga' >Málaga</option>
+                        <option value='Mallorca' >Mallorca</option>
+                        <option value='Melilla' >Melilla</option>
+                        <option value='Murcia' >Murcia</option>
+                        <option value='Navarra' >Navarra</option>
+                        <option value='Orense' >Orense</option>
+                        <option value='Palencia' >Palencia</option>
+                        <option value='Pontevedra'>Pontevedra</option>
+                        <option value='Salamanca'>Salamanca</option>
+                        <option value='Segovia' >Segovia</option>
+                        <option value='Sevilla' >Sevilla</option>
+                        <option value='Soria' >Soria</option>
+                        <option value='Tarragona' >Tarragona</option>
+                        <option value='Tenerife' >Tenerife</option>
+                        <option value='Teruel' >Teruel</option>
+                        <option value='Toledo' >Toledo</option>
+                        <option value='Valencia' >Valencia</option>
+                        <option value='Valladolid' >Valladolid</option>
+                        <option value='Vizcaya' >Vizcaya</option>
+                        <option value='Zamora' >Zamora</option>
+                        <option value='Zaragoza'>Zaragoza</option>
+                    </select>
                     <label>Presentation</label>
                     <textarea className='profile__textarea' maxLength='280' value={this.state.presentation} onChange={this.handlePresentationChange}></textarea>
                     <label>Min Age</label>
