@@ -30,18 +30,17 @@ User data is persistent across page reloads, as local data is stored in the user
 
 ![](images/slidesLogos.png)
 
+## API test
+
+![](images/API_Test.jpg)
+
+## APP test
+
+![](images/APP_Test.jpg)
+
 ## Blocks Diagram
 
-![](images/Gamma_block_diagram.jpg)
-
-## Components Diagram
-
-![](images/Component_diagram.jpg)
-
-## Sequences Diagram
-
-![](images/Show_info_of_movie.jpg)
-![](images/Search_Movies.jpg)
+![](images/Blocks_Diagram.jpg)
 
 ## Data Model Diagram
 
