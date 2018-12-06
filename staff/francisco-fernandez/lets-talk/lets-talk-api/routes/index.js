@@ -106,11 +106,11 @@ router.patch('/users/:id', [bearerTokenParser, jwtVerifier, jsonBodyParser], (re
 //ADD CONTACT
 router.patch('/users/:id/contacts', [bearerTokenParser, jwtVerifier, jsonBodyParser], (req, res) => {
     routeHandler(() => {
-        const { params: { id }, sub, body: { idContact } } = req
+        const { params: { id }, sub, body: { contactId } } = req
 
         if (id !== sub) throw Error('token sub does not match user id')
 
-        return logic.addContact(id, idContact)
+        return logic.addContact(id, contactId)
             .then(() =>
                 res.json({
                     message: 'contact added'
@@ -154,11 +154,11 @@ router.patch('/upload', [bearerTokenParser, jwtVerifier, jsonBodyParser], (req, 
 //ADD MESSAGE
 router.post('/users/:id/message', [bearerTokenParser, jwtVerifier, jsonBodyParser], (req, res) => {
     routeHandler(() => {
-        const { sub, params: { id }, body: { user, sentTo, text } } = req
+        const { sub, params: { id }, body: { user, text } } = req
 
         if (id !== sub) throw Error('token sub does not match user id')
 
-        return logic.addMessage(user, sentTo, text)
+        return logic.addMessage(id, user, text)
             .then(() => res.json({
                 message: 'message added'
             }))
@@ -167,13 +167,13 @@ router.post('/users/:id/message', [bearerTokenParser, jwtVerifier, jsonBodyParse
 })
 
 //RETRIEVE MESSAGES
-router.get('/users/:id/messages/:idContact', [bearerTokenParser, jwtVerifier], (req, res) => {
+router.get('/users/:id/messages/:contactId', [bearerTokenParser, jwtVerifier], (req, res) => {
     routeHandler(() => {
-        const { sub, params: { id, idContact } } = req
+        const { sub, params: { id, contactId } } = req
 
         if (id !== sub) throw Error('token sub does not match user id')
 
-        return logic.retrieveMessages(id, idContact)
+        return logic.retrieveMessages(id, contactId)
             .then(messages => res.json({
                 data: messages
             }))
@@ -181,13 +181,13 @@ router.get('/users/:id/messages/:idContact', [bearerTokenParser, jwtVerifier], (
 })
 
 //CHECK NUMBER OF MESSAGES
-router.get('/users/:id/messages/:idContact/check', [bearerTokenParser, jwtVerifier], (req, res) => {
+router.get('/users/:id/messages/:contactId/check', [bearerTokenParser, jwtVerifier], (req, res) => {
     routeHandler(() => {
-        const { sub, params: { id, idContact } } = req
+        const { sub, params: { id, contactId } } = req
 
         if (id !== sub) throw Error('token sub does not match user id')
 
-        return logic.checkMessages(id, idContact)
+        return logic.checkMessages(id, contactId)
             .then(messages => res.json({
                 data: messages
             }))
@@ -226,16 +226,16 @@ router.get('/users/:id/candidates', [bearerTokenParser, jwtVerifier], (req, res)
 //BLOCK USER
 router.patch('/users/:id/block', [bearerTokenParser, jwtVerifier, jsonBodyParser], (req, res) => {
     routeHandler(() => {
-        const { sub, params: { id }, body: {user1, user2} } = req
+        const { sub, params: { id }, body: { user } } = req
 
         if (id !== sub) throw Error('token sub does not match user id')
 
-        return logic.blockUser(user1, user2)
+        return logic.blockUser(id, user)
             .then(() => {
                 res.status(201)
 
                 res.json({
-                    message: `${user2} successfully blocked`
+                    message: `${user} successfully blocked`
                 })
             })
     })

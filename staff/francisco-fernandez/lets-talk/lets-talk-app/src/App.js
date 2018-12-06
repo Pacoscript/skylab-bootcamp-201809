@@ -13,7 +13,7 @@ import Photos from './components/Photos'
 import logic from './logic'
 import { Route, withRouter, Redirect } from 'react-router-dom'
 
-logic.url = 'http://localhost:5000/api'
+logic.url = process.env.REACT_APP_API_URL
 
 class App extends Component {
 

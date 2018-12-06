@@ -1,13 +1,12 @@
-const validate = require('./utils/validate')
+const validate = require('../utils/validate')
 
 const logic = {
-
     _userId: sessionStorage.getItem('userId') || null,
     _token: sessionStorage.getItem('token') || null,
 
     // url: 'NO-URL',
 
-    url : 'http://localhost:5000/api',
+    url: 'NO-URL',
 
     /**
      * registerUser: save a new user in the data base
@@ -28,7 +27,6 @@ const logic = {
      */
 
     registerUser(name, surname, username, password, sex, age, city, presentation, minAgePref, maxAgePref) {
-
         validate([{ key: 'name', value: name, type: String },
         { key: 'surname', value: surname, type: String },
         { key: 'username', value: username, type: String },
@@ -42,7 +40,7 @@ const logic = {
 
         if ((age < 18) || (minAgePref < 18)) throw Error('not for children under 18')
         if ((minAgePref > maxAgePref)) throw Error('minAgePref must be inferior to maxAgePref')
-        
+
         return fetch(`${this.url}/users`, {
             method: 'POST',
             headers: {
@@ -52,7 +50,7 @@ const logic = {
         })
             .then(res => res.json())
             .then(res => {
-                
+
                 if (res.error) throw Error(res.error)
             })
     },
@@ -79,19 +77,18 @@ const logic = {
      */
 
     updateUser(name, surname, username, password, newPassword, newPassword2, sex, age, city, presentation, minAgePref, maxAgePref) {
-
         validate([{ key: 'name', value: name, type: String, optional: true },
-        { key: 'surname', value: surname, type: String, optional: true},
-        { key: 'username', value: username, type: String, optional: true},
+        { key: 'surname', value: surname, type: String, optional: true },
+        { key: 'username', value: username, type: String, optional: true },
         { key: 'password', value: password, type: String },
         { key: 'newPassword', value: newPassword, type: String, optional: true },
         { key: 'newPassword2', value: newPassword2, type: String, optional: true },
-        { key: 'sex', value: sex, type: String , optional: true},
-        { key: 'age', value: age, type: Number , optional: true},
-        { key: 'city', value: city, type: String , optional: true},
-        { key: 'presentation', value: presentation, type: String , optional: true},
-        { key: 'minAgePref', value: minAgePref, type: Number , optional: true},
-        { key: 'maxAgePref', value: maxAgePref, type: Number , optional: true}])
+        { key: 'sex', value: sex, type: String, optional: true },
+        { key: 'age', value: age, type: Number, optional: true },
+        { key: 'city', value: city, type: String, optional: true },
+        { key: 'presentation', value: presentation, type: String, optional: true },
+        { key: 'minAgePref', value: minAgePref, type: Number, optional: true },
+        { key: 'maxAgePref', value: maxAgePref, type: Number, optional: true }])
 
         if ((age < 18) || (minAgePref < 18)) throw Error('not for children under 18')
         if ((minAgePref > maxAgePref)) throw Error('minAgePref must be inferior to maxAgePref')
@@ -106,7 +103,7 @@ const logic = {
         })
             .then(res => res.json())
             .then(res => {
-                
+
                 if (res.error) throw Error(res.error)
             })
 
@@ -198,24 +195,23 @@ const logic = {
             .then(res => res.json())
             .then(res => {
                 if (res.error) throw Error(res.error)
-                
+
                 return res.data
             })
 
 
     },
 
-     /**
-         * retrieveUserPhotos: it returns all the photos uploaded by the user in his profile
-         * 
-         * @param {string} id 
-         * 
-         * @returns {array} array with photos of the user
-         * 
-         */
+    /**
+        * retrieveUserPhotos: it returns all the photos uploaded by the user in his profile
+        * 
+        * @param {string} id 
+        * 
+        * @returns {array} array with photos of the user
+        * 
+        */
 
     retrieveUserPhotos(id) {
-
         validate([{ key: 'id', value: id, type: String }])
 
         return fetch(`${this.url}/users/${id}/photos`, {
@@ -227,8 +223,6 @@ const logic = {
 
                 return res.data
             })
-
-
     },
 
     /**
@@ -236,25 +230,22 @@ const logic = {
      * it saves there the id of the user added
      * 
      * @param {string} id id of the user logged
-     * @param {string} idContact id of the contact to add to the list
+     * @param {string} contactId id of the contact to add to the list
      * 
      * @returns {string} message: 'contact added'
      */
 
-    addContact(id, idContact) {
+    addContact(contactId) {
+        validate([{ key: 'contactId', value: contactId, type: String }])
 
-        validate([
-            { key: 'id', value: id, type: String },
-            { key: 'idContact', value: idContact, type: String }])
-
-        return fetch(`${this.url}/users/${id}/contacts`, {
+        return fetch(`${this.url}/users/${this._userId}/contacts`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${this._token}`,
                 'Content-Type': 'application/json; charset=utf-8'
 
             },
-            body: JSON.stringify({ id, idContact })
+            body: JSON.stringify({ contactId })
         })
             .then(res => res.json())
             .then(res => {
@@ -269,33 +260,30 @@ const logic = {
      * blockUser: it add the contact id to the list of blocked users of the user logged, and to the list
      * of blockedBy of the contact
      * 
-     * @param {string} user1 id of the user logged
-     * @param {string} user2 id of the user to block
+     * @param {string} user id of the user to block
      * 
      * @returns {string} message: `user successfully blocked`
      */
 
-    blockUser(user1, user2){
+    blockUser(user) {
 
-        validate([
-            { key: 'user1', value: user1, type: String },
-            { key: 'user2', value: user2, type: String }])
-            
-            return fetch(`${this.url}/users/${user1}/block`, {
-                method: 'PATCH',
-                headers: {
-                    'Authorization': `Bearer ${this._token}`,
-                    'Content-Type': 'application/json; charset=utf-8'
-    
-                },
-                body: JSON.stringify({ user1, user2 })
+        validate([{ key: 'user', value: user, type: String }])
+
+        return fetch(`${this.url}/users/${this._userId}/block`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${this._token}`,
+                'Content-Type': 'application/json; charset=utf-8'
+
+            },
+            body: JSON.stringify({ user })
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.error) throw Error(res.error)
+
             })
-                .then(res => res.json())
-                .then(res => {
-    
-                    if (res.error) throw Error(res.error)
-    
-                })
 
     },
 
@@ -308,12 +296,8 @@ const logic = {
      * 
      */
 
-    listContacts(id) {
-        
-        validate([
-            { key: 'id', value: id, type: String }])
-
-        return fetch(`${this.url}/users/${id}/contacts`, {
+    listContacts() {
+        return fetch(`${this.url}/users/${this._userId}/contacts`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
@@ -341,19 +325,18 @@ const logic = {
      * @returns {string} message: 'message added'
      */
 
-    addMessage(user, sentTo, text) {
+    addMessage(user, text) {
         validate([
             { key: 'user', value: user, type: String },
-            { key: 'sentTo', value: sentTo, type: String },
             { key: 'text', value: text, type: String }])
 
-        return fetch(`${this.url}/users/${user}/message`, {
+        return fetch(`${this.url}/users/${this._userId}/message`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=utf-8',
                 'Authorization': `Bearer ${this._token}`
             },
-            body: JSON.stringify({ user, sentTo, text })
+            body: JSON.stringify({ user, text })
         })
             .then(res => res.json())
             .then(res => {
@@ -370,18 +353,18 @@ const logic = {
      * to readed
      *
      * @param {string} user1 id jof the user logged
-     * @param {string} user2 id of the contact
+     * @param {string} user id of the contact
      * 
      * @returns {array} array of objects with id, nameSentTo, nameUser, text, user
      */
 
-    retrieveMessages(id, idContact) {
+    retrieveMessages(id, contactId) {
 
         validate([
             { key: 'id', value: id, type: String },
-            { key: 'idContact', value: idContact, type: String }])
+            { key: 'contactId', value: contactId, type: String }])
 
-        return fetch(`${this.url}/users/${id}/messages/${idContact}`, {
+        return fetch(`${this.url}/users/${id}/messages/${contactId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${this._token}`,
@@ -390,7 +373,7 @@ const logic = {
         })
             .then(res => res.json())
             .then(res => {
-                
+
                 if (res.error) throw Error(res.error)
 
                 return res.data
@@ -402,31 +385,31 @@ const logic = {
      * checkMessages: it is used when we need the list of messages but we don´t want to change anything of them
      * 
      * @param {string} user1 id of the user logged
-     * @param {string} user2 id of the contact
+     * @param {string} user id of the contact
      * 
      * @returns {array} array of objects with id, nameSentTo, nameUser, text, user
      */
 
-    checkMessages(id, idContact){
+    checkMessages(id, contactId) {
 
         validate([
             { key: 'id', value: id, type: String },
-            { key: 'idContact', value: idContact, type: String }])
+            { key: 'contactId', value: contactId, type: String }])
 
-            return fetch(`${this.url}/users/${id}/messages/${idContact}/check`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${this._token}`,
-                    'Content-Type': 'application/json; charset=utf-8'
-                }
+        return fetch(`${this.url}/users/${id}/messages/${contactId}/check`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this._token}`,
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.error) throw Error(res.error)
+
+                return res.data
             })
-                .then(res => res.json())
-                .then(res => {
-    
-                    if (res.error) throw Error(res.error)
-    
-                    return res.data
-                })
 
     },
 
@@ -440,24 +423,24 @@ const logic = {
      * 
      */
 
-    checkNewMessages(id){
+    checkNewMessages(id) {
 
         validate([{ key: 'id', value: id, type: String }])
 
-            return fetch(`${this.url}/users/${id}/newMessages`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${this._token}`,
-                    'Content-Type': 'application/json; charset=utf-8'
-                }
+        return fetch(`${this.url}/users/${id}/newMessages`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this._token}`,
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        })
+            .then(res => res.json())
+            .then(res => {
+
+                if (res.error) throw Error(res.error)
+
+                return res.data
             })
-                .then(res => res.json())
-                .then(res => {
-    
-                    if (res.error) throw Error(res.error)
-    
-                    return res.data
-                })
 
     },
 

@@ -1,4 +1,4 @@
-const { mongoose, models: { User, Message } } = require('data')
+const { mongoose, models: { User, Message } } = require('lets-talk-data')
 const { AlreadyExistsError, AuthError, NotAllowedError, NotFoundError } = require('../errors')
 const validate = require('../utils/validate')
 const cloudinary = require('cloudinary')

@@ -11,5 +11,5 @@ class ValueError extends Error {
     }
 }
 
-export default ValueError
-// module.exports = ValueError
+// export default ValueError
+module.exports = ValueError

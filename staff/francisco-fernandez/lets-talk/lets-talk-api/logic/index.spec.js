@@ -1,18 +1,20 @@
-const { mongoose, models: { User, Message } } = require('data')
+require('dotenv').config()
+
+const { mongoose, models: { User, Message } } = require('lets-talk-data')
 const logic = require('.')
 const { AlreadyExistsError, ValueError, NotAllowedError, AuthError, NotFoundError } = require('../errors')
-const chunk = require('./test')
+const base64Image = require('./base64-image')
 
 const { expect } = require('chai')
 
-const MONGO_URL = 'mongodb://localhost:27017/lets-talk-test'
+const { env: { TEST_MONGO_URL}} = process
 
 // running test from CLI
 // normal -> $ mocha logic/index.spec.js --timeout 10000
 // debug -> $ mocha debug logic/index.spec.js --timeout 10000
 
 describe('logic', () => {
-    before(() => mongoose.connect(MONGO_URL, { useNewUrlParser: true, useCreateIndex: true }))
+    before(() => mongoose.connect(TEST_MONGO_URL, { useNewUrlParser: true, useCreateIndex: true }))
 
     beforeEach(() => Promise.all([User.deleteMany(), Message.deleteMany()]))
 
@@ -743,7 +745,10 @@ describe('logic', () => {
                     maxAgePref: 25, created: Date.now()
                 })
 
-                await Promise.all([user.save(), user2.save(), user3.save(), user4.save()])
+                await user.save()
+                await user2.save()
+                await user3.save()
+                await user4.save()                
             })
 
             it('should succed on correct data', async () => {
@@ -774,7 +779,7 @@ describe('logic', () => {
 
                 const photo = 'photo1'
 
-                const res = await logic.insertPhoto(user.id, chunk, photo)
+                const res = await logic.insertPhoto(user.id, base64Image, photo)
 
                 expect(res).not.to.be.undefined
 
@@ -801,7 +806,7 @@ describe('logic', () => {
 
                 const photo = 'photo1'
 
-                await logic.insertPhoto(user.id, chunk, photo)
+                await logic.insertPhoto(user.id, base64Image, photo)
             })
 
             it('should succed on correct data', async () => {
