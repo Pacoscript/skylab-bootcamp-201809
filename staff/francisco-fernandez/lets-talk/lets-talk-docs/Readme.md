@@ -23,7 +23,7 @@ All the persons have the opportunity of write to someone. But you only will be a
 # Technical description
 The application is a web application for works in a browser. It uses React.js to mount the frontend. With SASS/CSS for the styling. The app connect with one API.
 
-The API handles user data and messages data. And it´s constructed with node and mongo data base.
+The API handles user data and messages data. And it has been constructed with node and mongo data base.
 
 User data is persistent across page reloads, as local data is stored in the user's SessionStorage
 
